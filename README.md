@@ -2,6 +2,8 @@
 
 Accursed Fiend will be a topdown RPG or ARPG with randomly generated dungeons.
 
+The primary target platform will be the GameTank.
+
 ## building
 
 Build requires cc65, can be located anywhere as long as cc65/bin is in your PATH
