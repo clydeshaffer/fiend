@@ -52,7 +52,7 @@ sprites: assets/gamesprites.bmp
 
 testmap: assets/testmap.bmp
 	cd assets ;\
-	tail -c 256 testmap.bmp > testmap.gtg ;\
+	tail -c 1024 testmap.bmp > testmap.gtg ;\
 	zopfli --deflate testmap.gtg
 	
 

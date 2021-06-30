@@ -30,55 +30,75 @@ void updateInputs(){
 }
 #pragma optimize(on)
 
+#define MAP_SIZE 1024
+#define MAP_W 32
+#define MAP_H 32
+#define MAP_ORD 5
+#define TILE_SIZE 32
+#define TILE_ORD 5
+#define VISIBLE_W 5
+#define VISIBLE_H 5
+
 unsigned char camera_x = 0;
 unsigned char camera_y = 0;
 unsigned char tile_scroll_x = 0;
 unsigned char tile_scroll_y = 0;
-unsigned char tiles[256];
+unsigned char tiles[MAP_SIZE];
 extern const unsigned char* TestMap;
-
+unsigned char walk_cycle[4] = {0, 16, 32, 16};
 
 void draw_world() {
-    unsigned char r, c, t;
+    int r, c;
+    int t;
 
     r = 0;
     c = 0;
-    t = (camera_x + c) + (16 * (camera_y + r));
+    asm("SEI");
+    t = (camera_x + c) + ((camera_y + r) << MAP_ORD);
     if(tiles[t] != 0) {
-        QueueSpriteRect(0, 0, 32 - tile_scroll_x, 32 - tile_scroll_y, tile_scroll_x + (tiles[t] << 5), tile_scroll_y);
+        QueueSpriteRect(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y);
     }
-    for(c = 1; c < 5; c++) {
-        if((camera_x + c) < 16) {
-            t++;
+    asm("SEI");
+    t++;
+    for(c = 1; c < VISIBLE_W; c++) {
+        if((camera_x + c) < MAP_W) {
+           
             if(tiles[t] != 0) {
-                QueueSpriteRect((c << 5) - tile_scroll_x, 0, 32, 32 - tile_scroll_y, tiles[t] << 5, tile_scroll_y);
+                asm("SEI");
+                QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y);
             }
         }
+        t++;
     }
+    asm("SEI");
+    t += MAP_W - VISIBLE_W;
 
     c = 0;
     r = 1;
-    t = (camera_x + c) + ((camera_y + r) << 4);
-    for(r = 1; r < 5; r++) {
-        if((camera_y + r) < 16) {
+    for(r = 1; r < VISIBLE_H; r++) {
+        asm("SEI");
+        if((camera_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
-                QueueSpriteRect(0, (r << 5) - tile_scroll_y, 32 - tile_scroll_x, 32, tile_scroll_x + (tiles[t] << 5), 0);
+                
+                QueueSpriteRect(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0);
             }
             t++;
-            for(c = 1; c < 5; c++) {
-                if((camera_x + c) < 16) {
+            for(c = 1; c < VISIBLE_W; c++) {
+                asm("SEI");
+                if((camera_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
-                        QueueSpriteRect((c << 5) - tile_scroll_x, (r << 5) - tile_scroll_y, 32, 32, tiles[t] << 5, 0);
+                        QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0);
                     }
                 }
                 t++;
             }
         } else { 
-            t += 5;
+            t += VISIBLE_W;
         }
-        t += 11;
+        t += MAP_W - VISIBLE_W;
     }
+    asm("CLI");
 }
 
 void Sleep(int frames) {
@@ -91,6 +111,8 @@ void Sleep(int frames) {
 
 void main() {
     unsigned char i;
+    unsigned char anim_frame = 0;
+    unsigned char anim_dir = 32;
     asm ("SEI");
 
     init_dynawave();
@@ -127,20 +149,25 @@ void main() {
 
         updateInputs();
 
+        i = 0;
         if(inputs & INPUT_MASK_RIGHT) {
+            anim_dir = 48;
+            i = 1;
             tile_scroll_x++;
-            if(tile_scroll_x == 32) {
+            if(tile_scroll_x == TILE_SIZE) {
                 tile_scroll_x = 0;
                 camera_x++;
-                if(camera_x == 13) {
-                    camera_x = 12;
-                    tile_scroll_x = 31;
+                if(camera_x == MAP_W-3) {
+                    camera_x = MAP_W-4;
+                    tile_scroll_x = TILE_SIZE-1;
                 }
             }
         } else if(inputs & INPUT_MASK_LEFT) {
+            anim_dir = 80;
+            i = 1;
             tile_scroll_x--;
             if(tile_scroll_x == 255) {
-                tile_scroll_x = 31;
+                tile_scroll_x = TILE_SIZE-1;
                 camera_x--;
                 if(camera_x == 255) {
                     camera_x = 0;
@@ -150,25 +177,33 @@ void main() {
         }
 
         if(inputs & INPUT_MASK_DOWN) {
+            anim_dir = 64;
+            i = 1;
             tile_scroll_y++;
-            if(tile_scroll_y == 32) {
+            if(tile_scroll_y == TILE_SIZE) {
                 tile_scroll_y = 0;
                 camera_y++;
-                if(camera_y == 13) {
-                    camera_y = 12;
-                    tile_scroll_y = 31;
+                if(camera_y == MAP_H - 3) {
+                    camera_y = MAP_H - 4;
+                    tile_scroll_y = TILE_SIZE-1;
                 }
             }
         } else if(inputs & INPUT_MASK_UP) {
+            anim_dir = 32;
+            i = 1;
             tile_scroll_y--;
             if(tile_scroll_y == 255) {
-                tile_scroll_y = 31;
+                tile_scroll_y = TILE_SIZE-1;
                 camera_y--;
                 if(camera_y == 255) {
                     camera_y = 0;
                     tile_scroll_y = 0;
                 }
             }
+        }
+
+        if(i == 1) {
+            anim_frame++;
         }
 
         asm("SEI");
@@ -184,7 +219,7 @@ void main() {
         draw_world();
         CLB(16);
         
-        QueueSpriteRect(64 - 8, 64 - 8, 16, 16, 0, 64);
+        QueueSpriteRect(64 - 8, 64 - 8, 16, 16, walk_cycle[(anim_frame >> 3) & 3], anim_dir);
         while(queue_pending != 0) {
             wait();
         }

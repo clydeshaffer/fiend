@@ -28,7 +28,8 @@ _nmi_int:  PHX                    ; Save X register contents to stack
 ; ---------------------------------------------------------------------------
 ; Maskable interrupt (IRQ) service routine
 
-_irq_int:  PHX                    ; Save X register contents to stack
+_irq_int:
+           PHX                    ; Save X register contents to stack
            PHA
            PHY
            JSR  _IRQHandler
