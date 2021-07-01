@@ -45,7 +45,8 @@ unsigned char tile_scroll_x = 0;
 unsigned char tile_scroll_y = 0;
 unsigned char tiles[MAP_SIZE];
 extern const unsigned char* TestMap;
-unsigned char walk_cycle[4] = {0, 16, 32, 16};
+extern const SpriteMetadata* HeroMeta;
+unsigned char walk_cycle[4] = {3, 4, 5, 6};
 
 void draw_world() {
     int r, c;
@@ -53,42 +54,36 @@ void draw_world() {
 
     r = 0;
     c = 0;
-    asm("SEI");
     t = (camera_x + c) + ((camera_y + r) << MAP_ORD);
     if(tiles[t] != 0) {
-        QueueSpriteRect(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y);
+        QueueSpriteRect(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0);
     }
-    asm("SEI");
     t++;
     for(c = 1; c < VISIBLE_W; c++) {
         if((camera_x + c) < MAP_W) {
            
             if(tiles[t] != 0) {
-                asm("SEI");
-                QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y);
+                QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y, 0);
             }
         }
         t++;
     }
-    asm("SEI");
     t += MAP_W - VISIBLE_W;
 
     c = 0;
     r = 1;
     for(r = 1; r < VISIBLE_H; r++) {
-        asm("SEI");
         if((camera_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
                 
-                QueueSpriteRect(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0);
+                QueueSpriteRect(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0);
             }
             t++;
             for(c = 1; c < VISIBLE_W; c++) {
-                asm("SEI");
                 if((camera_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
-                        QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0);
+                        QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0);
                     }
                 }
                 t++;
@@ -98,7 +93,6 @@ void draw_world() {
         }
         t += MAP_W - VISIBLE_W;
     }
-    asm("CLI");
 }
 
 void Sleep(int frames) {
@@ -112,17 +106,18 @@ void Sleep(int frames) {
 void main() {
     unsigned char i;
     unsigned char anim_frame = 0;
-    unsigned char anim_dir = 32;
+    unsigned char anim_dir = 4;
+    unsigned char anim_flip = 0;
     asm ("SEI");
 
     init_dynawave();
 
     load_spritesheet();
 
-    *dma_flags = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_TRANS;
+    *dma_flags = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE;
     FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 0);
     wait();
-    *dma_flags = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_TRANS | DMA_VRAM_PAGE | DMA_PAGE_OUT;
+    *dma_flags = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_VRAM_PAGE | DMA_PAGE_OUT;
     FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 0);
     wait();
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
@@ -130,7 +125,7 @@ void main() {
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM | DMA_VRAM_PAGE;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
 
-    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_TRANS | frameflip;
+    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
     *dma_flags = flagsMirror;
 
     queue_start = 0;
@@ -144,60 +139,68 @@ void main() {
 
     asm ("CLI");
     while(1){
-        flagsMirror &= ~DMA_TRANS;
-        *dma_flags = flagsMirror;
-
         updateInputs();
 
         i = 0;
-        if(inputs & INPUT_MASK_RIGHT) {
-            anim_dir = 48;
-            i = 1;
-            tile_scroll_x++;
-            if(tile_scroll_x == TILE_SIZE) {
-                tile_scroll_x = 0;
-                camera_x++;
-                if(camera_x == MAP_W-3) {
-                    camera_x = MAP_W-4;
-                    tile_scroll_x = TILE_SIZE-1;
-                }
+        if(inputs & INPUT_MASK_A) {
+            if(anim_dir < 12) {
+                anim_dir += 12;
             }
-        } else if(inputs & INPUT_MASK_LEFT) {
-            anim_dir = 80;
             i = 1;
-            tile_scroll_x--;
-            if(tile_scroll_x == 255) {
-                tile_scroll_x = TILE_SIZE-1;
-                camera_x--;
-                if(camera_x == 255) {
-                    camera_x = 0;
+        } else {
+            if(inputs & INPUT_MASK_RIGHT) {
+                anim_dir = 4;
+                anim_flip = 0;
+                i = 1;
+                tile_scroll_x++;
+                if(tile_scroll_x == TILE_SIZE) {
                     tile_scroll_x = 0;
+                    camera_x++;
+                    if(camera_x == MAP_W-3) {
+                        camera_x = MAP_W-4;
+                        tile_scroll_x = TILE_SIZE-1;
+                    }
+                }
+            } else if(inputs & INPUT_MASK_LEFT) {
+                anim_dir = 4;
+                anim_flip = SPRITE_FLIP_X;
+                i = 1;
+                tile_scroll_x--;
+                if(tile_scroll_x == 255) {
+                    tile_scroll_x = TILE_SIZE-1;
+                    camera_x--;
+                    if(camera_x == 255) {
+                        camera_x = 0;
+                        tile_scroll_x = 0;
+                    }
                 }
             }
-        }
 
-        if(inputs & INPUT_MASK_DOWN) {
-            anim_dir = 64;
-            i = 1;
-            tile_scroll_y++;
-            if(tile_scroll_y == TILE_SIZE) {
-                tile_scroll_y = 0;
-                camera_y++;
-                if(camera_y == MAP_H - 3) {
-                    camera_y = MAP_H - 4;
-                    tile_scroll_y = TILE_SIZE-1;
-                }
-            }
-        } else if(inputs & INPUT_MASK_UP) {
-            anim_dir = 32;
-            i = 1;
-            tile_scroll_y--;
-            if(tile_scroll_y == 255) {
-                tile_scroll_y = TILE_SIZE-1;
-                camera_y--;
-                if(camera_y == 255) {
-                    camera_y = 0;
+            if(inputs & INPUT_MASK_DOWN) {
+                anim_dir = 0;
+                anim_flip = 0;
+                i = 1;
+                tile_scroll_y++;
+                if(tile_scroll_y == TILE_SIZE) {
                     tile_scroll_y = 0;
+                    camera_y++;
+                    if(camera_y == MAP_H - 3) {
+                        camera_y = MAP_H - 4;
+                        tile_scroll_y = TILE_SIZE-1;
+                    }
+                }
+            } else if(inputs & INPUT_MASK_UP) {
+                anim_dir = 8;
+                anim_flip = 0;
+                i = 1;
+                tile_scroll_y--;
+                if(tile_scroll_y == 255) {
+                    tile_scroll_y = TILE_SIZE-1;
+                    camera_y--;
+                    if(camera_y == 255) {
+                        camera_y = 0;
+                        tile_scroll_y = 0;
+                    }
                 }
             }
         }
@@ -214,35 +217,20 @@ void main() {
         vram[START] = 0;
         asm("CLI");
 
-        QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR);
+        QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
         
         draw_world();
         CLB(16);
         
-        QueueSpriteRect(64 - 8, 64 - 8, 16, 16, walk_cycle[(anim_frame >> 3) & 3], anim_dir);
+        QueuePackedSprite(&HeroMeta, 64, 64, walk_cycle[(anim_frame >> 3) & 3] + anim_dir, anim_flip, DMA_GRAM_PAGE);
         while(queue_pending != 0) {
+            asm("CLI");
             wait();
         }
 
         Sleep(1);
         frameflip ^= DMA_PAGE_OUT | DMA_VRAM_PAGE;
-        flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_TRANS | frameflip;
+        flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
         *dma_flags = flagsMirror;
     }
-}
-
-void IRQHandler() {
-    queue_pending = 0;
-    if(queue_start != queue_end) {
-        queue_pending = 1;
-        NextQueue();
-        nop5();
-    } else {
-        vram[START] = 0;
-        queue_pending = 0;
-    }
-}
-
-void NMIHandler() {
-    frameflag = 0;
 }

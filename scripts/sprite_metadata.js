@@ -2,7 +2,9 @@ const fs = require('fs');
 const argv = require('minimist')(process.argv.slice(2));
 
 const inFileName = argv._[0];
-
+const outFileName = argv._.length == 2 ?
+    argv._[1] :
+    inFileName.split(".").slice(0, -1).join(".") + ".gsi";
 
 const spriteInfo = JSON.parse(fs.readFileSync(inFileName));
 
@@ -43,4 +45,4 @@ const outBuf = Buffer.concat(
         .map(frame2Buf)
 );
 
-fs.writeFileSync(inFileName.split(".").slice(0, -1).join(".") + ".gsi", outBuf);
+fs.writeFileSync(outFileName, outBuf);

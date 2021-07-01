@@ -15,16 +15,17 @@ COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
 _AOBJS = assets.o wait.o vectors.o interrupt.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
-_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate
+_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
-ASSETDEPS = assets/gamesprites.gtg.deflate lib/dynawave.acp.deflate lib/inflate_e000_0200.obx
+_SPRITEMETA = chara_hero.gsi
+SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
 bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS)
 	mkdir -p $(@D)
 	$(LN) $(LFLAGS) $(AOBJS) $(COBJS) -o $@ $(LLIBS)
 
-$(ODIR)/assets.o: src/assets.s $(BMPOBJS)
+$(ODIR)/assets.o: src/assets.s $(BMPOBJS) $(SPRITEMETA)
 	mkdir -p $(@D)
 	$(AS) $(AFLAGS) -o $@ $<
 
@@ -58,6 +59,10 @@ $(ODIR)/assets/%.gtg.deflate: $(ODIR)/assets/%.gtg
 	zopfli --deflate $<
 	mv $<.deflate $@
 
+$(ODIR)/assets/%.gsi: assets/%.json
+	mkdir -p $(@D)
+	cd scripts ;\
+	node sprite_metadata.js ../$< ../$@
 
 .PHONY: clean
 

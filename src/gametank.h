@@ -31,7 +31,7 @@
 #define DMA_VRAM_PAGE 16
 #define DMA_CPU_TO_VRAM 32
 #define DMA_IRQ 64
-#define DMA_TRANS 128
+#define DMA_OPAQUE 128
 
 #define VX 0
 #define VY 1

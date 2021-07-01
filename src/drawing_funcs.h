@@ -10,13 +10,20 @@
 #define SPRITE_CHAR_BLANK_X 0x70
 #define SPRITE_CHAR_BLANK_Y 0x70
 
+#define SPRITE_FLIP_X 1
+#define SPRITE_FLIP_Y 2
+
 #define BG_COLOR 16
 #define WINDOW_COLOR 0
 
-void load_spritesheet();
+typedef struct {
+    char ovx, ovy, w, h, gx, gy, pad1, pad2;
+} SpriteMetadata;
 
-void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy);
-void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c);
+void load_spritesheet();
+void QueuePackedSprite(SpriteMetadata *sprite_table, char x, char y, char frame, char flip, char flags);
+void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy, unsigned char flags);
+void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c, unsigned char flags);
 void NextQueue();
 void FlushQueue();
 

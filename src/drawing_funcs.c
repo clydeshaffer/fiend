@@ -8,6 +8,7 @@
 char cursorX, cursorY;
 
 extern const unsigned char* GameSprites;
+extern const unsigned char* HeroSprites;
 
 extern void wait();
 extern void nop5();
@@ -17,6 +18,9 @@ void load_spritesheet() {
     flagsMirror = DMA_NMI | DMA_IRQ;
     *dma_flags = flagsMirror;
     inflatemem(vram, &GameSprites);
+    flagsMirror = DMA_NMI | DMA_IRQ | DMA_GRAM_PAGE;
+    *dma_flags = flagsMirror;
+    inflatemem(vram, &HeroSprites);
 }
 
 unsigned char draw_queue[256];
@@ -26,7 +30,47 @@ unsigned char queue_count = 0;
 unsigned char queue_pending = 0;
 #define QUEUE_MAX 32
 
-void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy) {
+void QueuePackedSprite(SpriteMetadata* sprite_table, char x, char y, char frame, char flip, char flags) {
+    SpriteMetadata frameData;
+
+    while(queue_count >= QUEUE_MAX) {
+        asm("CLI");
+        wait();
+    }
+
+    asm("SEI");
+    frameData = sprite_table[frame];
+    draw_queue[queue_end++] = flags;
+
+    if(flip & SPRITE_FLIP_X) {
+        draw_queue[queue_end++] = (x - frameData.w - frameData.ovx - 1) | 128;
+    } else {
+        draw_queue[queue_end++] = (frameData.ovx + x) | 128;
+    }
+
+    draw_queue[queue_end++] = frameData.ovy + y;
+
+    draw_queue[queue_end] = frameData.gx;
+    if(flip & SPRITE_FLIP_X) {
+        draw_queue[queue_end] ^= 0x7F;
+        draw_queue[queue_end] -= frameData.w - 1;
+    }
+    queue_end++;
+
+    draw_queue[queue_end++] = frameData.gy;
+    draw_queue[queue_end++] = frameData.w | (flip & SPRITE_FLIP_X ? 128 : 0);
+    draw_queue[queue_end++] = frameData.h;
+    draw_queue[queue_end++] = 0;
+    queue_count++;
+
+    if(queue_pending == 0) {
+        queue_pending = 1;
+        NextQueue();
+    }
+    asm("CLI");
+}
+
+void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy, unsigned char flags) {
     if(x > 127) {
         return;
     }
@@ -39,8 +83,9 @@ void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned
     if(h == 0) {
         return;
     }
-    if(queue_count >= QUEUE_MAX) {
-        return;
+    while(queue_count >= QUEUE_MAX) {
+        asm("CLI");
+        wait();
     }
 
     if(x + w >= 128) {
@@ -50,6 +95,7 @@ void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned
         h = 128 - y;
     }
     asm("SEI");
+    draw_queue[queue_end++] = flags;
     draw_queue[queue_end++] = x | 128;
     draw_queue[queue_end++] = y;
     draw_queue[queue_end++] = gx;
@@ -66,7 +112,7 @@ void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned
     asm("CLI");
 }
 
-void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c) {
+void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c, unsigned char flags) {
     if(x > 127) {
         return;
     }
@@ -79,8 +125,9 @@ void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned c
     if(h == 0) {
         return;
     }
-    if(queue_count >= QUEUE_MAX) {
-        return;
+    while(queue_count >= QUEUE_MAX) {
+        asm("CLI");
+        wait();
     }
     if(x + w >= 128) {
         w = 128 - x;
@@ -89,6 +136,7 @@ void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned c
         h = 128 - y;
     }
     asm("SEI");
+    draw_queue[queue_end++] = flags;
     draw_queue[queue_end++] = x | 128;
     draw_queue[queue_end++] = y;
     draw_queue[queue_end++] = DMA_GX_SOLIDCOLOR_FLAG;
@@ -107,6 +155,8 @@ void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned c
 }
 
 void NextQueue() {
+    flagsMirror = draw_queue[queue_start++] | DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
+    *dma_flags = flagsMirror;
     vram[VX] = draw_queue[queue_start++];
     vram[VY] = draw_queue[queue_start++];
     vram[GX] = draw_queue[queue_start++];
@@ -133,10 +183,10 @@ void FlushQueue() {
 }
 
 void CLB(char c) {
-    QueueFillRect(0, 0, SCREEN_WIDTH-1, 7, c);
-    QueueFillRect(0, 7, 1, SCREEN_HEIGHT-7, c);
-    QueueFillRect(1, SCREEN_HEIGHT-8, SCREEN_WIDTH-1, 8, c);
-    QueueFillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-8, c);
+    QueueFillRect(0, 0, SCREEN_WIDTH-1, 7, c, DMA_OPAQUE);
+    QueueFillRect(0, 7, 1, SCREEN_HEIGHT-7, c, DMA_OPAQUE);
+    QueueFillRect(1, SCREEN_HEIGHT-8, SCREEN_WIDTH-1, 8, c, DMA_OPAQUE);
+    QueueFillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-8, c, DMA_OPAQUE);
 }
 
 void CLS(char c) {
