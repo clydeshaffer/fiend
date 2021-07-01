@@ -57,7 +57,6 @@ $(ODIR)/assets/%.gtg: assets/%.bmp
 $(ODIR)/assets/%.gtg.deflate: $(ODIR)/assets/%.gtg
 	mkdir -p $(@D)
 	zopfli --deflate $<
-	mv $<.deflate $@
 
 $(ODIR)/assets/%.gsi: assets/%.json
 	mkdir -p $(@D)
@@ -74,4 +73,4 @@ flash:
 	 node flashtool.js --sector 126 --offset 0 -f ~/Repos/Fiend/bin/fiend.gtr -p COM3
 
 emulate:
-	../GameTankEmulator/bin/Windows_NT/GameTankEmulator.exe bin/fiend.gtr
+	../GameTankEmulator/bin/$(OS)/GameTankEmulator bin/fiend.gtr
