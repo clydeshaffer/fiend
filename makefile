@@ -15,10 +15,10 @@ COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
 _AOBJS = assets.o wait.o vectors.o interrupt.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
-_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate
+_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate chara_spider.gtg.deflate
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
-_SPRITEMETA = chara_hero.gsi
+_SPRITEMETA = chara_hero.gsi chara_spider.gsi
 SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
 bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS)

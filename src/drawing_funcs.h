@@ -16,12 +16,14 @@
 #define BG_COLOR 16
 #define WINDOW_COLOR 0
 
+#define ENEMY_SPRITES_OFFSET 32
+
 typedef struct {
     char ovx, ovy, w, h, gx, gy, pad1, pad2;
-} SpriteMetadata;
+} Frame;
 
 void load_spritesheet();
-void QueuePackedSprite(SpriteMetadata *sprite_table, char x, char y, char frame, char flip, char flags);
+void QueuePackedSprite(Frame *sprite_table, char x, char y, char frame, char flip, char flags, char offset);
 void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy, unsigned char flags);
 void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c, unsigned char flags);
 void NextQueue();
