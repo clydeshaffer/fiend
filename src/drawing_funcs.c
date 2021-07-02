@@ -9,6 +9,7 @@ char cursorX, cursorY;
 
 extern const unsigned char* GameSprites;
 extern const unsigned char* HeroSprites;
+extern const unsigned char* EnemySprites;
 
 extern void wait();
 extern void nop5();
@@ -18,6 +19,7 @@ void load_spritesheet() {
     flagsMirror = DMA_NMI | DMA_IRQ;
     *dma_flags = flagsMirror;
     inflatemem(vram, &GameSprites);
+    inflatemem(vram + (ENEMY_SPRITES_OFFSET*128), &EnemySprites);
     flagsMirror = DMA_NMI | DMA_IRQ | DMA_GRAM_PAGE;
     *dma_flags = flagsMirror;
     inflatemem(vram, &HeroSprites);
@@ -30,8 +32,8 @@ unsigned char queue_count = 0;
 unsigned char queue_pending = 0;
 #define QUEUE_MAX 32
 
-void QueuePackedSprite(SpriteMetadata* sprite_table, char x, char y, char frame, char flip, char flags) {
-    SpriteMetadata frameData;
+void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char flip, char flags, char offset) {
+    Frame frameData;
 
     while(queue_count >= QUEUE_MAX) {
         asm("CLI");
@@ -48,7 +50,7 @@ void QueuePackedSprite(SpriteMetadata* sprite_table, char x, char y, char frame,
         draw_queue[queue_end++] = (frameData.ovx + x) | 128;
     }
 
-    draw_queue[queue_end++] = frameData.ovy + y;
+    draw_queue[queue_end++] = (frameData.ovy + y) | 128;
 
     draw_queue[queue_end] = frameData.gx;
     if(flip & SPRITE_FLIP_X) {
@@ -57,7 +59,7 @@ void QueuePackedSprite(SpriteMetadata* sprite_table, char x, char y, char frame,
     }
     queue_end++;
 
-    draw_queue[queue_end++] = frameData.gy;
+    draw_queue[queue_end++] = frameData.gy + offset;
     draw_queue[queue_end++] = frameData.w | (flip & SPRITE_FLIP_X ? 128 : 0);
     draw_queue[queue_end++] = frameData.h;
     draw_queue[queue_end++] = 0;
@@ -97,7 +99,7 @@ void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned
     asm("SEI");
     draw_queue[queue_end++] = flags;
     draw_queue[queue_end++] = x | 128;
-    draw_queue[queue_end++] = y;
+    draw_queue[queue_end++] = y | 128;
     draw_queue[queue_end++] = gx;
     draw_queue[queue_end++] = gy;
     draw_queue[queue_end++] = w;

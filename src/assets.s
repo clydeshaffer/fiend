@@ -1,4 +1,4 @@
-    .export _GameSprites, _HeroSprites, _HeroMeta, _DynaWave, _TestMap
+    .export _GameSprites, _HeroSprites, _HeroFrames, _EnemySprites, _EnemyFrames, _DynaWave, _TestMap
 
     .RODATA
 _GameSprites:
@@ -7,8 +7,14 @@ _GameSprites:
 _HeroSprites:
     .incbin "chara_hero.gtg.deflate"
 
-_HeroMeta:
+_HeroFrames:
     .incbin "chara_hero.gsi"
+
+_EnemySprites:
+    .incbin "chara_spider.gtg.deflate"
+
+_EnemyFrames:
+    .incbin "chara_spider.gsi"
 
 _TestMap:
     .incbin "testmap.gtg.deflate"

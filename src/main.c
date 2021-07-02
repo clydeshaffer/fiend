@@ -39,14 +39,23 @@ void updateInputs(){
 #define VISIBLE_W 5
 #define VISIBLE_H 5
 #define CAMERA_LIMIT 895 // (TILE_SIZE * (MAP_W - VISIBLE_W + 1)) - 1
+#define MAX_ENEMIES 32
 
 unsigned int camera_x = 0;
 unsigned int camera_y = 0;
 unsigned char tiles[MAP_SIZE];
 extern const unsigned char* TestMap;
-extern const SpriteMetadata* HeroMeta;
+extern const Frame* HeroFrames;
+extern const Frame* EnemyFrames;
 unsigned char walk_cycle[4] = {3, 4, 5, 6};
 unsigned int player_x = 48, player_y = 48;
+
+typedef struct {
+    char anim_frame, anim_dir, anim_flip, mode;
+    int x, y;
+} MobState;
+
+MobState enemies[MAX_ENEMIES];
 
 #define HITBOX_X -6
 #define HITBOX_Y 4
@@ -139,6 +148,94 @@ void draw_world() {
     }
 }
 
+void clear_enemies() {
+    char i;
+    for(i = 0; i < MAX_ENEMIES; i++) {
+        enemies[i].mode = 0;
+        enemies[i].x = 0;
+        enemies[i].y = 0;
+        enemies[i].anim_flip = 0;
+        enemies[i].anim_dir = 0;
+        enemies[i].anim_frame = 0; 
+    }
+}
+
+void draw_enemies() {
+    char i;
+    MobState *enemy = enemies;
+    for(i = 0; i < MAX_ENEMIES; i++) {
+        if(enemy->mode != 0) {
+            if(enemy->x > camera_x
+                && enemy->y > camera_y
+                && enemy->x < (camera_x + 128)
+                && enemy->y < (camera_y + 128)) {
+                    QueuePackedSprite(&EnemyFrames, enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, 0, ENEMY_SPRITES_OFFSET);
+                } 
+        }
+        enemy++;
+    }
+}
+
+void face_player(MobState *enemy) {
+    int dx, dy, adx, ady;
+    dx = player_x - enemy->x;
+    dy = player_y - enemy->y;
+    adx = dx;
+    ady = dy;
+    if(dx < 0) {
+        adx = -adx;
+    }
+    if(dy < 0) {
+        ady = -ady;
+    }
+    if(adx > ady) {
+        if(dx > 0) {
+            enemy->anim_dir = 4;
+            enemy->anim_flip = 0;
+        } else {
+            enemy->anim_dir = 4;
+            enemy->anim_flip = SPRITE_FLIP_X;
+        }
+    } else {
+        if(dy > 0) {
+            enemy->anim_flip = 0;
+            enemy->anim_dir = 0;
+        } else {
+            enemy->anim_flip = 0;
+            enemy->anim_dir = 8;
+        }
+    }
+}
+
+void update_enemies() {
+    char i;
+    MobState *enemy = enemies;
+    for(i = 0; i < MAX_ENEMIES; i++) {
+        if(enemy->x > camera_x
+                && enemy->y > camera_y
+                && enemy->x < (camera_x + 128)
+                && enemy->y < (camera_y + 128)) {
+            if(enemy->mode == 1) {
+                enemy->anim_frame++;
+                if((enemy->anim_frame & 3) == 0) {
+                    if(enemy->x > player_x) {
+                        enemy->x--;
+                    } else {
+                        enemy->x++;
+                    }
+                    if(enemy->y > player_y) {
+                        enemy->y--;
+                    } else {
+                        enemy->y++;
+                    }
+                }
+                face_player(enemy);
+            }
+        }
+        enemy++;
+    }
+}
+
 void Sleep(int frames) {
     int i;
     for(i = 0; i < frames; i++) {
@@ -179,6 +276,12 @@ void main() {
     vram[START] = 0;
 
     inflatemem(tiles, &TestMap);
+
+    clear_enemies(); 
+
+    enemies[0].mode = 1;
+    enemies[0].x = 288;
+    enemies[0].y = 288;
 
     via[DDRB] = 0xFF;
 
@@ -234,6 +337,8 @@ void main() {
             anim_frame++;
         }
 
+        update_enemies();
+
         asm("SEI");
         queue_start = 0;
         queue_end = 0;
@@ -245,6 +350,7 @@ void main() {
         QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
         
         draw_world();
+        draw_enemies();
         CLB(16);
         
         camera_x = player_x - 64;
@@ -262,7 +368,7 @@ void main() {
             camera_y = CAMERA_LIMIT;
         }
 
-        QueuePackedSprite(&HeroMeta, player_x - camera_x, player_y - camera_y, walk_cycle[(anim_frame >> 3) & 3] + anim_dir, anim_flip, DMA_GRAM_PAGE);
+        QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, walk_cycle[(anim_frame >> 3) & 3] + anim_dir, anim_flip, DMA_GRAM_PAGE, 0);
         while(queue_pending != 0) {
             asm("CLI");
             wait();
