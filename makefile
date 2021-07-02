@@ -5,6 +5,8 @@ LN = ld65
 SDIR = src
 ODIR = build
 
+PORT = COM3
+
 CFLAGS = -t none -O --cpu 65sc02
 AFLAGS = --cpu 65sc02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
 LFLAGS = -C gametank-32k.cfg -m out.map
@@ -70,7 +72,7 @@ clean:
 
 flash:
 	cd ../eepromProgrammer/flashtool ;\
-	 node flashtool.js --sector 126 --offset 0 -f ~/Repos/Fiend/bin/fiend.gtr -p COM3
+	 node flashtool.js --sector 126 --offset 0 -f ~/repos/fiend/bin/fiend.gtr -p $(PORT)
 
 emulate:
 	../GameTankEmulator/bin/$(OS)/GameTankEmulator bin/fiend.gtr
