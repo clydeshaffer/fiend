@@ -9,8 +9,6 @@ int inputs2 = 0, last_inputs2 = 0;
 extern void wait();
 extern void nop5();
 
-void IRQHandler();
-
 #pragma optimize(off)
 void updateInputs(){
     char inputsA, inputsB;
@@ -41,6 +39,21 @@ void updateInputs(){
 #define CAMERA_LIMIT 895 // (TILE_SIZE * (MAP_W - VISIBLE_W + 1)) - 1
 #define MAX_ENEMIES 32
 
+int xorshift16(int x) {
+    x |= x == 0;   /* if x == 0, set x = 1 instead */
+    x ^= (x & 0x07ff) << 5;
+    x ^= x >> 7;
+    x ^= (x & 0x0003) << 14;
+    return x;
+}
+
+int rnd_seed = 234;
+
+int rnd() {
+    rnd_seed = xorshift16(rnd_seed);
+    return rnd_seed;
+}
+
 unsigned int camera_x = 0;
 unsigned int camera_y = 0;
 unsigned char tiles[MAP_SIZE];
@@ -50,10 +63,15 @@ extern const Frame* EnemyFrames;
 unsigned char walk_cycle[4] = {3, 4, 5, 6};
 unsigned int player_x = 48, player_y = 48;
 
+int temp1;
+int temp2;
+
 typedef struct {
     char anim_frame, anim_dir, anim_flip, mode;
     int x, y;
 } MobState;
+
+MobState tempEnemy;
 
 MobState enemies[MAX_ENEMIES];
 
@@ -177,40 +195,45 @@ void draw_enemies() {
 }
 
 void face_player(MobState *enemy) {
-    int dx, dy, adx, ady;
-    dx = player_x - enemy->x;
-    dy = player_y - enemy->y;
-    adx = dx;
-    ady = dy;
+    int dx, dy;
+    tempEnemy = *enemy;
+    dx = player_x - tempEnemy.x;
+    dy = player_y - tempEnemy.y;
+    temp1 = dx;
+    temp2 = dy;
+    
     if(dx < 0) {
-        adx = -adx;
+        temp1 = -temp1;
     }
     if(dy < 0) {
-        ady = -ady;
+        temp2 = -temp2;
     }
-    if(adx > ady) {
+    if(temp1 > temp2) {
         if(dx > 0) {
-            enemy->anim_dir = 4;
-            enemy->anim_flip = 0;
+            tempEnemy.anim_dir = 4;
+            tempEnemy.anim_flip = 0;
         } else {
-            enemy->anim_dir = 4;
-            enemy->anim_flip = SPRITE_FLIP_X;
+            tempEnemy.anim_dir = 4;
+            tempEnemy.anim_flip = SPRITE_FLIP_X;
         }
     } else {
         if(dy > 0) {
-            enemy->anim_flip = 0;
-            enemy->anim_dir = 0;
+            tempEnemy.anim_flip = 0;
+            tempEnemy.anim_dir = 0;
         } else {
-            enemy->anim_flip = 0;
-            enemy->anim_dir = 8;
+            tempEnemy.anim_flip = 0;
+            tempEnemy.anim_dir = 8;
         }
     }
+    *enemy = tempEnemy;
 }
 
 void update_enemies() {
     char i;
     MobState *enemy = enemies;
     for(i = 0; i < MAX_ENEMIES; i++) {
+        temp1 = enemy->x;
+        temp2 = enemy->y;
         if(enemy->x > camera_x
                 && enemy->y > camera_y
                 && enemy->x < (camera_x + 128)
@@ -223,13 +246,18 @@ void update_enemies() {
                     } else {
                         enemy->x++;
                     }
+                    if(!character_tilemap_check(enemy->x, enemy->y)) {
+                        enemy->x = temp1;
+                    }
                     if(enemy->y > player_y) {
                         enemy->y--;
                     } else {
                         enemy->y++;
+                    }if(!character_tilemap_check(enemy->x, enemy->y)) {
+                        enemy->y = temp2;
                     }
+                    face_player(enemy);
                 }
-                face_player(enemy);
             }
         }
         enemy++;
@@ -279,9 +307,14 @@ void main() {
 
     clear_enemies(); 
 
-    enemies[0].mode = 1;
-    enemies[0].x = 288;
-    enemies[0].y = 288;
+    for(i = 0; i < 10; i++) {
+        enemies[i].mode = 1;
+        enemies[i].x = (rnd() & 0b1111100000) | 16;
+        enemies[i].y = (rnd() & 0b1111100000) | 16;
+        if(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
+            enemies[i].mode = 0;
+        }
+    }
 
     via[DDRB] = 0xFF;
 
