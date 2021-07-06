@@ -66,6 +66,9 @@ signed char player_dir_x = 0, player_dir_y = 16;
 unsigned char player_hitbox_damage = 0;
 unsigned char player_anim_frame = 0;
 
+#define PLAYER_STATE_NEUTRAL 0
+#define PLAYER_STATE_ATTACK 1
+
 int temp1;
 int temp2;
 int temp3;
@@ -306,6 +309,7 @@ void main() {
     unsigned char player_anim_dir = 4;
     unsigned char anim_flip = 0;
     unsigned int tx, ty;
+    unsigned char player_anim_state = PLAYER_STATE_NEUTRAL;
     asm ("SEI");
 
     init_dynawave();
@@ -354,56 +358,59 @@ void main() {
         tx = player_x;
         ty = player_y;
         player_hitbox_damage = 0;
-        if(inputs & INPUT_MASK_A) {
-            if(player_anim_dir < 12) {
-                player_anim_dir += 12;
-                player_anim_frame = 0;
-            }
+
+        if(player_anim_state == PLAYER_STATE_ATTACK) {
             i = (player_anim_frame >> 3) & 3;
             if(i == 1 || i == 2) {
                 player_hitbox_damage = 1;
             }
             i = 1;
+            if(player_anim_frame == 32) {
+                player_anim_state = PLAYER_STATE_NEUTRAL;
+            }
         } else {
-            if(player_anim_dir > 11) {
-                player_anim_dir -= 12;
-            }
-            if(inputs & INPUT_MASK_RIGHT) {
-                player_anim_dir = 4;
-                anim_flip = 0;
+            if(inputs & INPUT_MASK_A & ~last_inputs) {
+                player_anim_frame = 0;
+                player_anim_state = PLAYER_STATE_ATTACK;
                 i = 1;
-                player_x++;
-                player_dir_x = 16;
-                player_dir_y = 0;
-            } else if(inputs & INPUT_MASK_LEFT) {
-                player_anim_dir = 4;
-                anim_flip = SPRITE_FLIP_X;
-                i = 1;
-                player_x--;
-                player_dir_x = -16;
-                player_dir_y = 0;
-            }
-            if(!character_tilemap_check(player_x, player_y)) {
-                player_x = tx;
-            }
+            } else {
+                if(inputs & INPUT_MASK_RIGHT) {
+                    player_anim_dir = 4;
+                    anim_flip = 0;
+                    i = 1;
+                    player_x++;
+                    player_dir_x = 16;
+                    player_dir_y = 0;
+                } else if(inputs & INPUT_MASK_LEFT) {
+                    player_anim_dir = 4;
+                    anim_flip = SPRITE_FLIP_X;
+                    i = 1;
+                    player_x--;
+                    player_dir_x = -16;
+                    player_dir_y = 0;
+                }
+                if(!character_tilemap_check(player_x, player_y)) {
+                    player_x = tx;
+                }
 
-            if(inputs & INPUT_MASK_DOWN) {
-                player_anim_dir = 0;
-                anim_flip = 0;
-                i = 1;
-                player_y++;
-                player_dir_x = 0;
-                player_dir_y = 16;
-            } else if(inputs & INPUT_MASK_UP) {
-                player_anim_dir = 8;
-                anim_flip = 0;
-                i = 1;
-                player_y--;
-                player_dir_x = 0;
-                player_dir_y = -16;
-            }
-            if(!character_tilemap_check(player_x, player_y)) {
-                player_y = ty;
+                if(inputs & INPUT_MASK_DOWN) {
+                    player_anim_dir = 0;
+                    anim_flip = 0;
+                    i = 1;
+                    player_y++;
+                    player_dir_x = 0;
+                    player_dir_y = 16;
+                } else if(inputs & INPUT_MASK_UP) {
+                    player_anim_dir = 8;
+                    anim_flip = 0;
+                    i = 1;
+                    player_y--;
+                    player_dir_x = 0;
+                    player_dir_y = -16;
+                }
+                if(!character_tilemap_check(player_x, player_y)) {
+                    player_y = ty;
+                }
             }
         }
 
@@ -442,7 +449,7 @@ void main() {
             camera_y = CAMERA_LIMIT;
         }
 
-        QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, walk_cycle[(player_anim_frame >> 3) & 3] + player_anim_dir, anim_flip, DMA_GRAM_PAGE, 0);
+        QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, walk_cycle[(player_anim_frame >> 3) & 3] + player_anim_dir + (player_anim_state == PLAYER_STATE_ATTACK ? 12 : 0), anim_flip, DMA_GRAM_PAGE, 0);
         while(queue_pending != 0) {
             asm("CLI");
             wait();
