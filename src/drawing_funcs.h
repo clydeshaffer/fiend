@@ -4,11 +4,11 @@
 
 #define SPRITE_CHAR_W 8
 #define SPRITE_CHAR_H 8
-#define SPRITE_ROW_0_F 0x60
-#define SPRITE_ROW_G_V 0x68
-#define SPRITE_ROW_W_Z 0x70
+#define SPRITE_ROW_0_F 0x68
+#define SPRITE_ROW_G_V 0x70
+#define SPRITE_ROW_W_Z 0x78
 #define SPRITE_CHAR_BLANK_X 0x70
-#define SPRITE_CHAR_BLANK_Y 0x70
+#define SPRITE_CHAR_BLANK_Y 0x78
 
 #define SPRITE_FLIP_X 1
 #define SPRITE_FLIP_Y 2
