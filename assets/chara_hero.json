@@ -256,7 +256,7 @@
     "frame": { "x": 35, "y": 16, "w": 17, "h": 20 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 17, "y": 7, "w": 17, "h": 20 },
+    "spriteSourceSize": { "x": 17, "y": 12, "w": 17, "h": 20 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
@@ -265,7 +265,7 @@
     "frame": { "x": 52, "y": 16, "w": 17, "h": 18 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 17, "y": 9, "w": 17, "h": 18 },
+    "spriteSourceSize": { "x": 17, "y": 14, "w": 17, "h": 18 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
@@ -292,7 +292,7 @@
     "frame": { "x": 0, "y": 27, "w": 17, "h": 17 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 8, "y": 15, "w": 17, "h": 17 },
+    "spriteSourceSize": { "x": 13, "y": 15, "w": 17, "h": 17 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
@@ -301,7 +301,7 @@
     "frame": { "x": 35, "y": 51, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 11, "y": 16, "w": 16, "h": 16 },
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
@@ -328,7 +328,7 @@
     "frame": { "x": 0, "y": 45, "w": 19, "h": 14 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 12, "y": 23, "w": 19, "h": 14 },
+    "spriteSourceSize": { "x": 12, "y": 18, "w": 19, "h": 14 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
@@ -337,7 +337,7 @@
     "frame": { "x": 33, "y": 36, "w": 19, "h": 15 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 12, "y": 22, "w": 19, "h": 15 },
+    "spriteSourceSize": { "x": 12, "y": 17, "w": 19, "h": 15 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
@@ -353,7 +353,7 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.27-x64",
+  "version": "1.2.16.3-x64",
   "image": "chara_hero.bmp",
   "format": "I8",
   "size": { "w": 128, "h": 99 },
