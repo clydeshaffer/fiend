@@ -62,9 +62,15 @@ extern const Frame* HeroFrames;
 extern const Frame* EnemyFrames;
 unsigned char walk_cycle[4] = {3, 4, 5, 6};
 unsigned int player_x = 48, player_y = 48;
+signed char player_dir_x = 0, player_dir_y = 16;
+unsigned char player_hitbox_damage = 0;
+unsigned char player_anim_frame = 0;
 
 int temp1;
 int temp2;
+int temp3;
+int temp4;
+char* tmpptr_char;
 
 typedef struct {
     char anim_frame, anim_dir, anim_flip, mode;
@@ -85,30 +91,29 @@ char tile_is_passable(char* tile) {
 }
 
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
-    char *corner_tile;
     pos_x += HITBOX_X;
     pos_y += HITBOX_Y;
-    corner_tile = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
+    tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
     pos_x &= (TILE_SIZE-1);
     pos_y &= (TILE_SIZE-1);
-    if(!tile_is_passable(corner_tile)) {
+    if(!tile_is_passable(tmpptr_char)) {
         return 0;
     }
-    corner_tile++;
+    tmpptr_char++;
     if(pos_x + HITBOX_W >= TILE_SIZE) {
-        if(!tile_is_passable(corner_tile)) {
+        if(!tile_is_passable(tmpptr_char)) {
             return 0;
         }   
     }
-    corner_tile += MAP_W - 1;
+    tmpptr_char += MAP_W - 1;
     if(pos_y + HITBOX_H >= TILE_SIZE) {
-        if(!tile_is_passable(corner_tile)) {
+        if(!tile_is_passable(tmpptr_char)) {
             return 0;
         }   
     }
-    corner_tile++;
+    tmpptr_char++;
     if((pos_x + HITBOX_W >= TILE_SIZE) && (pos_y + HITBOX_H >= TILE_SIZE)) {
-        if(!tile_is_passable(corner_tile)) {
+        if(!tile_is_passable(tmpptr_char)) {
             return 0;
         }   
     }
@@ -130,7 +135,7 @@ void draw_world() {
         QueueSpriteRect(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0);
     }
     t++;
-    for(c = 1; c < VISIBLE_W; c++) {
+    for(c = 1; c < VISIBLE_W; ++c) {
         if((cam_x + c) < MAP_W) {
            
             if(tiles[t] != 0) {
@@ -143,7 +148,7 @@ void draw_world() {
 
     c = 0;
     r = 1;
-    for(r = 1; r < VISIBLE_H; r++) {
+    for(r = 1; r < VISIBLE_H; ++r) {
         if((cam_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
@@ -151,7 +156,7 @@ void draw_world() {
                 QueueSpriteRect(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0);
             }
             t++;
-            for(c = 1; c < VISIBLE_W; c++) {
+            for(c = 1; c < VISIBLE_W; ++c) {
                 if((cam_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
                         QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0);
@@ -168,7 +173,7 @@ void draw_world() {
 
 void clear_enemies() {
     char i;
-    for(i = 0; i < MAX_ENEMIES; i++) {
+    for(i = 0; i < MAX_ENEMIES; ++i) {
         enemies[i].mode = 0;
         enemies[i].x = 0;
         enemies[i].y = 0;
@@ -181,7 +186,7 @@ void clear_enemies() {
 void draw_enemies() {
     char i;
     MobState *enemy = enemies;
-    for(i = 0; i < MAX_ENEMIES; i++) {
+    for(i = 0; i < MAX_ENEMIES; ++i) {
         if(enemy->mode != 0) {
             if(enemy->x > camera_x
                 && enemy->y > camera_y
@@ -190,26 +195,25 @@ void draw_enemies() {
                     QueuePackedSprite(&EnemyFrames, enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, 0, ENEMY_SPRITES_OFFSET);
                 } 
         }
-        enemy++;
+        ++enemy;
     }
 }
 
 void face_player(MobState *enemy) {
-    int dx, dy;
     tempEnemy = *enemy;
-    dx = player_x - tempEnemy.x;
-    dy = player_y - tempEnemy.y;
-    temp1 = dx;
-    temp2 = dy;
+    temp3 = player_x - tempEnemy.x;
+    temp4 = player_y - tempEnemy.y;
+    temp1 = temp3;
+    temp2 = temp4;
     
-    if(dx < 0) {
+    if(temp3 < 0) {
         temp1 = -temp1;
     }
-    if(dy < 0) {
+    if(temp4 < 0) {
         temp2 = -temp2;
     }
     if(temp1 > temp2) {
-        if(dx > 0) {
+        if(temp3 > 0) {
             tempEnemy.anim_dir = 4;
             tempEnemy.anim_flip = 0;
         } else {
@@ -217,7 +221,7 @@ void face_player(MobState *enemy) {
             tempEnemy.anim_flip = SPRITE_FLIP_X;
         }
     } else {
-        if(dy > 0) {
+        if(temp4 > 0) {
             tempEnemy.anim_flip = 0;
             tempEnemy.anim_dir = 0;
         } else {
@@ -231,7 +235,7 @@ void face_player(MobState *enemy) {
 void update_enemies() {
     char i;
     MobState *enemy = enemies;
-    for(i = 0; i < MAX_ENEMIES; i++) {
+    for(i = 0; i < MAX_ENEMIES; ++i) {
         temp1 = enemy->x;
         temp2 = enemy->y;
         if(enemy->x > camera_x
@@ -239,34 +243,59 @@ void update_enemies() {
                 && enemy->x < (camera_x + 128)
                 && enemy->y < (camera_y + 128)) {
             if(enemy->mode == 1) {
-                enemy->anim_frame++;
+                ++(enemy->anim_frame);
                 if((enemy->anim_frame & 3) == 0) {
                     if(enemy->x > player_x) {
-                        enemy->x--;
+                        --(enemy->x);
                     } else {
-                        enemy->x++;
+                        ++(enemy->x);
                     }
                     if(!character_tilemap_check(enemy->x, enemy->y)) {
                         enemy->x = temp1;
                     }
                     if(enemy->y > player_y) {
-                        enemy->y--;
+                        --(enemy->y);
                     } else {
-                        enemy->y++;
+                        ++(enemy->y);
                     }if(!character_tilemap_check(enemy->x, enemy->y)) {
                         enemy->y = temp2;
                     }
                     face_player(enemy);
                 }
+
+                if(player_hitbox_damage) {
+                    temp1 = player_x + player_dir_x - enemy->x;
+                    temp2 = player_y + player_dir_y - enemy->y;
+                    if(temp1 < 0) {
+                        temp1 = -temp1;
+                    }
+                    if(temp2 < 0) {
+                        temp2 = -temp2;
+                    }
+                    if(temp1 + temp2 < 8) {
+                        enemy->mode = 2;
+                        enemy->anim_frame = 0;
+                    }
+                }
+            } else if(enemy->mode == 2) {
+                ++(enemy->anim_frame);
+                enemy->anim_dir = (enemy->anim_dir + 1) & 7;
+                if(enemy->anim_frame & 1) {
+                    enemy->x += player_dir_x >> 4;
+                    enemy->y += player_dir_y >> 4;
+                }
+                if(enemy->anim_frame == 12) {
+                    enemy->mode = 0;
+                }
             }
         }
-        enemy++;
+        ++enemy;
     }
 }
 
 void Sleep(int frames) {
     int i;
-    for(i = 0; i < frames; i++) {
+    for(i = 0; i < frames; ++i) {
         frameflag = 1;
         while(frameflag) {}
     }
@@ -274,8 +303,7 @@ void Sleep(int frames) {
 
 void main() {
     unsigned char i;
-    unsigned char anim_frame = 0;
-    unsigned char anim_dir = 4;
+    unsigned char player_anim_dir = 4;
     unsigned char anim_flip = 0;
     unsigned int tx, ty;
     asm ("SEI");
@@ -307,7 +335,7 @@ void main() {
 
     clear_enemies(); 
 
-    for(i = 0; i < 10; i++) {
+    for(i = 0; i < 10; ++i) {
         enemies[i].mode = 1;
         enemies[i].x = (rnd() & 0b1111100000) | 16;
         enemies[i].y = (rnd() & 0b1111100000) | 16;
@@ -325,41 +353,54 @@ void main() {
         i = 0;
         tx = player_x;
         ty = player_y;
+        player_hitbox_damage = 0;
         if(inputs & INPUT_MASK_A) {
-            if(anim_dir < 12) {
-                anim_dir += 12;
-                anim_frame = 0;
+            if(player_anim_dir < 12) {
+                player_anim_dir += 12;
+                player_anim_frame = 0;
+            }
+            i = (player_anim_frame >> 3) & 3;
+            if(i == 1 || i == 2) {
+                player_hitbox_damage = 1;
             }
             i = 1;
         } else {
-            if(anim_dir > 11) {
-                anim_dir -= 12;
+            if(player_anim_dir > 11) {
+                player_anim_dir -= 12;
             }
             if(inputs & INPUT_MASK_RIGHT) {
-                anim_dir = 4;
+                player_anim_dir = 4;
                 anim_flip = 0;
                 i = 1;
                 player_x++;
+                player_dir_x = 16;
+                player_dir_y = 0;
             } else if(inputs & INPUT_MASK_LEFT) {
-                anim_dir = 4;
+                player_anim_dir = 4;
                 anim_flip = SPRITE_FLIP_X;
                 i = 1;
                 player_x--;
+                player_dir_x = -16;
+                player_dir_y = 0;
             }
             if(!character_tilemap_check(player_x, player_y)) {
                 player_x = tx;
             }
 
             if(inputs & INPUT_MASK_DOWN) {
-                anim_dir = 0;
+                player_anim_dir = 0;
                 anim_flip = 0;
                 i = 1;
                 player_y++;
+                player_dir_x = 0;
+                player_dir_y = 16;
             } else if(inputs & INPUT_MASK_UP) {
-                anim_dir = 8;
+                player_anim_dir = 8;
                 anim_flip = 0;
                 i = 1;
                 player_y--;
+                player_dir_x = 0;
+                player_dir_y = -16;
             }
             if(!character_tilemap_check(player_x, player_y)) {
                 player_y = ty;
@@ -367,7 +408,7 @@ void main() {
         }
 
         if(i == 1) {
-            anim_frame++;
+            player_anim_frame++;
         }
 
         update_enemies();
@@ -401,7 +442,7 @@ void main() {
             camera_y = CAMERA_LIMIT;
         }
 
-        QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, walk_cycle[(anim_frame >> 3) & 3] + anim_dir, anim_flip, DMA_GRAM_PAGE, 0);
+        QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, walk_cycle[(player_anim_frame >> 3) & 3] + player_anim_dir, anim_flip, DMA_GRAM_PAGE, 0);
         while(queue_pending != 0) {
             asm("CLI");
             wait();
