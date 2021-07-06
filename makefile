@@ -7,7 +7,7 @@ ODIR = build
 
 PORT = COM3
 
-CFLAGS = -t none -Osir --cpu 65sc02
+CFLAGS = -t none -Osir --cpu 65c02
 AFLAGS = --cpu 65sc02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
 LFLAGS = -C gametank-32k.cfg -m out.map
 LLIBS = lib/gametank.lib

@@ -81,6 +81,30 @@ typedef struct {
 } MobState;
 
 MobState tempEnemy;
+#define ch_tempEnemy ((char*) &tempEnemy)
+#define ch_enemy ((char*) enemy)
+
+void LD_tempEnemy(MobState *enemy) {
+    ch_tempEnemy[0] = ch_enemy[0];
+    ch_tempEnemy[1] = ch_enemy[1];
+    ch_tempEnemy[2] = ch_enemy[2];
+    ch_tempEnemy[3] = ch_enemy[3];
+    ch_tempEnemy[4] = ch_enemy[4];
+    ch_tempEnemy[5] = ch_enemy[5];
+    ch_tempEnemy[6] = ch_enemy[6];
+    ch_tempEnemy[7] = ch_enemy[7];
+}
+
+void ST_tempEnemy(MobState *enemy) {
+    ch_enemy[0] = ch_tempEnemy[0];
+    ch_enemy[1] = ch_tempEnemy[1];
+    ch_enemy[2] = ch_tempEnemy[2];
+    ch_enemy[3] = ch_tempEnemy[3];
+    ch_enemy[4] = ch_tempEnemy[4];
+    ch_enemy[5] = ch_tempEnemy[5];
+    ch_enemy[6] = ch_tempEnemy[6];
+    ch_enemy[7] = ch_tempEnemy[7];
+}
 
 MobState enemies[MAX_ENEMIES];
 
@@ -89,9 +113,8 @@ MobState enemies[MAX_ENEMIES];
 #define HITBOX_W 10
 #define HITBOX_H 3
 
-char tile_is_passable(char* tile) {
-    return *tile == 1 || *tile == 3;
-}
+
+char tile_passmap[4] = { 0, 1, 0, 1};
 
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
     pos_x += HITBOX_X;
@@ -99,24 +122,24 @@ char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
     tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
     pos_x &= (TILE_SIZE-1);
     pos_y &= (TILE_SIZE-1);
-    if(!tile_is_passable(tmpptr_char)) {
+    if(!tile_passmap[*tmpptr_char]) {
         return 0;
     }
     tmpptr_char++;
     if(pos_x + HITBOX_W >= TILE_SIZE) {
-        if(!tile_is_passable(tmpptr_char)) {
+        if(!tile_passmap[*tmpptr_char]) {
             return 0;
         }   
     }
     tmpptr_char += MAP_W - 1;
     if(pos_y + HITBOX_H >= TILE_SIZE) {
-        if(!tile_is_passable(tmpptr_char)) {
+        if(!tile_passmap[*tmpptr_char]) {
             return 0;
         }   
     }
     tmpptr_char++;
     if((pos_x + HITBOX_W >= TILE_SIZE) && (pos_y + HITBOX_H >= TILE_SIZE)) {
-        if(!tile_is_passable(tmpptr_char)) {
+        if(!tile_passmap[*tmpptr_char]) {
             return 0;
         }   
     }
@@ -191,9 +214,9 @@ void draw_enemies() {
     MobState *enemy = enemies;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         if(enemy->mode != 0) {
-            if(enemy->x > camera_x
+            if(enemy->x > (camera_x-8)
                 && enemy->y > camera_y
-                && enemy->x < (camera_x + 128)
+                && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
                     QueuePackedSprite(&EnemyFrames, enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, 0, ENEMY_SPRITES_OFFSET);
                 } 
@@ -202,8 +225,7 @@ void draw_enemies() {
     }
 }
 
-void face_player(MobState *enemy) {
-    tempEnemy = *enemy;
+void face_player() {
     temp3 = player_x - tempEnemy.x;
     temp4 = player_y - tempEnemy.y;
     temp1 = temp3;
@@ -232,43 +254,46 @@ void face_player(MobState *enemy) {
             tempEnemy.anim_dir = 8;
         }
     }
-    *enemy = tempEnemy;
 }
 
 void update_enemies() {
     char i;
     MobState *enemy = enemies;
     for(i = 0; i < MAX_ENEMIES; ++i) {
-        temp1 = enemy->x;
-        temp2 = enemy->y;
-        if(enemy->x > camera_x
+        if(enemy->x > (camera_x-8)
                 && enemy->y > camera_y
-                && enemy->x < (camera_x + 128)
+                && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
-            if(enemy->mode == 1) {
-                ++(enemy->anim_frame);
-                if((enemy->anim_frame & 3) == 0) {
-                    if(enemy->x > player_x) {
-                        --(enemy->x);
+            LD_tempEnemy(enemy);
+            if(tempEnemy.mode == 1) {
+                temp1 = tempEnemy.x;
+                temp2 = tempEnemy.y;
+                ++(tempEnemy.anim_frame);
+                if((tempEnemy.anim_frame & 3) == 0) {
+                    if(tempEnemy.x > player_x) {
+                        --(tempEnemy.x);
                     } else {
-                        ++(enemy->x);
+                        ++(tempEnemy.x);
                     }
-                    if(!character_tilemap_check(enemy->x, enemy->y)) {
-                        enemy->x = temp1;
+                    if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
+                        tempEnemy.x = temp1;
                     }
-                    if(enemy->y > player_y) {
-                        --(enemy->y);
+                    if(tempEnemy.y > player_y) {
+                        --(tempEnemy.y);
                     } else {
-                        ++(enemy->y);
-                    }if(!character_tilemap_check(enemy->x, enemy->y)) {
-                        enemy->y = temp2;
+                        ++(tempEnemy.y);
                     }
-                    face_player(enemy);
+                    
+                    if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
+                        tempEnemy.y = temp2;
+                    }
+                    
+                    face_player();
                 }
 
                 if(player_hitbox_damage) {
-                    temp1 = player_x + player_dir_x - enemy->x;
-                    temp2 = player_y + player_dir_y - enemy->y;
+                    temp1 = player_x + player_dir_x - tempEnemy.x;
+                    temp2 = player_y + player_dir_y - tempEnemy.y;
                     if(temp1 < 0) {
                         temp1 = -temp1;
                     }
@@ -276,21 +301,22 @@ void update_enemies() {
                         temp2 = -temp2;
                     }
                     if(temp1 + temp2 < 8) {
-                        enemy->mode = 2;
-                        enemy->anim_frame = 0;
+                        tempEnemy.mode = 2;
+                        tempEnemy.anim_frame = 0;
                     }
                 }
-            } else if(enemy->mode == 2) {
-                ++(enemy->anim_frame);
-                enemy->anim_dir = (enemy->anim_dir + 1) & 7;
-                if(enemy->anim_frame & 1) {
-                    enemy->x += player_dir_x >> 4;
-                    enemy->y += player_dir_y >> 4;
+            } else if(tempEnemy.mode == 2) {
+                ++(tempEnemy.anim_frame);
+                tempEnemy.anim_dir = (tempEnemy.anim_dir + 1) & 7;
+                if(tempEnemy.anim_frame & 1) {
+                    tempEnemy.x += player_dir_x >> 4;
+                    tempEnemy.y += player_dir_y >> 4;
                 }
-                if(enemy->anim_frame == 12) {
-                    enemy->mode = 0;
+                if(tempEnemy.anim_frame == 12) {
+                    tempEnemy.mode = 0;
                 }
             }
+            ST_tempEnemy(enemy);
         }
         ++enemy;
     }

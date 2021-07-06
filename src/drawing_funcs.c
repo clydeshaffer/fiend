@@ -31,37 +31,51 @@ unsigned char queue_end = 0;
 unsigned char queue_count = 0;
 unsigned char queue_pending = 0;
 #define QUEUE_MAX 32
+Frame temp_frame;
 
 void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char flip, char flags, char offset) {
-    Frame frameData;
-
     while(queue_count >= QUEUE_MAX) {
         asm("CLI");
         wait();
     }
 
     asm("SEI");
-    frameData = sprite_table[frame];
+    temp_frame = sprite_table[frame];
     draw_queue[queue_end++] = flags;
 
     if(flip & SPRITE_FLIP_X) {
-        draw_queue[queue_end++] = (x - frameData.w - frameData.ovx - 1) | 128;
+        draw_queue[queue_end] = (x - temp_frame.w - temp_frame.ovx - 1);
     } else {
-        draw_queue[queue_end++] = (frameData.ovx + x) | 128;
+        draw_queue[queue_end] = (temp_frame.ovx + x);
+    }
+    if(draw_queue[queue_end] & 128) {
+        temp_frame.w -= 0 - draw_queue[queue_end];
+        temp_frame.gx += 0 - draw_queue[queue_end];
+        draw_queue[queue_end] = 0;
     }
 
-    draw_queue[queue_end++] = (frameData.ovy + y) | 128;
+    draw_queue[queue_end] |= 128;
+    ++queue_end;
 
-    draw_queue[queue_end] = frameData.gx;
+    draw_queue[queue_end] = (temp_frame.ovy + y);
+    if(draw_queue[queue_end] & 128) {
+        temp_frame.h -= 0 - draw_queue[queue_end];
+        temp_frame.gy += 0 - draw_queue[queue_end];
+        draw_queue[queue_end] = 0;
+    }
+    draw_queue[queue_end] |= 128;
+    ++queue_end;
+
+    draw_queue[queue_end] = temp_frame.gx;
     if(flip & SPRITE_FLIP_X) {
         draw_queue[queue_end] ^= 0x7F;
-        draw_queue[queue_end] -= frameData.w - 1;
+        draw_queue[queue_end] -= temp_frame.w - 1;
     }
     queue_end++;
 
-    draw_queue[queue_end++] = frameData.gy + offset;
-    draw_queue[queue_end++] = frameData.w | (flip & SPRITE_FLIP_X ? 128 : 0);
-    draw_queue[queue_end++] = frameData.h;
+    draw_queue[queue_end++] = temp_frame.gy + offset;
+    draw_queue[queue_end++] = temp_frame.w | (flip & SPRITE_FLIP_X ? 128 : 0);
+    draw_queue[queue_end++] = temp_frame.h;
     draw_queue[queue_end++] = 0;
     queue_count++;
 
@@ -140,7 +154,7 @@ void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned c
     asm("SEI");
     draw_queue[queue_end++] = flags;
     draw_queue[queue_end++] = x | 128;
-    draw_queue[queue_end++] = y;
+    draw_queue[queue_end++] = y | 128;
     draw_queue[queue_end++] = DMA_GX_SOLIDCOLOR_FLAG;
     draw_queue[queue_end++] = 0;
     draw_queue[queue_end++] = w;
