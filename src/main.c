@@ -436,6 +436,11 @@ void init_game_state(unsigned char new_state) {
                 ++enemy_count;
             }
         }
+
+        do {
+            player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
+            player_y = ((((rnd() & 0x7FFF) % (MAP_H - 2)) + 1) << TILE_ORD)+16;
+        } while(!character_tilemap_check(player_x, player_y));
     }
 }
 
@@ -477,7 +482,7 @@ void main() {
     while(1){
         updateInputs();
         if(game_state == GAME_STATE_TITLE) {
-            //rnd();
+            rnd();
             QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
             draw_world();
             ++player_anim_frame;
@@ -648,10 +653,10 @@ void main() {
         } else if(game_state == GAME_STATE_PLAY) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;
-            cursorX = 96;
+            cursorX = 92;
             cursorY = 108;
             print("left");
-            cursorX = 88;
+            cursorX = 83;
             cursorY = 108;
             printnum(enemy_count);
         }
