@@ -426,16 +426,18 @@ void init_game_state(unsigned char new_state) {
         player_anim_frame = 0;
         player_health = PLAYER_MAX_HEALTH;
         clear_enemies(); 
-        for(i = 0; i < 10; ++i) {
-            enemies[i].mode = 1;
-            enemies[i].x = (rnd() & 0b1111100000) | 16;
-            enemies[i].y = (rnd() & 0b1111100000) | 16;
-            if(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
-                enemies[i].mode = 0;
-            } else {
-                ++enemy_count;
+        do {
+            for(i = 0; i < MAX_ENEMIES; ++i) {
+                enemies[i].mode = 1;
+                enemies[i].x = (rnd() & 0b1111100000) | 16;
+                enemies[i].y = (rnd() & 0b1111100000) | 16;
+                if(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
+                    enemies[i].mode = 0;
+                } else {
+                    ++enemy_count;
+                }
             }
-        }
+        } while(enemy_count == 0);
 
         do {
             player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
@@ -648,7 +650,9 @@ void main() {
             print("floor cleared");
             game_over_timer--;
             if(game_over_timer == 0) {
+                i = player_health;
                 init_game_state(GAME_STATE_PLAY);
+                player_health = i;
             }
         } else if(game_state == GAME_STATE_PLAY) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
