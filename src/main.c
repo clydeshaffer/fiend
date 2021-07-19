@@ -95,7 +95,7 @@ int temp3;
 int temp4;
 char* tmpptr_char;
 
-typedef struct {
+typedef struct MobState {
     char anim_frame, anim_dir, anim_flip, mode;
     int x, y;
 } MobState;
@@ -104,27 +104,9 @@ MobState tempEnemy;
 #define ch_tempEnemy ((char*) &tempEnemy)
 #define ch_enemy ((char*) enemy)
 
-void LD_tempEnemy(MobState *enemy) {
-    ch_tempEnemy[0] = ch_enemy[0];
-    ch_tempEnemy[1] = ch_enemy[1];
-    ch_tempEnemy[2] = ch_enemy[2];
-    ch_tempEnemy[3] = ch_enemy[3];
-    ch_tempEnemy[4] = ch_enemy[4];
-    ch_tempEnemy[5] = ch_enemy[5];
-    ch_tempEnemy[6] = ch_enemy[6];
-    ch_tempEnemy[7] = ch_enemy[7];
-}
+void LD_tempEnemy(MobState *enemy);
 
-void ST_tempEnemy(MobState *enemy) {
-    ch_enemy[0] = ch_tempEnemy[0];
-    ch_enemy[1] = ch_tempEnemy[1];
-    ch_enemy[2] = ch_tempEnemy[2];
-    ch_enemy[3] = ch_tempEnemy[3];
-    ch_enemy[4] = ch_tempEnemy[4];
-    ch_enemy[5] = ch_tempEnemy[5];
-    ch_enemy[6] = ch_tempEnemy[6];
-    ch_enemy[7] = ch_tempEnemy[7];
-}
+void ST_tempEnemy(MobState *enemy);
 
 MobState enemies[MAX_ENEMIES];
 
@@ -169,6 +151,8 @@ char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
 void draw_world() {
     char r, c, tile_scroll_x, tile_scroll_y, cam_x, cam_y;
     int t;
+    via[ORB] = 0x80;
+    via[ORB] = 0x00;
     tile_scroll_x = camera_x & (TILE_SIZE-1);
     tile_scroll_y = camera_y & (TILE_SIZE-1);
     cam_x = camera_x >> TILE_ORD;
@@ -178,14 +162,16 @@ void draw_world() {
     c = 0;
     t = (cam_x + c) + ((cam_y + r) << MAP_ORD);
     if(tiles[t] != 0) {
-        QueueSpriteRect(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0);
+        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0, 0)
+        QueueSpriteRect();
     }
     t++;
     for(c = 1; c < VISIBLE_W; ++c) {
         if((cam_x + c) < MAP_W) {
            
             if(tiles[t] != 0) {
-                QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y, 0);
+                SET_RECT((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y, 0, 0)
+                QueueSpriteRect();
             }
         }
         t++;
@@ -198,14 +184,15 @@ void draw_world() {
         if((cam_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
-                
-                QueueSpriteRect(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0);
+                SET_RECT(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0, 0)
+                QueueSpriteRect();
             }
             t++;
             for(c = 1; c < VISIBLE_W; ++c) {
                 if((cam_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
-                        QueueSpriteRect((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0);
+                        SET_RECT((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0, 0)
+                        QueueSpriteRect();
                     }
                 }
                 t++;
@@ -215,6 +202,8 @@ void draw_world() {
         }
         t += MAP_W - VISIBLE_W;
     }
+    via[ORB] = 0x80;
+    via[ORB] = 0x40;
 }
 
 void clear_enemies() {
@@ -482,6 +471,14 @@ void main() {
 
     init_game_state(GAME_STATE_TITLE);
     while(1){
+        asm("SEI");
+        queue_start = 0;
+        queue_end = 0;
+        queue_pending = 0;
+        queue_count = 0;
+        vram[START] = 0;
+        asm("CLI");
+
         updateInputs();
         if(game_state == GAME_STATE_TITLE) {
             rnd();
@@ -504,6 +501,9 @@ void main() {
             }
         }
         else if(game_state == GAME_STATE_PLAY) {    
+
+            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
+
             i = 0;
             tx = player_x;
             ty = player_y;
@@ -583,18 +583,6 @@ void main() {
             if(i == 1) {
                 player_anim_frame++;
             }
-
-            update_enemies();
-
-            asm("SEI");
-            queue_start = 0;
-            queue_end = 0;
-            queue_pending = 0;
-            queue_count = 0;
-            vram[START] = 0;
-            asm("CLI");
-
-            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
             
             camera_x = player_x - 64;
             camera_y = player_y - 64;
@@ -612,13 +600,19 @@ void main() {
             }
 
             draw_world();
+
+            update_enemies();
+
             draw_enemies();
+
             QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, (3 & (player_anim_frame >> 3)) + player_anim_dir + player_state_offsets[player_anim_state], player_anim_flip, DMA_GRAM_PAGE, 0);
             for(i = 0; i < player_health; ++i) {
-                QueueSpriteRect((i << 3) + 4, 10, 8, 8, 88, 120, 0);
+                SET_RECT((i << 3) + 4, 10, 8, 8, 88, 120, 0, 0)
+                QueueSpriteRect();
             }
             for(;i < PLAYER_MAX_HEALTH; ++i) {
-                QueueSpriteRect((i<<3)+4, 10, 8,8, 96, 120, 0);
+                SET_RECT((i<<3)+4, 10, 8,8, 96, 120, 0, 0)
+                QueueSpriteRect();
             }
         }    
         
@@ -664,6 +658,7 @@ void main() {
             cursorY = 108;
             printnum(enemy_count);
         }
+
 
         Sleep(1);
         frameflip ^= DMA_PAGE_OUT | DMA_VRAM_PAGE;

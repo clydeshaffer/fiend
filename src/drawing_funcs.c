@@ -32,6 +32,9 @@ unsigned char queue_count = 0;
 unsigned char queue_pending = 0;
 #define QUEUE_MAX 32
 Frame temp_frame;
+Frame rect;
+
+void pushRect();
 
 void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char flip, char flags, char offset) {
     while(queue_count >= QUEUE_MAX) {
@@ -44,9 +47,9 @@ void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char fli
     draw_queue[queue_end++] = flags;
 
     if(flip & SPRITE_FLIP_X) {
-        draw_queue[queue_end] = (x - temp_frame.w - temp_frame.ovx - 1);
+        draw_queue[queue_end] = (x - temp_frame.w - temp_frame.x - 1);
     } else {
-        draw_queue[queue_end] = (temp_frame.ovx + x);
+        draw_queue[queue_end] = (temp_frame.x + x);
     }
     if(draw_queue[queue_end] & 128) {
         temp_frame.w -= 0 - draw_queue[queue_end];
@@ -57,7 +60,7 @@ void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char fli
     draw_queue[queue_end] |= 128;
     ++queue_end;
 
-    draw_queue[queue_end] = (temp_frame.ovy + y);
+    draw_queue[queue_end] = (temp_frame.y + y);
     if(draw_queue[queue_end] & 128) {
         temp_frame.h -= 0 - draw_queue[queue_end];
         temp_frame.gy += 0 - draw_queue[queue_end];
@@ -86,40 +89,33 @@ void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char fli
     asm("CLI");
 }
 
-void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy, unsigned char flags) {
-    if(x > 127) {
+void QueueSpriteRect() {
+    if(rect.x > 127) {
         return;
     }
-    if(y > 127) {
+    if(rect.y > 127) {
         return;
     }
-    if(w == 0) {
+    if(rect.w == 0) {
         return;
     }
-    if(h == 0) {
+    if(rect.h == 0) {
         return;
     }
-    while(queue_count >= QUEUE_MAX) {
+    if(queue_count >= QUEUE_MAX) {
         asm("CLI");
         wait();
     }
 
-    if(x + w >= 128) {
-        w = 128 - x;
+    if(rect.x + rect.w >= 128) {
+        rect.w = 128 - rect.x;
     }
-    if(y + h >= 128) {
-        h = 128 - y;
+    if(rect.y + rect.h >= 128) {
+        rect.h = 128 - rect.y;
     }
+
     asm("SEI");
-    draw_queue[queue_end++] = flags;
-    draw_queue[queue_end++] = x | 128;
-    draw_queue[queue_end++] = y | 128;
-    draw_queue[queue_end++] = gx;
-    draw_queue[queue_end++] = gy;
-    draw_queue[queue_end++] = w;
-    draw_queue[queue_end++] = h;
-    draw_queue[queue_end++] = 0;
-    queue_count++;
+    pushRect();
 
     if(queue_pending == 0) {
         queue_pending = 1;

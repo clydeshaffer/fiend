@@ -18,13 +18,22 @@
 
 #define ENEMY_SPRITES_OFFSET 32
 
-typedef struct {
-    char ovx, ovy, w, h, gx, gy, pad1, pad2;
+#define SET_RECT(xm,ym,wm,hm,gxm,gym,cm,fm) rect.x = xm;\
+    rect.y = ym; \
+    rect.w = wm; \
+    rect.h = hm; \
+    rect.gx = gxm; \
+    rect.gy = gym; \
+    rect.c = cm; \
+    rect.f = fm; \
+
+typedef struct Frame {
+    char x, y, w, h, gx, gy, c, f;
 } Frame;
 
 void load_spritesheet();
 void QueuePackedSprite(Frame *sprite_table, char x, char y, char frame, char flip, char flags, char offset);
-void QueueSpriteRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char gx, unsigned char gy, unsigned char flags);
+void QueueSpriteRect();
 void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c, unsigned char flags);
 void NextQueue();
 void FlushQueue();
@@ -43,5 +52,6 @@ void print(char* str);
 
 extern char cursorX, cursorY;
 extern unsigned char queue_start, queue_end, queue_pending, queue_count;
+extern Frame rect;
 
 #endif

@@ -14,7 +14,7 @@ LLIBS = lib/gametank.lib
 
 _COBJS = gametank.o dynawave.o drawing_funcs.o main.o
 COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
-_AOBJS = assets.o wait.o vectors.o interrupt.o
+_AOBJS = assets.o wait.o vectors.o interrupt.o enemy.o draw_util.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
 _BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate chara_spider.gtg.deflate
