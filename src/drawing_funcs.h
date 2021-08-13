@@ -51,6 +51,7 @@ void printnum(int num);
 void print(char* str);
 
 extern char cursorX, cursorY;
+extern unsigned char draw_queue[256];
 extern unsigned char queue_start, queue_end, queue_pending, queue_count;
 extern Frame rect;
 
