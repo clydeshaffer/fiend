@@ -126,10 +126,12 @@ void map_fill_tile_rect(Rect *r) {
     }
 }
 
+unsigned char scratchpad[256];
+
 void generate_map() {
     //inflatemem(tiles, &TestMap);
     unsigned int i, j;
-    Rect *mapRects = (Rect*) draw_queue;
+    Rect *mapRects = (Rect*) scratchpad;
 
     for(i = 0; i < MAP_SIZE; i++) {
         tiles[i] = 0;
@@ -154,7 +156,7 @@ void generate_map() {
         }
     }
 
-    mapRects = (Rect*) draw_queue;
+    mapRects = (Rect*) scratchpad;
 
     for(i = 0; i < 16; i+=4) {
         for(j = 0; j < 3; ++j) {
@@ -221,7 +223,8 @@ void draw_world() {
     c = 0;
     t = (cam_x + c) + ((cam_y + r) << MAP_ORD);
     if(tiles[t] != 0) {
-        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0, 0)
+        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0, bankflip)
+        queue_flags_param = DMA_GCARRY;
         QueueSpriteRect();
     }
     t++;
@@ -229,7 +232,8 @@ void draw_world() {
         if((cam_x + c) < MAP_W) {
            
             if(tiles[t] != 0) {
-                SET_RECT((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y, 0, 0)
+                SET_RECT((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y, 0, bankflip)
+                queue_flags_param = DMA_GCARRY;
                 QueueSpriteRect();
             }
         }
@@ -243,14 +247,16 @@ void draw_world() {
         if((cam_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
-                SET_RECT(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0, 0)
+                SET_RECT(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0, bankflip)
+                queue_flags_param = DMA_GCARRY;
                 QueueSpriteRect();
             }
             t++;
             for(c = 1; c < VISIBLE_W; ++c) {
                 if((cam_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
-                        SET_RECT((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0, 0)
+                        SET_RECT((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0, bankflip)
+                        queue_flags_param = DMA_GCARRY;
                         QueueSpriteRect();
                     }
                 }

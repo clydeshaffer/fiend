@@ -100,13 +100,14 @@ void clear_enemies() {
 void draw_enemies() {
     char i;
     MobState *enemy = enemies;
+    queue_flags_param = DMA_GCARRY;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         if(enemy->mode != 0) {
             if((enemy->x + 8) > (camera_x)
                 && enemy->y > camera_y
                 && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
-                    QueuePackedSprite(&EnemyFrames, enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, 0, ENEMY_SPRITES_OFFSET);
+                    QueuePackedSprite(&EnemyFrames, enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, GRAM_PAGE(0) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, ENEMY_SPRITES_OFFSET);
                 } 
         }
         ++enemy;
@@ -323,23 +324,33 @@ void main() {
     unsigned int tx, ty;
     asm ("SEI");
 
-    init_dynawave();
-
-    load_spritesheet();
-
-    *dma_flags = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE;
+    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE;
     FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 0);
     wait();
-    *dma_flags = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_VRAM_PAGE | DMA_PAGE_OUT;
+    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_PAGE_OUT;
+    *bank_reg = BANK_SECOND_FRAMEBUFFER;
     FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 0);
     wait();
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
+    *bank_reg = 0;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
-    *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM | DMA_VRAM_PAGE;
+    *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
+    *bank_reg = BANK_SECOND_FRAMEBUFFER;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
+
+    init_dynawave();
+
+    frameflip = 0;
+    flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
+    bankflip = BANK_SECOND_FRAMEBUFFER;
+    banksMirror = bankflip;
+
+    load_spritesheet();
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
     *dma_flags = flagsMirror;
+    banksMirror = bankflip;
+    *bank_reg = banksMirror;
 
     queue_start = 0;
     queue_end = 0;
@@ -365,7 +376,7 @@ void main() {
         updateInputs();
         if(game_state == GAME_STATE_TITLE) {
             rnd();
-            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
+            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR);
             draw_world();
             ++player_anim_frame;
             if(player_anim_frame & 1) {
@@ -385,7 +396,7 @@ void main() {
         }
         else if(game_state == GAME_STATE_PLAY) {    
 
-            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR, 0);
+            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR);
 
             i = 0;
             tx = player_x;
@@ -488,13 +499,14 @@ void main() {
 
             draw_enemies();
 
-            QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, (3 & (player_anim_frame >> 3)) + player_anim_dir + player_state_offsets[player_anim_state], player_anim_flip, DMA_GRAM_PAGE, 0);
+            queue_flags_param = DMA_GCARRY;
+            QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, (3 & (player_anim_frame >> 3)) + player_anim_dir + player_state_offsets[player_anim_state], player_anim_flip, bankflip | GRAM_PAGE(1) | BANK_CLIP_X | BANK_CLIP_Y, 0);
             for(i = 0; i < player_health; ++i) {
-                SET_RECT((i << 3) + 4, 10, 8, 8, 88, 120, 0, 0)
+                SET_RECT((i << 3) + 4, 10, 8, 8, 88, 120, 0, bankflip)
                 QueueSpriteRect();
             }
             for(;i < PLAYER_MAX_HEALTH; ++i) {
-                SET_RECT((i<<3)+4, 10, 8,8, 96, 120, 0, 0)
+                SET_RECT((i<<3)+4, 10, 8,8, 96, 120, 0, bankflip)
                 QueueSpriteRect();
             }
         }    
@@ -507,6 +519,10 @@ void main() {
         }
 
         if(game_state == GAME_STATE_TITLE) {
+            flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
+            *dma_flags = flagsMirror;
+            banksMirror = bankflip;
+            *bank_reg = banksMirror;
             cursorX = 8;
             cursorY = 32;
             print("accursed fiend");
@@ -544,8 +560,11 @@ void main() {
 
 
         Sleep(1);
-        frameflip ^= DMA_PAGE_OUT | DMA_VRAM_PAGE;
+        frameflip ^= DMA_PAGE_OUT;
+        bankflip ^= BANK_SECOND_FRAMEBUFFER;
         flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
+        banksMirror = bankflip;
         *dma_flags = flagsMirror;
+        *bank_reg = banksMirror;
     }
 }

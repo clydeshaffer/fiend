@@ -18,23 +18,23 @@
 
 #define ENEMY_SPRITES_OFFSET 32
 
-#define SET_RECT(xm,ym,wm,hm,gxm,gym,cm,fm) rect.x = xm;\
+#define SET_RECT(xm,ym,wm,hm,gxm,gym,cm,bm) rect.x = xm;\
     rect.y = ym; \
     rect.w = wm; \
     rect.h = hm; \
     rect.gx = gxm; \
     rect.gy = gym; \
     rect.c = cm; \
-    rect.f = fm; \
+    rect.b = bm; \
 
 typedef struct Frame {
-    char x, y, w, h, gx, gy, c, f;
+    char x, y, w, h, gx, gy, c, b;
 } Frame;
 
 void load_spritesheet();
-void QueuePackedSprite(Frame *sprite_table, char x, char y, char frame, char flip, char flags, char offset);
+void QueuePackedSprite(Frame *sprite_table, char x, char y, char frame, char flip, char bank, char offset);
 void QueueSpriteRect();
-void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c, unsigned char flags);
+void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c);
 void NextQueue();
 void FlushQueue();
 
@@ -51,8 +51,7 @@ void printnum(int num);
 void print(char* str);
 
 extern char cursorX, cursorY;
-extern unsigned char draw_queue[256];
-extern unsigned char queue_start, queue_end, queue_pending, queue_count;
+extern unsigned char queue_start, queue_end, queue_pending, queue_count, queue_flags_param;
 extern Frame rect;
 
 #endif

@@ -12,6 +12,7 @@
 
 .import    copydata, zerobss, initlib, donelib
 
+BankReg = $2005
 VIA = $2800
 ORB = 0
 ORAr = 1
@@ -41,6 +42,9 @@ _init:    LDX     #$FF                 ; Initialize stack pointer to $01FF
 viaWakeup:
 	inx
 	bne viaWakeup
+	
+	LDA #0
+	STA BankReg
 
 	LDA #%00000111
 	STA VIA+DDRA

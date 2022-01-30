@@ -9,6 +9,7 @@
 #define audio_nmi ((volatile char *) 0x2001)
 #define audio_rate ((volatile char *) 0x2006)
 #define dma_flags ((volatile char *) 0x2007)
+#define bank_reg ((volatile char *) 0x2005)
 #define via ((volatile char*) 0x2800)
 #define aram ((volatile char *) 0x3000)
 #define vram ((volatile char *) 0x4000)
@@ -27,11 +28,19 @@
 #define DMA_ENABLE 1
 #define DMA_PAGE_OUT 2
 #define DMA_NMI 4
-#define DMA_GRAM_PAGE 8
-#define DMA_VRAM_PAGE 16
+#define DMA_COLORFILL_ENABLE 8
+#define DMA_GCARRY 16
 #define DMA_CPU_TO_VRAM 32
 #define DMA_IRQ 64
 #define DMA_OPAQUE 128
+
+#define BANK_GRAM_MASK 7
+#define BANK_SECOND_FRAMEBUFFER 8
+#define BANK_CLIP_X 16
+#define BANK_CLIP_Y 32
+#define BANK_RAM_MASK 192
+
+#define GRAM_PAGE(x) x
 
 #define VX 0
 #define VY 1
@@ -41,8 +50,6 @@
 #define HEIGHT 5
 #define START 6
 #define COLOR 7
-
-#define DMA_GX_SOLIDCOLOR_FLAG 0x80
 
 #define gamepad_1 ((volatile char *) 0x2008)
 #define gamepad_2 ((volatile char *) 0x2009)
@@ -67,6 +74,6 @@
 #define IFR 13
 #define IER 14
 
-extern char frameflag, frameflip, flagsMirror;
+extern char frameflag, frameflip, flagsMirror, banksMirror, bankflip;
 
 #endif
