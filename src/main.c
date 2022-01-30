@@ -519,7 +519,7 @@ void main() {
         }
 
         if(game_state == GAME_STATE_TITLE) {
-            flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
+            flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
             *dma_flags = flagsMirror;
             banksMirror = bankflip;
             *bank_reg = banksMirror;

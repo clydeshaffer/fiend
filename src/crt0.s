@@ -12,6 +12,8 @@
 
 .import    copydata, zerobss, initlib, donelib
 
+.PC02
+
 BankReg = $2005
 VIA = $2800
 ORB = 0
@@ -43,8 +45,7 @@ viaWakeup:
 	inx
 	bne viaWakeup
 	
-	LDA #0
-	STA BankReg
+	STZ BankReg
 
 	LDA #%00000111
 	STA VIA+DDRA

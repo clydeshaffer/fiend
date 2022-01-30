@@ -11,6 +11,9 @@
 .import   _banksMirror
 .export   _irq_int, _nmi_int
 
+.pc02
+
+
 Q_DMAFlags = $0200
 Q_VX       = $0300
 Q_VY       = $0400
@@ -58,8 +61,7 @@ _irq_int:
 
         ;make sure DMA isn't running then compare head and tail of queue
         ;to determine whether there is more to process
-        LDA #0
-        STA $4006 ;vram[START]
+        STZ $4006 ;vram[START]
         STA _queue_pending
         LDA _queue_start
         CMP _queue_end
@@ -69,8 +71,7 @@ _irq_int:
 next_queue:
         ;determined that there is more to process
         ;so load next set of parameters
-        LDA #0
-        STA BankReg
+        STZ BankReg
 
         ;make sure DMA mode is set to input these params
         LDA _flagsMirror
