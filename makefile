@@ -9,7 +9,7 @@ PORT = COM3
 
 CFLAGS = -t none -Osir --cpu 65c02
 AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
-LFLAGS = -C gametank-32k.cfg -m out.map
+LFLAGS = -C gametank-32k.cfg -m $(ODIR)/out.map
 LLIBS = lib/gametank.lib
 
 _COBJS = gametank.o dynawave.o drawing_funcs.o tilemap.o random.o main.o

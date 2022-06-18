@@ -45,7 +45,11 @@ viaWakeup:
 	inx
 	bne viaWakeup
 	
+	LDA #40
+	STA BankReg
+	STA $1FFF
 	STZ BankReg
+	STZ $1FFF
 
 	LDA #%00000111
 	STA VIA+DDRA

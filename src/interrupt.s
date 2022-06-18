@@ -43,12 +43,14 @@ DMA_Color = $4007
 ; ---------------------------------------------------------------------------
 ; Non-maskable interrupt (NMI) service routine
 
-_nmi_int:                    ; Save X register contents to stack
+_nmi_int:
         PHA
-        LDA #0
-        STA _frameflag
-        PLA                    ; Restore accumulator contents
-        RTI                    ; Return from all NMI interrupts
+        LDA $1FFF
+        BNE nmi_done
+        STZ _frameflag
+nmi_done:
+        PLA
+        RTI
 
 ; ---------------------------------------------------------------------------
 ; Maskable interrupt (IRQ) service routine
@@ -61,8 +63,8 @@ _irq_int:
 
         ;make sure DMA isn't running then compare head and tail of queue
         ;to determine whether there is more to process
-        STZ $4006 ;vram[START]
-        STA _queue_pending
+        STZ DMA_Start
+        STZ _queue_pending
         LDA _queue_start
         CMP _queue_end
         BEQ finish_irq
