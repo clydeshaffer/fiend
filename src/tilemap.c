@@ -19,8 +19,9 @@ typedef struct Rect {
 Rect tmpRect;
 
 #define EMPTY_TILE 0
-#define GROUND_TILE 1
-#define WALL_TILE 2
+#define GROUND_TILE 32
+#define WALL_TILE 64
+#define GROUND2_TILE 96
 
 void trim_edge_rects(Rect *r) {
     if(r->x == 0) {
@@ -185,24 +186,24 @@ char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
     tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
     pos_x &= (TILE_SIZE-1);
     pos_y &= (TILE_SIZE-1);
-    if(!tile_passmap[*tmpptr_char]) {
+    if(!(*tmpptr_char & GROUND_TILE)) {
         return 0;
     }
     tmpptr_char++;
     if(pos_x + HITBOX_W >= TILE_SIZE) {
-        if(!tile_passmap[*tmpptr_char]) {
+        if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
     tmpptr_char += MAP_W - 1;
     if(pos_y + HITBOX_H >= TILE_SIZE) {
-        if(!tile_passmap[*tmpptr_char]) {
+        if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
     tmpptr_char++;
     if((pos_x + HITBOX_W >= TILE_SIZE) && (pos_y + HITBOX_H >= TILE_SIZE)) {
-        if(!tile_passmap[*tmpptr_char]) {
+        if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
@@ -210,7 +211,7 @@ char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
 }
 
 void draw_world() {
-    char r, c, tile_scroll_x, tile_scroll_y, cam_x, cam_y;
+    char r, c, tile_scroll_x, tile_scroll_y, cam_x, cam_y, r2, c2;
     int t;
     via[ORB] = 0x80;
     via[ORB] = 0x00;
@@ -223,49 +224,57 @@ void draw_world() {
     c = 0;
     t = (cam_x + c) + ((cam_y + r) << MAP_ORD);
     if(tiles[t] != 0) {
-        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] << TILE_ORD), tile_scroll_y, 0, bankflip)
+        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t]), tile_scroll_y, 0, bankflip)
         queue_flags_param = DMA_GCARRY;
         QueueSpriteRect();
     }
     t++;
+    c2 = TILE_SIZE;
     for(c = 1; c < VISIBLE_W; ++c) {
         if((cam_x + c) < MAP_W) {
            
             if(tiles[t] != 0) {
-                SET_RECT((c << TILE_ORD) - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] << TILE_ORD, tile_scroll_y, 0, bankflip)
+                SET_RECT(c2 - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t], tile_scroll_y, 0, bankflip)
                 queue_flags_param = DMA_GCARRY;
                 QueueSpriteRect();
             }
         }
+        c2 += TILE_SIZE;
         t++;
     }
     t += MAP_W - VISIBLE_W;
 
     c = 0;
     r = 1;
+    c2 = 0;
+    r2 = TILE_SIZE - tile_scroll_y;
     for(r = 1; r < VISIBLE_H; ++r) {
         if((cam_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
-                SET_RECT(0, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] << TILE_ORD), 0, 0, bankflip)
+                SET_RECT(0, r2, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + tiles[t], 0, 0, bankflip)
                 queue_flags_param = DMA_GCARRY;
                 QueueSpriteRect();
             }
+
             t++;
+            c2 = TILE_SIZE - tile_scroll_x;
             for(c = 1; c < VISIBLE_W; ++c) {
                 if((cam_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
-                        SET_RECT((c << TILE_ORD) - tile_scroll_x, (r << TILE_ORD) - tile_scroll_y, TILE_SIZE, TILE_SIZE, tiles[t] << TILE_ORD, 0, 0, bankflip)
+                        SET_RECT(c2, r2, TILE_SIZE, TILE_SIZE, tiles[t], 0, 0, bankflip)
                         queue_flags_param = DMA_GCARRY;
                         QueueSpriteRect();
                     }
                 }
                 t++;
+                c2 += TILE_SIZE;
             }
         } else { 
             t += VISIBLE_W;
         }
         t += MAP_W - VISIBLE_W;
+        r2 += TILE_SIZE;
     }
     via[ORB] = 0x80;
     via[ORB] = 0x40;
