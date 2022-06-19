@@ -248,6 +248,8 @@ void draw_world() {
     r = 1;
     c2 = 0;
     r2 = TILE_SIZE - tile_scroll_y;
+    via[ORB] = 0x80;
+    via[ORB] = 0x01;
     for(r = 1; r < VISIBLE_H; ++r) {
         if((cam_y + r) < MAP_H) {
             
@@ -276,6 +278,8 @@ void draw_world() {
         t += MAP_W - VISIBLE_W;
         r2 += TILE_SIZE;
     }
+    via[ORB] = 0x80;
+    via[ORB] = 0x41;
     via[ORB] = 0x80;
     via[ORB] = 0x40;
 }

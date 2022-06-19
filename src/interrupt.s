@@ -9,7 +9,7 @@
 .import   _stop, _frameflag, _queue_pending, _queue_start
 .import   _queue_end, _queue_count, _flagsMirror, _frameflip
 .import   _banksMirror
-.export   _irq_int, _nmi_int
+.export   _irq_int, _nmi_int, _NextQueue
 
 .pc02
 
@@ -56,7 +56,6 @@ nmi_done:
 ; Maskable interrupt (IRQ) service routine
 
 _irq_int:
-        SEI
         PHX                    ; Save X register contents to stack
         PHA
         PHY
@@ -68,12 +67,19 @@ _irq_int:
         LDA _queue_start
         CMP _queue_end
         BEQ finish_irq
-        LDA #1
-        STA _queue_pending
-next_queue:
+        JSR _NextQueue
+finish_irq:
+        PLY
+        PLA                    ; Restore accumulator contents
+        PLX                    ; Restore X register contents
+        RTI                    ; Return from all IRQ interrupts
+
+.proc _NextQueue: near
         ;determined that there is more to process
         ;so load next set of parameters
         STZ BankReg
+        LDA #1
+        STA _queue_pending
 
         ;make sure DMA mode is set to input these params
         LDA _flagsMirror
@@ -124,9 +130,5 @@ next_queue:
         STA DMA_Start ;START
 
         DEC _queue_count
-finish_irq:
-        PLY
-        PLA                    ; Restore accumulator contents
-        PLX                    ; Restore X register contents
-        CLI
-        RTI                    ; Return from all IRQ interrupts
+        RTS
+.endproc

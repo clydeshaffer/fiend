@@ -37,8 +37,6 @@ unsigned char queue_count = 0;
 unsigned char queue_pending = 0;
 #define QUEUE_MAX 250
 Frame temp_frame;
-Frame rect;
-unsigned char queue_flags_param;
 
 void pushRect();
 
@@ -83,7 +81,6 @@ void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char fli
     pushRect();
 
     if(queue_pending == 0) {
-        queue_pending = 1;
         NextQueue();
     }
     asm("CLI");
@@ -114,11 +111,10 @@ void QueueSpriteRect() {
         rect.h = 128 - rect.y;
     }
 
-    asm("SEI");
+   asm("SEI");
     pushRect();
 
     if(queue_pending == 0) {
-        queue_pending = 1;
         NextQueue();
     }
     asm("CLI");
@@ -162,14 +158,9 @@ void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned c
     
 
     if(queue_pending == 0) {
-        queue_pending = 1;
         NextQueue();
     }
     asm("CLI");
-}
-
-void NextQueue() {
-    asm("BRK");
 }
 
 void FlushQueue() {
