@@ -21,6 +21,6 @@ void init_dynawave()
 
     inflatemem(aram, &DynaWave);
 
-    *audio_reset = 0;
     *audio_rate = 255;
+    *audio_reset = 0;
 }

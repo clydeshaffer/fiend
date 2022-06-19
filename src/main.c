@@ -4,6 +4,7 @@
 #include "drawing_funcs.h"
 #include "tilemap.h"
 #include "random.h"
+#include "music.h"
 
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
@@ -566,5 +567,7 @@ void main() {
         banksMirror = bankflip;
         *dma_flags = flagsMirror;
         *bank_reg = banksMirror;
+
+        tick_music();
     }
 }
