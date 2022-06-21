@@ -23,11 +23,14 @@ BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 _SPRITEMETA = chara_hero.gsi chara_spider.gsi
 SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
+_AUDIO_FW = audio_fw.bin.deflate
+AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
+
 bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS)
 	mkdir -p $(@D)
 	$(LN) $(LFLAGS) $(AOBJS) $(COBJS) -o $@ $(LLIBS)
 
-$(ODIR)/assets.o: src/assets.s $(BMPOBJS) $(SPRITEMETA) lib/dynawave.acp.deflate
+$(ODIR)/assets.o: src/assets.s $(BMPOBJS) $(SPRITEMETA) $(AUDIO_FW)
 	mkdir -p $(@D)
 	$(AS) $(AFLAGS) -o $@ $<
 
@@ -64,6 +67,13 @@ $(ODIR)/assets/%.gsi: assets/%.json
 	mkdir -p $(@D)
 	cd scripts ;\
 	node sprite_metadata.js ../$< ../$@
+
+$(ODIR)/assets/audio_fw.bin.deflate: $(ODIR)/assets/audio_fw.bin
+	zopfli --deflate $<
+
+$(ODIR)/assets/audio_fw.bin: src/audio_fw.asm gametank-acp.cfg
+	$(AS) --cpu 65C02 src/audio_fw.asm -o $(ODIR)/assets/audio_fw.o
+	$(LN) -C gametank-acp.cfg $(ODIR)/assets/audio_fw.o -o $(ODIR)/assets/audio_fw.bin
 
 .PHONY: clean
 

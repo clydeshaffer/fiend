@@ -20,4 +20,4 @@ _TestMap:
     .incbin "testmap.gtg.deflate"
 
 _DynaWave:
-    .incbin "dynawave.acp.deflate"
+    .incbin "audio_fw.bin.deflate"
