@@ -33,20 +33,29 @@ char noteNum2 = 0;
 char pattNum2 = 0;
 char *currentPattern = patterns;
 char *currentPattern2 = patterns;
+unsigned char audio_amplitudes[4] = {0, 0, 0, 0};
 
 void tick_music() {
     if(audio_amplitudes[0] > 0) {
-        audio_amplitudes[0] -= 16;
+        if(audio_amplitudes[0] < 17) {
+            audio_amplitudes[0] = 0;
+        } else {
+            audio_amplitudes[0] -= 17;
+            if(audio_amplitudes[0] & 1) {
+                push_audio_param(PITCHBEND, 2);
+            } else {
+                push_audio_param(PITCHBEND, -2);
+            }
+        }
+        push_audio_param(AMPLITUDE, audio_amplitudes[0]);
     }
-     /*if(audio_amplitudes[3] > 0) {
-        audio_amplitudes[3] -= 16;
-    }*/
     
     metronome--;
     if(metronome == 0) {
         if(currentPattern[noteNum] != RST) {
-            SET_NOTE(0, (currentPattern[noteNum]-12) );
+            set_note(0, (currentPattern[noteNum]-12) );
             audio_amplitudes[0] = 128;
+            push_audio_param(AMPLITUDE, 128);
         }
         noteNum = (noteNum + 1) % PATTERN_LEN;
         if(noteNum == 0) {
@@ -57,8 +66,9 @@ void tick_music() {
         }
 
         if(currentPattern2[noteNum2] != RST) {
-            SET_NOTE(3, (currentPattern2[noteNum2]) );
+            set_note(3, (currentPattern2[noteNum2]) );
             audio_amplitudes[3] = 127;
+            push_audio_param(AMPLITUDE+3, 127);
         }
         noteNum2 = (noteNum2 + 1) % PATTERN_LEN;
         if(noteNum2 == 0) {
@@ -68,5 +78,7 @@ void tick_music() {
             currentPattern2 = &(patterns[sequence2[pattNum2]*PATTERN_LEN]);
         }
         metronome = BEAT_FRAMES;
+
     }
+    flush_audio_params();
 }

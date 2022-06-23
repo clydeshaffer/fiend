@@ -2,11 +2,14 @@ DAC = $8000
 
 AccBuf = $00
 LFSR = $04 ;$05
+Tmp = $06
 FreqsH = $10
-FreqsL = $20
-Amplitudes = $30
+FreqsL = $14
+Amplitudes = $18
+Bends = $1C
 WaveStatesH = $50
 WaveStatesL = $60
+Inputs = $70
 
 	.zeropage
 	.byte 0, 0, 0, 0, 2, 0
@@ -21,6 +24,7 @@ WaveStatesL = $60
 RESET:
 	CLI
 Forever:
+    WAI
 	JMP Forever
 
 IRQ:
@@ -42,7 +46,24 @@ IRQ:
 	CLC ;2
 	ADC AccBuf ;3
 	STA AccBuf ;3
+    LDA WaveStatesH+0
+    CMP #$80
+    BNE CH2
+    LDA Bends+0
+    EOR #$80
+    ROL
+    LDA #$FF
+    ADC #$0
+    STA Tmp
+    CLC
+    LDA Bends+0
+    ADC FreqsL+0
+    STA FreqsL+0
+    LDA FreqsH+0
+    ADC Tmp
+    STA FreqsH+0
 
+CH2:
 	;Channel 2 wavestate
 	CLC ;2
 	LDA WaveStatesL+1 ;3
@@ -118,6 +139,20 @@ IRQ:
 	EOR #$39
 	STA LFSR
 
+    LDA Bends+2
+    EOR #$80
+    ROL
+    LDA #$FF
+    ADC #$0
+    STA Tmp
+    CLC
+    LDA Bends+2
+    ADC FreqsL+2
+    STA FreqsL+2
+    LDA FreqsH+2
+    ADC Tmp
+    STA FreqsH+2
+
 AddNoise:
 	LDA Amplitudes+2
 	LSR
@@ -158,7 +193,25 @@ SineChannel:
 	STA DAC ;3
 	RTI ;6
 
+;Read inputs addr, val until addr=0
 NMI_handler:
+    PHY
+    PHX
+    PHA
+    LDY #0
+NMI_Loop:
+    LDX Inputs, y
+    BEQ NMI_Done
+    INY
+    LDA Inputs, y
+    STA $00, x
+    INY
+    JMP NMI_Loop
+    
+NMI_Done:
+    PLA
+    PLX
+    PLY
 	RTI
 
 	.align 8

@@ -15,6 +15,8 @@ char pitch_table[216] = {
 
 extern const unsigned char* DynaWave;
 
+char audio_params_index = 0;
+
 void init_dynawave()
 {
     *audio_rate = 0x7F;
@@ -23,4 +25,22 @@ void init_dynawave()
 
     *audio_rate = 255;
     *audio_reset = 0;
+    audio_params_index = 0;
+    AUDIO_PARAM_INPUT_BUFFER[0] = 0;
+}
+
+void push_audio_param(char param, char value) {
+    AUDIO_PARAM_INPUT_BUFFER[audio_params_index++] = param;
+    AUDIO_PARAM_INPUT_BUFFER[audio_params_index++] = value;
+}
+
+void flush_audio_params() {
+    AUDIO_PARAM_INPUT_BUFFER[audio_params_index] = 0;
+    *audio_nmi = 1;
+    audio_params_index = 0;
+}
+
+void set_note(char ch, char n) {
+    push_audio_param(PITCH_MSB + ch, pitch_table[ n * 2]);
+    push_audio_param(PITCH_LSB + ch, pitch_table[ n * 2 + 1]);
 }
