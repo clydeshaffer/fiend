@@ -41,13 +41,17 @@ void tick_music() {
             audio_amplitudes[0] = 0;
         } else {
             audio_amplitudes[0] -= 17;
-            if(audio_amplitudes[0] & 1) {
-                push_audio_param(PITCHBEND, 2);
-            } else {
-                push_audio_param(PITCHBEND, -2);
-            }
         }
         push_audio_param(AMPLITUDE, audio_amplitudes[0]);
+    }
+
+    if(audio_amplitudes[2] > 0) {
+        audio_amplitudes[2] --;
+        if(audio_amplitudes[2] == 0) {
+            push_audio_param(AMPLITUDE+2, 0);
+        } else {
+            push_audio_param(AMPLITUDE+2, 127);
+        }
     }
     
     metronome--;
@@ -80,5 +84,13 @@ void tick_music() {
         metronome = BEAT_FRAMES;
 
     }
+    flush_audio_params();
+}
+
+void do_noise_effect(char note, char bend, char duration) {
+    set_note(2, note);
+    push_audio_param(PITCHBEND+2, bend);
+    audio_amplitudes[2] = duration;
+    push_audio_param(AMPLITUDE+2, 127);
     flush_audio_params();
 }

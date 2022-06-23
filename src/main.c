@@ -232,6 +232,7 @@ void update_enemies() {
                             player_anim_frame = 0;
                             --player_health;
                             player_face_enemy();
+                            do_noise_effect(80, -8, 10);
                         }
                     }
                     ////end attack player check
@@ -249,6 +250,7 @@ void update_enemies() {
                     if(temp1 + temp2 < 8) {
                         tempEnemy.mode = 2;
                         tempEnemy.anim_frame = 0;
+                        do_noise_effect(70, -12, 8);
                     }
                 }
             } else if(tempEnemy.mode == 2) {
@@ -433,6 +435,7 @@ void main() {
                 if(inputs & INPUT_MASK_A & ~last_inputs) {
                     player_anim_frame = 0;
                     player_anim_state = PLAYER_STATE_ATTACK;
+                    do_noise_effect(95, 12, 4);
                     i = 1;
                 } else {
                     if(inputs & INPUT_MASK_RIGHT) {

@@ -173,23 +173,12 @@ AddCH2:
     STA FreqsH+2
 
 AddNoise:
+    LDA LFSR+1
+    BPL SineChannel
+    CLC
 	LDA Amplitudes+2
-	LSR
-	LSR
-	LSR
-	LSR
-	LSR
-	BEQ SkipNoiseAttenuation
-	TAX
-	LDA LFSR
-ShiftLoop:
-	LSR
-	DEX
-	BNE ShiftLoop
-SkipNoiseAttenuation:
-	CLC ;2
-	ADC AccBuf ;3
-	STA AccBuf ;3
+    ADC AccBuf
+    STA AccBuf
 	
 SineChannel:
 	CLC ;2
