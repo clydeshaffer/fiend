@@ -39,16 +39,8 @@ IRQ:
 	LDA WaveStatesH+0
 	ADC FreqsH+0
 	STA WaveStatesH+0 ;3
-	ROL ;2
-	LDA #$FF ;2
-	ADC #$00 ;2
-	AND Amplitudes+0 ;3
-	CLC ;2
-	ADC AccBuf ;3
-	STA AccBuf ;3
-    LDA WaveStatesH+0
-    CMP #$80
-    BNE CH2
+    BCC AddCH1
+
     LDA Bends+0
     EOR #$80
     ROL
@@ -63,7 +55,16 @@ IRQ:
     ADC Tmp
     STA FreqsH+0
 
-CH2:
+AddCH1:
+    LDA WaveStatesH+0
+	ROL ;2
+	LDA #$FF ;2
+	ADC #$00 ;2
+	AND Amplitudes+0 ;3
+	CLC ;2
+	ADC AccBuf ;3
+	STA AccBuf ;3
+
 	;Channel 2 wavestate
 	CLC ;2
 	LDA WaveStatesL+1 ;3
@@ -72,6 +73,24 @@ CH2:
 	LDA WaveStatesH+1
 	ADC FreqsH+1
 	STA WaveStatesH+1 ;3
+    BCC AddCH2
+
+    LDA Bends+1
+    EOR #$80
+    ROL
+    LDA #$FF
+    ADC #$0
+    STA Tmp
+    CLC
+    LDA Bends+1
+    ADC FreqsL+1
+    STA FreqsL+1
+    LDA FreqsH+1
+    ADC Tmp
+    STA FreqsH+1
+
+AddCH2:
+    LDA WaveStatesH+1
 	ROL ;2
 	LDA #$FF ;2
 	ADC #$00 ;2
@@ -180,7 +199,24 @@ SineChannel:
 	LDA WaveStatesH+3
 	ADC FreqsH+3
 	STA WaveStatesH+3 ;3
-	TAX
+
+    BCC AddSine
+    LDA Bends+3
+    EOR #$80
+    ROL
+    LDA #$FF
+    ADC #$0
+    STA Tmp
+    CLC
+    LDA Bends+3
+    ADC FreqsL+3
+    STA FreqsL+3
+    LDA FreqsH+3
+    ADC Tmp
+    STA FreqsH+3
+
+AddSine: 
+	LDX WaveStatesH+3
 	LDA Sine, x
 	LSR
 	LSR
