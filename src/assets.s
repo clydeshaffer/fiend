@@ -1,4 +1,4 @@
-    .export _GameSprites, _HeroSprites, _HeroFrames, _EnemySprites, _EnemyFrames, _DynaWave, _TestMap
+    .export _GameSprites, _HeroSprites, _HeroFrames, _EnemySprites, _EnemyFrames, _DynaWave, _TestMap, _MainMusic, _TitleMusic, _DiedMusic
 
     .RODATA
 _GameSprites:
@@ -21,3 +21,12 @@ _TestMap:
 
 _DynaWave:
     .incbin "audio_fw.bin.deflate"
+
+_MainMusic:
+    .incbin "fiend_loop.gtm2"
+
+_TitleMusic:
+    .incbin "title.gtm2"
+
+_DiedMusic:
+    .incbin "died.gtm2"

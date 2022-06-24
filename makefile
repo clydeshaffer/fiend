@@ -26,11 +26,14 @@ SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 _AUDIO_FW = audio_fw.bin.deflate
 AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
 
+_MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2
+MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
+
 bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS)
 	mkdir -p $(@D)
 	$(LN) $(LFLAGS) $(AOBJS) $(COBJS) -o $@ $(LLIBS)
 
-$(ODIR)/assets.o: src/assets.s $(BMPOBJS) $(SPRITEMETA) $(AUDIO_FW)
+$(ODIR)/assets.o: src/assets.s $(BMPOBJS) $(SPRITEMETA) $(AUDIO_FW) $(MUSIC)
 	mkdir -p $(@D)
 	$(AS) $(AFLAGS) -o $@ $<
 
@@ -59,7 +62,12 @@ $(ODIR)/assets/%.gtg: assets/%.bmp
 	cd scripts ;\
 	node sprite_convert.js ../$< ../$@
 
-$(ODIR)/assets/%.gtg.deflate: $(ODIR)/assets/%.gtg
+$(ODIR)/assets/%.gtm2: assets/%.mid
+	mkdir -p $(@D)
+	cd scripts ;\
+	node midiconvert.js ../$< ../$@
+
+$(ODIR)/assets/%.deflate: $(ODIR)/assets/%
 	mkdir -p $(@D)
 	zopfli --deflate $<
 

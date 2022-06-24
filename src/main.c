@@ -290,7 +290,9 @@ void init_game_state(unsigned char new_state) {
         player_anim_frame = 0;
         player_health = 0;
         generate_map();
+        play_track(MUSIC_TRACK_TITLE, 0);
     } else if(new_state == GAME_STATE_PLAY) {
+        play_track(MUSIC_TRACK_MAIN, 1);
         player_x = PLAYER_START_X;
         player_y = PLAYER_START_Y;
         player_dir_x = 0;
@@ -342,6 +344,7 @@ void main() {
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
 
     init_dynawave();
+    init_music();
 
     frameflip = 0;
     flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
@@ -415,6 +418,7 @@ void main() {
                 if(player_anim_frame == 24) {
                     player_anim_state = PLAYER_STATE_NEUTRAL;
                     if(player_health == 0) {
+                        play_track(MUSIC_TRACK_DIED, 0);
                         player_anim_state = PLAYER_STATE_DEAD;
                         player_anim_frame = 0;
                         i = 0;
