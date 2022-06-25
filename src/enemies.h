@@ -8,9 +8,10 @@
 #define ENEMY_STATE_ACTIVE 1
 #define ENEMY_STATE_DYING 2
 
-#define ENEMY_TYPE_SPIDER   0
-#define ENEMY_TYPE_BAT      1
-#define ENEMY_TYPE_SKELETON 2
+#define ENEMY_TYPE_RAT      0
+#define ENEMY_TYPE_SPIDER   1
+#define ENEMY_TYPE_BAT      2
+#define ENEMY_TYPE_SKELETON 3
 #define ENEMY_TYPE_NONE     255
 
 typedef struct MobState {

@@ -134,7 +134,7 @@ void main() {
     load_spritesheet(&GameSprites, 0);
     load_spritesheet(&HeroSprites, 1);
     clear_enemy_slots();
-    load_enemy_type(ENEMY_TYPE_SPIDER);
+    load_enemy_type(ENEMY_TYPE_RAT);
     load_enemy_type(ENEMY_TYPE_BAT);
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;

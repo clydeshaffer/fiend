@@ -17,10 +17,10 @@ COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
 _AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
-_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate
+_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.gtg.deflate
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
-_SPRITEMETA = chara_hero.gsi chara_spider.gsi chara_bat.gsi
+_SPRITEMETA = chara_hero.gsi chara_spider.gsi chara_bat.gsi chara_rat.gsi
 SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
 _AUDIO_FW = audio_fw.bin.deflate
