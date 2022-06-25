@@ -11,7 +11,10 @@ MobState enemies[MAX_ENEMIES];
 
 unsigned char enemy_count = 0;
 
-extern const Frame* EnemyFrames;
+extern const Frame* EnemyFrames_SPIDER;
+extern const Frame* EnemyFrames_BAT;
+
+char* enemyFrameData[8] = {&EnemyFrames_SPIDER, &EnemyFrames_BAT, 0, 0, 0, 0, 0, 0};
 
 void clear_enemies() {
     char i;
@@ -36,7 +39,7 @@ void draw_enemies() {
                 && enemy->y > camera_y
                 && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
-                    QueuePackedSprite(&EnemyFrames, enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, GRAM_PAGE(0) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, ENEMY_SPRITES_OFFSET);
+                    QueuePackedSprite(enemyFrameData[enemy->type], enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, GRAM_PAGE(enemy->type + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
                 } 
         }
         ++enemy;

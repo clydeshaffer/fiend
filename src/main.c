@@ -8,6 +8,11 @@
 #include "music.h"
 #include "enemies.h"
 
+extern const unsigned char* GameSprites;
+extern const unsigned char* HeroSprites;
+extern const unsigned char* EnemySprites_SPIDER;
+extern const unsigned char* EnemySprites_BAT;
+
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
 
@@ -90,6 +95,7 @@ void init_game_state(unsigned char new_state) {
                 enemies[i].mode = 1;
                 enemies[i].x = (rnd() & 0b1111100000) | 16;
                 enemies[i].y = (rnd() & 0b1111100000) | 16;
+                enemies[i].type = rnd() & 1;
                 if(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
                     enemies[i].mode = 0;
                 } else {
@@ -132,7 +138,10 @@ void main() {
     bankflip = BANK_SECOND_FRAMEBUFFER;
     banksMirror = bankflip;
 
-    load_spritesheet();
+    load_spritesheet(&GameSprites, 0);
+    load_spritesheet(&HeroSprites, 1);
+    load_spritesheet(&EnemySprites_SPIDER, 2);
+    load_spritesheet(&EnemySprites_BAT, 3);
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
     *dma_flags = flagsMirror;

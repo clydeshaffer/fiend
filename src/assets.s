@@ -1,4 +1,6 @@
-    .export _GameSprites, _HeroSprites, _HeroFrames, _EnemySprites, _EnemyFrames, _DynaWave, _TestMap, _MainMusic, _TitleMusic, _DiedMusic
+    .export _GameSprites, _HeroSprites, _HeroFrames, _DynaWave, _TestMap, _MainMusic, _TitleMusic, _DiedMusic
+    .export _EnemyFrames_BAT, _EnemyFrames_SPIDER
+    .export _EnemySprites_BAT, _EnemySprites_SPIDER
 
     .RODATA
 _GameSprites:

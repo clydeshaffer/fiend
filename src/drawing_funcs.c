@@ -7,28 +7,16 @@
 
 char cursorX, cursorY;
 
-extern const unsigned char* GameSprites;
-extern const unsigned char* HeroSprites;
-extern const unsigned char* EnemySprites;
-
 extern void wait();
 extern void nop5();
 extern void nop10();
 
-void load_spritesheet() {
+void load_spritesheet(char* spriteData, char bank) {
     flagsMirror = DMA_NMI | DMA_IRQ;
     *dma_flags = flagsMirror;
-    banksMirror = bankflip | GRAM_PAGE(0);
+    banksMirror = bankflip | GRAM_PAGE(bank);
     *bank_reg = banksMirror;
-    inflatemem(vram, &GameSprites);
-    inflatemem(vram + (ENEMY_SPRITES_OFFSET*128), &EnemySprites);
-    flagsMirror = DMA_NMI | DMA_IRQ;
-    *dma_flags = flagsMirror;
-    banksMirror = bankflip | GRAM_PAGE(1);
-    *bank_reg = banksMirror;
-    inflatemem(vram, &HeroSprites);
-    banksMirror = bankflip;
-    *bank_reg = banksMirror;
+    inflatemem(vram, spriteData);
 }
 
 unsigned char queue_start = 0;

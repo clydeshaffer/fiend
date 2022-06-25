@@ -4,8 +4,9 @@
 #define MAX_ENEMIES 32
 
 typedef struct MobState {
-    char anim_frame, anim_dir, anim_flip, mode;
+    unsigned char anim_frame, anim_dir, anim_flip, mode;
     int x, y;
+    unsigned char health, type;
 } MobState;
 
 extern MobState enemies[MAX_ENEMIES];

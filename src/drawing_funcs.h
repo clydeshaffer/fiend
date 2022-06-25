@@ -16,8 +16,6 @@
 #define BG_COLOR 16
 #define WINDOW_COLOR 0
 
-#define ENEMY_SPRITES_OFFSET 32
-
 #define SET_RECT(xm,ym,wm,hm,gxm,gym,cm,bm) rect.x = xm;\
     rect.y = ym; \
     rect.w = wm; \
@@ -31,7 +29,7 @@ typedef struct Frame {
     char x, y, w, h, gx, gy, c, b;
 } Frame;
 
-void load_spritesheet();
+void load_spritesheet(char* spriteData, char bank);
 void QueuePackedSprite(Frame *sprite_table, char x, char y, char frame, char flip, char bank, char offset);
 void QueueSpriteRect();
 void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c);
