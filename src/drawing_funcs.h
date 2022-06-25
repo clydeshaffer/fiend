@@ -30,7 +30,7 @@ typedef struct Frame {
 } Frame;
 
 void load_spritesheet(char* spriteData, char bank);
-void QueuePackedSprite(Frame *sprite_table, char x, char y, char frame, char flip, char bank, char offset);
+void QueuePackedSprite(const Frame *sprite_table, char x, char y, char frame, char flip, char bank, char offset);
 void QueueSpriteRect();
 void QueueFillRect(unsigned char x, unsigned char y, unsigned char w, unsigned char h, unsigned char c);
 void NextQueue();

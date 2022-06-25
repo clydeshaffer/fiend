@@ -28,7 +28,7 @@ Frame temp_frame;
 
 void pushRect();
 
-void QueuePackedSprite(Frame* sprite_table, char x, char y, char frame, char flip, char bank, char offset) {
+void QueuePackedSprite(const Frame* sprite_table, char x, char y, char frame, char flip, char bank, char offset) {
     while(queue_count >= QUEUE_MAX) {
         asm("CLI");
         wait();

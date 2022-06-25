@@ -10,8 +10,6 @@
 
 extern const unsigned char* GameSprites;
 extern const unsigned char* HeroSprites;
-extern const unsigned char* EnemySprites_SPIDER;
-extern const unsigned char* EnemySprites_BAT;
 
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
@@ -53,10 +51,6 @@ unsigned char game_over_timer = 0;
 
 extern const Frame* HeroFrames;
 
-#define ENEMY_STATE_INACTIVE 0
-#define ENEMY_STATE_ACTIVE 1
-#define ENEMY_STATE_DYING 2
-
 void Sleep(int frames) {
     int i;
     for(i = 0; i < frames; ++i) {
@@ -92,10 +86,9 @@ void init_game_state(unsigned char new_state) {
         clear_enemies(); 
         do {
             for(i = 0; i < MAX_ENEMIES; ++i) {
-                enemies[i].mode = 1;
                 enemies[i].x = (rnd() & 0b1111100000) | 16;
                 enemies[i].y = (rnd() & 0b1111100000) | 16;
-                enemies[i].type = rnd() & 1;
+                init_enemy(random_loaded_enemy_slot(), &enemies[i]);
                 if(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
                     enemies[i].mode = 0;
                 } else {
@@ -140,8 +133,9 @@ void main() {
 
     load_spritesheet(&GameSprites, 0);
     load_spritesheet(&HeroSprites, 1);
-    load_spritesheet(&EnemySprites_SPIDER, 2);
-    load_spritesheet(&EnemySprites_BAT, 3);
+    clear_enemy_slots();
+    load_enemy_type(ENEMY_TYPE_SPIDER);
+    load_enemy_type(ENEMY_TYPE_BAT);
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
     *dma_flags = flagsMirror;

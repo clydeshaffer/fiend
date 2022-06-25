@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "tilemap.h"
 #include "music.h"
+#include "random.h"
 
 MobState tempEnemy;
 
@@ -11,10 +12,75 @@ MobState enemies[MAX_ENEMIES];
 
 unsigned char enemy_count = 0;
 
-extern const Frame* EnemyFrames_SPIDER;
-extern const Frame* EnemyFrames_BAT;
+unsigned char enemy_type_slots[ENEMY_TYPE_NUM_SLOTS];
+unsigned char enemy_type_used_slots = 0;
 
-char* enemyFrameData[8] = {&EnemyFrames_SPIDER, &EnemyFrames_BAT, 0, 0, 0, 0, 0, 0};
+extern const unsigned char* EnemySprites_SPIDER;
+extern const unsigned char* EnemySprites_BAT;
+
+extern const Frame EnemyFrames_SPIDER;
+extern const Frame EnemyFrames_BAT;
+
+char enemy_speeds[] = {
+    1, //SPIDER
+    2, //BAT
+    1 //SKELETON
+};
+
+const Frame* enemyFrameData[] = {
+    &EnemyFrames_SPIDER,
+    &EnemyFrames_BAT
+};
+const char* enemySpriteSheets[] = {
+    &EnemySprites_SPIDER,
+    &EnemySprites_BAT
+};
+
+void load_enemy_type(char type) {
+    char i;
+    for(i = 0; i < ENEMY_TYPE_NUM_SLOTS; ++i) {
+        if(enemy_type_slots[i] == type) {
+            return;
+        }
+    }
+    for(i = 0; i < ENEMY_TYPE_NUM_SLOTS; ++i) {
+        if(enemy_type_slots[i] == ENEMY_TYPE_NONE) {
+            enemy_type_slots[i] = type;
+            ++enemy_type_used_slots;
+            load_spritesheet(enemySpriteSheets[type], i+2);
+            return;
+        }
+    }
+}
+
+void clear_enemy_slots() {
+    char i;
+    enemy_type_used_slots = 0;
+    for(i = 0; i < ENEMY_TYPE_NUM_SLOTS; ++i) {
+        enemy_type_slots[i] = ENEMY_TYPE_NONE;
+    }
+}
+
+unsigned char random_loaded_enemy_slot() {
+    return (((unsigned char) rnd()) & 0x7F) % enemy_type_used_slots;
+}
+
+void init_enemy(char slot, MobState* enemy) {
+    char type = enemy_type_slots[slot];
+    enemy->mode = 1;
+    enemy->slot = slot;
+    switch(type) {
+    case ENEMY_TYPE_SPIDER:
+            enemy->health = 2;
+            break;
+    case ENEMY_TYPE_BAT:
+            enemy->health = 1;
+            break;
+    case ENEMY_TYPE_SKELETON:
+            enemy->health = 3;
+            break;
+    }
+}
 
 void clear_enemies() {
     char i;
@@ -39,7 +105,7 @@ void draw_enemies() {
                 && enemy->y > camera_y
                 && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
-                    QueuePackedSprite(enemyFrameData[enemy->type], enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, GRAM_PAGE(enemy->type + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                    QueuePackedSprite(enemyFrameData[enemy_type_slots[enemy->slot]], enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir, enemy->anim_flip, GRAM_PAGE(enemy->slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
                 } 
         }
         ++enemy;
@@ -47,7 +113,7 @@ void draw_enemies() {
 }
 
 void update_enemies() {
-    char i;
+    char i, speed;
     MobState *enemy = enemies;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         if((enemy->x + 8) > (camera_x)
@@ -57,22 +123,23 @@ void update_enemies() {
             //LD_tempEnemy(enemy);
             tempEnemy = *enemy;
             if(tempEnemy.mode == 1) {
+                speed = enemy_speeds[enemy_type_slots[tempEnemy.slot]];
                 temp1 = tempEnemy.x;
                 temp2 = tempEnemy.y;
                 ++(tempEnemy.anim_frame);
                 if((tempEnemy.anim_frame & 3) == 0) {
                     if(tempEnemy.x > player_x) {
-                        --(tempEnemy.x);
+                        tempEnemy.x -= speed;
                     } else {
-                        ++(tempEnemy.x);
+                        tempEnemy.x += speed;
                     }
                     if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
                         tempEnemy.x = temp1;
                     }
                     if(tempEnemy.y > player_y) {
-                        --(tempEnemy.y);
+                        tempEnemy.y -= speed;
                     } else {
-                        ++(tempEnemy.y);
+                        tempEnemy.y += speed;
                     }
                     
                     if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
@@ -143,6 +210,7 @@ void update_enemies() {
                     if(temp1 + temp2 < 8) {
                         tempEnemy.mode = 2;
                         tempEnemy.anim_frame = 0;
+                        --tempEnemy.health;
                         do_noise_effect(70, -12, 8);
                     }
                 }
@@ -150,12 +218,16 @@ void update_enemies() {
                 ++(tempEnemy.anim_frame);
                 tempEnemy.anim_dir = (tempEnemy.anim_dir + 1) & 7;
                 if(tempEnemy.anim_frame & 1) {
-                    tempEnemy.x += player_dir_x >> 4;
-                    tempEnemy.y += player_dir_y >> 4;
+                    tempEnemy.x += player_dir_x >> 3;
+                    tempEnemy.y += player_dir_y >> 3;
                 }
                 if(tempEnemy.anim_frame == 12) {
-                    tempEnemy.mode = 0;
-                    --enemy_count;
+                    if(enemy->health) {
+                        tempEnemy.mode = 1;
+                    } else {
+                        tempEnemy.mode = 0;
+                        --enemy_count;
+                    }
                 }
             }
             *enemy = tempEnemy;
