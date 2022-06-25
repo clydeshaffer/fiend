@@ -10,11 +10,22 @@ _HeroSprites:
 _HeroFrames:
     .incbin "chara_hero.gsi"
 
+
+;Enemy sprites
+
 _EnemySprites:
+_EnemySprites_SPIDER:
     .incbin "chara_spider.gtg.deflate"
 
 _EnemyFrames:
+_EnemyFrames_SPIDER:
     .incbin "chara_spider.gsi"
+
+_EnemySprites_BAT:
+    .incbin "chara_bat.gtg.deflate"
+
+_EnemyFrames_BAT:
+    .incbin "chara_bat.gsi"
 
 _TestMap:
     .incbin "testmap.gtg.deflate"

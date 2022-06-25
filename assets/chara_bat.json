@@ -1,0 +1,234 @@
+{ "frames": [
+   {
+    "filename": "chara_bat 0.ase",
+    "frame": { "x": 90, "y": 34, "w": 15, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 13, "w": 15, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 1.ase",
+    "frame": { "x": 67, "y": 0, "w": 19, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 13, "w": 19, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 2.ase",
+    "frame": { "x": 86, "y": 0, "w": 21, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 13, "y": 15, "w": 21, "h": 17 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 3.ase",
+    "frame": { "x": 107, "y": 21, "w": 19, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 16, "w": 19, "h": 16 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 4.ase",
+    "frame": { "x": 30, "y": 35, "w": 14, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 13, "w": 14, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 5.ase",
+    "frame": { "x": 11, "y": 54, "w": 14, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 15, "w": 14, "h": 17 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 6.ase",
+    "frame": { "x": 104, "y": 55, "w": 12, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 15, "w": 12, "h": 17 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 7.ase",
+    "frame": { "x": 90, "y": 53, "w": 14, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 14, "w": 14, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 8.ase",
+    "frame": { "x": 15, "y": 35, "w": 15, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 13, "w": 15, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 9.ase",
+    "frame": { "x": 25, "y": 0, "w": 21, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 13, "y": 14, "w": 21, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 10.ase",
+    "frame": { "x": 46, "y": 0, "w": 21, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 13, "y": 14, "w": 21, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 11.ase",
+    "frame": { "x": 25, "y": 18, "w": 19, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 15, "w": 19, "h": 17 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 12.ase",
+    "frame": { "x": 107, "y": 0, "w": 17, "h": 21 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 15, "y": 9, "w": 17, "h": 21 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 13.ase",
+    "frame": { "x": 0, "y": 40, "w": 11, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 18, "y": 18, "w": 11, "h": 23 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 14.ase",
+    "frame": { "x": 25, "y": 54, "w": 13, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 22, "w": 13, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 15.ase",
+    "frame": { "x": 105, "y": 37, "w": 15, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 14, "w": 15, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 16.ase",
+    "frame": { "x": 44, "y": 18, "w": 16, "h": 20 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 11, "y": 12, "w": 16, "h": 20 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 17.ase",
+    "frame": { "x": 0, "y": 0, "w": 25, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 13, "w": 25, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 18.ase",
+    "frame": { "x": 86, "y": 17, "w": 21, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 15, "w": 21, "h": 17 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 19.ase",
+    "frame": { "x": 44, "y": 38, "w": 14, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 13, "w": 14, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 20.ase",
+    "frame": { "x": 60, "y": 19, "w": 17, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 15, "y": 16, "w": 17, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 21.ase",
+    "frame": { "x": 77, "y": 34, "w": 13, "h": 22 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 8, "w": 13, "h": 22 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 22.ase",
+    "frame": { "x": 0, "y": 19, "w": 15, "h": 21 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 9, "w": 15, "h": 21 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_bat 23.ase",
+    "frame": { "x": 60, "y": 37, "w": 15, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 13, "w": 15, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.35-x64",
+  "image": "chara_bat.bmp",
+  "format": "I8",
+  "size": { "w": 128, "h": 72 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

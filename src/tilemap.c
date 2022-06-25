@@ -213,8 +213,6 @@ char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
 void draw_world() {
     char r, c, tile_scroll_x, tile_scroll_y, cam_x, cam_y, r2, c2;
     int t;
-    via[ORB] = 0x80;
-    via[ORB] = 0x00;
     tile_scroll_x = camera_x & (TILE_SIZE-1);
     tile_scroll_y = camera_y & (TILE_SIZE-1);
     cam_x = camera_x >> TILE_ORD;
@@ -248,8 +246,6 @@ void draw_world() {
     r = 1;
     c2 = 0;
     r2 = TILE_SIZE - tile_scroll_y;
-    via[ORB] = 0x80;
-    via[ORB] = 0x01;
     for(r = 1; r < VISIBLE_H; ++r) {
         if((cam_y + r) < MAP_H) {
             
@@ -278,8 +274,5 @@ void draw_world() {
         t += MAP_W - VISIBLE_W;
         r2 += TILE_SIZE;
     }
-    via[ORB] = 0x80;
-    via[ORB] = 0x41;
-    via[ORB] = 0x80;
-    via[ORB] = 0x40;
+    
 }
