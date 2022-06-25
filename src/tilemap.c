@@ -127,6 +127,18 @@ void map_fill_tile_rect(Rect *r) {
     }
 }
 
+void maybe_add_pillars(Rect *r) {
+    char num_pillars, i, x, y;
+    if(r->w < 5) return;
+    if(r->h < 5) return;
+    num_pillars = rnd_range(1,4);
+    for(i = 0; i < num_pillars; ++i) {
+        x = rnd_range(2, r->w - 1) + r->x;
+        y = rnd_range(2, r->h - 1) + r->y;
+        tiles[x + (y << MAP_ORD)] = EMPTY_TILE;
+    }
+}
+
 unsigned char scratchpad[256];
 
 void generate_map() {
@@ -153,6 +165,7 @@ void generate_map() {
             trim_edge_rects(mapRects);
             random_reduce_rect(mapRects);
             map_fill_tile_rect(mapRects);
+            maybe_add_pillars(mapRects);
             mapRects++;
         }
     }
