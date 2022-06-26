@@ -21,7 +21,9 @@ Rect tmpRect;
 #define EMPTY_TILE 0
 #define GROUND_TILE 32
 #define WALL_TILE 64
-#define GROUND2_TILE 96
+#define STAIRS_TILE 96
+
+unsigned char tilemap_offset = 0;
 
 void trim_edge_rects(Rect *r) {
     if(r->x == 0) {
@@ -139,12 +141,20 @@ void maybe_add_pillars(Rect *r) {
     }
 }
 
+void place_stairs(Rect *r) {
+    char x, y;
+    x = rnd_range(0, r->w) + r->x;
+    y = rnd_range(0, r->h) + r->y;
+    tiles[x + (y << MAP_ORD)] = STAIRS_TILE;
+}
+
 unsigned char scratchpad[256];
 
 void generate_map() {
     //inflatemem(tiles, &TestMap);
-    unsigned int i, j;
+    unsigned int i, j, st;
     Rect *mapRects = (Rect*) scratchpad;
+    st = rnd_range(0, 16);
 
     for(i = 0; i < MAP_SIZE; i++) {
         tiles[i] = 0;
@@ -166,6 +176,10 @@ void generate_map() {
             random_reduce_rect(mapRects);
             map_fill_tile_rect(mapRects);
             maybe_add_pillars(mapRects);
+            if(st == 0) {
+                place_stairs(mapRects);
+            }
+            st--;
             mapRects++;
         }
     }
@@ -235,7 +249,7 @@ void draw_world() {
     c = 0;
     t = (cam_x + c) + ((cam_y + r) << MAP_ORD);
     if(tiles[t] != 0) {
-        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t]), tile_scroll_y, 0, bankflip)
+        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t]), tile_scroll_y+tilemap_offset, 0, bankflip)
         queue_flags_param = DMA_GCARRY;
         QueueSpriteRect();
     }
@@ -245,7 +259,7 @@ void draw_world() {
         if((cam_x + c) < MAP_W) {
            
             if(tiles[t] != 0) {
-                SET_RECT(c2 - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t], tile_scroll_y, 0, bankflip)
+                SET_RECT(c2 - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t], tile_scroll_y+tilemap_offset, 0, bankflip)
                 queue_flags_param = DMA_GCARRY;
                 QueueSpriteRect();
             }
@@ -263,7 +277,7 @@ void draw_world() {
         if((cam_y + r) < MAP_H) {
             
             if(tiles[t] != 0) {
-                SET_RECT(0, r2, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + tiles[t], 0, 0, bankflip)
+                SET_RECT(0, r2, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + tiles[t], tilemap_offset, 0, bankflip)
                 queue_flags_param = DMA_GCARRY;
                 QueueSpriteRect();
             }
@@ -273,7 +287,7 @@ void draw_world() {
             for(c = 1; c < VISIBLE_W; ++c) {
                 if((cam_x + c) < MAP_W) {
                     if(tiles[t] != 0) {
-                        SET_RECT(c2, r2, TILE_SIZE, TILE_SIZE, tiles[t], 0, 0, bankflip)
+                        SET_RECT(c2, r2, TILE_SIZE, TILE_SIZE, tiles[t], tilemap_offset, 0, bankflip)
                         queue_flags_param = DMA_GCARRY;
                         QueueSpriteRect();
                     }

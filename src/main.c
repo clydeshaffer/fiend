@@ -110,11 +110,11 @@ void main() {
     asm ("SEI");
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE;
-    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 0);
+    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 41);
     wait();
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_PAGE_OUT;
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
-    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 0);
+    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 41);
     wait();
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
     *bank_reg = 0;
