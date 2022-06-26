@@ -63,6 +63,7 @@ void Sleep(int frames) {
 void init_game_state(unsigned char new_state) {
     unsigned char i;
     game_state = new_state;
+    stop_music();
     if(new_state == GAME_STATE_TITLE) {
         player_dir_x = 1;
         player_dir_y = 1;

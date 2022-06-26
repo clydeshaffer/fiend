@@ -150,3 +150,16 @@ void do_noise_effect(char note, char bend, char duration) {
     push_audio_param(AMPLITUDE+2, 127);
     flush_audio_params();
 }
+
+void stop_music() {
+    music_cursor = 0;
+    audio_amplitudes[0] = 0;
+    audio_amplitudes[1] = 0;
+    audio_amplitudes[2] = 0;
+    audio_amplitudes[3] = 0;
+    push_audio_param(AMPLITUDE+0, 0);
+    push_audio_param(AMPLITUDE+1, 0);
+    push_audio_param(AMPLITUDE+2, 0);
+    push_audio_param(AMPLITUDE+3, 0);
+    flush_audio_params();
+}

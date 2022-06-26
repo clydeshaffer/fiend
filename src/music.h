@@ -13,4 +13,6 @@ void tick_music();
 
 void do_noise_effect(char note, char bend, char duration);
 
+void stop_music();
+
 #endif
