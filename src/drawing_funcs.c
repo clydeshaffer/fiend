@@ -42,20 +42,8 @@ void QueuePackedSprite(const Frame* sprite_table, char x, char y, char frame, ch
     } else {
         rect.x = (temp_frame.x + x);
     }
-    
-    if(rect.x & 128) {
-        temp_frame.w -= 0 - rect.x;
-        temp_frame.gx += 0 - rect.x;
-        rect.x = 0;
-    }
 
     rect.y = (temp_frame.y + y);
-    if(rect.y & 128) {
-        temp_frame.h -= 0 - rect.y;
-        temp_frame.gy += 0 - rect.y;
-        rect.y = 0;
-    }
-    
 
     rect.gx = temp_frame.gx;
     if(flip & SPRITE_FLIP_X) {
