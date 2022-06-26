@@ -12,15 +12,15 @@ AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
 LFLAGS = -C gametank-32k.cfg -m $(ODIR)/out.map
 LLIBS = lib/gametank.lib
 
-_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o main.o
+_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o main.o
 COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
 _AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
-_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.gtg.deflate
+_BMPOBJS = gamesprites.gtg.deflate testmap.gtg.deflate chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.gtg.deflate chara_orc.gtg.deflate
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
-_SPRITEMETA = chara_hero.gsi chara_spider.gsi chara_bat.gsi chara_rat.gsi
+_SPRITEMETA = chara_hero.gsi chara_spider.gsi chara_bat.gsi chara_rat.gsi chara_orc.gsi
 SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
 _AUDIO_FW = audio_fw.bin.deflate

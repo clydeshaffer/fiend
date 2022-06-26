@@ -7,6 +7,7 @@
 #include "random.h"
 #include "music.h"
 #include "enemies.h"
+#include "level.h"
 
 extern const unsigned char* GameSprites;
 extern const unsigned char* HeroSprites;
@@ -69,7 +70,7 @@ void init_game_state(unsigned char new_state) {
         camera_y = 0;
         player_anim_frame = 0;
         player_health = 0;
-        generate_map();
+        init_level(0);
         play_track(MUSIC_TRACK_TITLE, 0);
     } else if(new_state == GAME_STATE_PLAY) {
         play_track(MUSIC_TRACK_MAIN, 1);
@@ -80,7 +81,7 @@ void init_game_state(unsigned char new_state) {
         player_anim_state = PLAYER_STATE_NEUTRAL;
         player_anim_frame = 0;
         if(player_health != 0) {
-            generate_map();
+            next_level();
         }
         player_health = PLAYER_MAX_HEALTH;
         clear_enemies(); 
@@ -133,9 +134,6 @@ void main() {
 
     load_spritesheet(&GameSprites, 0);
     load_spritesheet(&HeroSprites, 1);
-    clear_enemy_slots();
-    load_enemy_type(ENEMY_TYPE_RAT);
-    load_enemy_type(ENEMY_TYPE_BAT);
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
     *dma_flags = flagsMirror;

@@ -11,7 +11,7 @@
 #define ENEMY_TYPE_RAT      0
 #define ENEMY_TYPE_SPIDER   1
 #define ENEMY_TYPE_BAT      2
-#define ENEMY_TYPE_SKELETON 3
+#define ENEMY_TYPE_ORC 3
 #define ENEMY_TYPE_NONE     255
 
 typedef struct MobState {

@@ -12,11 +12,17 @@ extern void nop5();
 extern void nop10();
 
 void load_spritesheet(char* spriteData, char bank) {
+    char oldFlags = flagsMirror;
+    char oldBanks = banksMirror;
     flagsMirror = DMA_NMI | DMA_IRQ;
     *dma_flags = flagsMirror;
     banksMirror = bankflip | GRAM_PAGE(bank);
     *bank_reg = banksMirror;
     inflatemem(vram, spriteData);
+    flagsMirror = oldFlags;
+    banksMirror = oldBanks;
+    *dma_flags = flagsMirror;
+    *bank_reg = banksMirror;
 }
 
 unsigned char queue_start = 0;

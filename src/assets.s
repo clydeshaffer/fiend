@@ -1,7 +1,6 @@
     .export _GameSprites, _HeroSprites, _HeroFrames, _DynaWave, _TestMap, _MainMusic, _TitleMusic, _DiedMusic
-    .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER
-    .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER
-
+    .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC
+    .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC
     .RODATA
 _GameSprites:
     .incbin "gamesprites.gtg.deflate"
@@ -31,6 +30,12 @@ _EnemySprites_RAT:
 
 _EnemyFrames_RAT:
     .incbin "chara_rat.gsi"
+
+_EnemySprites_ORC:
+    .incbin "chara_orc.gtg.deflate"
+
+_EnemyFrames_ORC:
+    .incbin "chara_orc.gsi"
 
 _TestMap:
     .incbin "testmap.gtg.deflate"

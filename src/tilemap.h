@@ -22,6 +22,7 @@
 extern unsigned int camera_x;
 extern unsigned int camera_y;
 
+void switch_tileset(unsigned char level_num);
 void generate_map();
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y);
 void draw_world();

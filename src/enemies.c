@@ -18,27 +18,31 @@ unsigned char enemy_type_used_slots = 0;
 extern const unsigned char* EnemySprites_RAT;
 extern const unsigned char* EnemySprites_SPIDER;
 extern const unsigned char* EnemySprites_BAT;
+extern const unsigned char* EnemySprites_ORC;
 
 extern const Frame EnemyFrames_RAT;
 extern const Frame EnemyFrames_SPIDER;
 extern const Frame EnemyFrames_BAT;
+extern const Frame EnemyFrames_ORC;
 
 char enemy_speeds[] = {
     1, //RAT
     1, //SPIDER
     2, //BAT
-    1 //SKELETON
+    1 //ORC
 };
 
 const Frame* enemyFrameData[] = {
     &EnemyFrames_RAT,
     &EnemyFrames_SPIDER,
-    &EnemyFrames_BAT
+    &EnemyFrames_BAT,
+    &EnemyFrames_ORC
 };
 const char* enemySpriteSheets[] = {
     &EnemySprites_RAT,
     &EnemySprites_SPIDER,
-    &EnemySprites_BAT
+    &EnemySprites_BAT,
+    &EnemySprites_ORC
 };
 
 void load_enemy_type(char type) {
@@ -84,7 +88,7 @@ void init_enemy(char slot, MobState* enemy) {
     case ENEMY_TYPE_BAT:
             enemy->health = 1;
             break;
-    case ENEMY_TYPE_SKELETON:
+    case ENEMY_TYPE_ORC:
             enemy->health = 3;
             break;
     }
