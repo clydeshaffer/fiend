@@ -18,11 +18,6 @@ typedef struct Rect {
 
 Rect tmpRect;
 
-#define EMPTY_TILE 0
-#define GROUND_TILE 32
-#define WALL_TILE 64
-#define STAIRS_TILE 96
-
 unsigned char tilemap_offset = 0;
 
 void switch_tileset(unsigned char level_num) {
@@ -221,6 +216,13 @@ void generate_map() {
         }
         ++j;
     }
+}
+
+char tile_at(unsigned int pos_x, unsigned int pos_y) {
+    pos_x += HITBOX_X;
+    pos_y += HITBOX_Y;
+    tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
+    return *tmpptr_char;
 }
 
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {

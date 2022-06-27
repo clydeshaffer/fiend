@@ -52,6 +52,8 @@ unsigned char game_over_timer = 0;
 
 extern const Frame* HeroFrames;
 
+unsigned char go_to_next_level = 0;
+
 void Sleep(int frames) {
     int i;
     for(i = 0; i < frames; ++i) {
@@ -224,6 +226,10 @@ void main() {
                     player_anim_state = PLAYER_STATE_ATTACK;
                     do_noise_effect(95, 12, 4);
                     i = 1;
+                } else if(inputs & INPUT_MASK_B & ~last_inputs) {
+                    if(tile_at(player_x, player_y) == STAIRS_TILE) {
+                        go_to_next_level = 1;
+                    }
                 } else {
                     if(inputs & INPUT_MASK_RIGHT) {
                         player_anim_dir = 4;
@@ -328,25 +334,19 @@ void main() {
             if(game_over_timer == 0) {
                 init_game_state(GAME_STATE_TITLE);
             }
-        } else if(enemy_count == 0) {
-            cursorX = 12;
-            cursorY = 60;
-            print("floor cleared");
-            game_over_timer--;
-            if(game_over_timer == 0) {
-                i = player_health;
-                init_game_state(GAME_STATE_PLAY);
-                player_health = i;
-            }
+        } else if(go_to_next_level != 0) {
+            go_to_next_level = 0;
+            i = player_health;
+            init_game_state(GAME_STATE_PLAY);
+            player_health = i;
         } else if(game_state == GAME_STATE_PLAY) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;
-            cursorX = 92;
-            cursorY = 108;
-            print("left");
-            cursorX = 83;
-            cursorY = 108;
-            printnum(enemy_count);
+            if(tile_at(player_x, player_y) == STAIRS_TILE) {
+                cursorX = 0;
+                cursorY = 108;
+                print("press b to enter");
+            }
         }
 
 

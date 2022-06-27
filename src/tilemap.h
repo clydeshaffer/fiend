@@ -19,11 +19,17 @@
 #define HITBOX_W 10
 #define HITBOX_H 3
 
+#define EMPTY_TILE 0
+#define GROUND_TILE 32
+#define WALL_TILE 64
+#define STAIRS_TILE 96
+
 extern unsigned int camera_x;
 extern unsigned int camera_y;
 
 void switch_tileset(unsigned char level_num);
 void generate_map();
+char tile_at(unsigned int pos_x, unsigned int pos_y);
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y);
 void draw_world();
 
