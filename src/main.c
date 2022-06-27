@@ -193,7 +193,6 @@ void main() {
         updateInputs();
         if(game_state == GAME_STATE_TITLE) {
             rnd();
-            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR);
             draw_world();
             ++player_anim_frame;
             if(player_anim_frame & 1) {
@@ -364,12 +363,10 @@ void main() {
             draw_fade(game_over_timer);
             if(game_over_timer == 116) {
                 if(player_anim_state == PLAYER_STATE_DEAD) {
-                    wait();
                     init_game_state(GAME_STATE_TITLE);
                 } else if(go_to_next_level) {
                     go_to_next_level = 0;
                     i = player_health;
-                    wait();
                     init_game_state(GAME_STATE_PLAY);
                     player_health = i;
                 } else {

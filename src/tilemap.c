@@ -272,7 +272,7 @@ void draw_world() {
     t = (cam_x + c) + ((cam_y + r) << MAP_ORD);
     //if(tiles[t] != 0) {
         SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t]), tile_scroll_y+tilemap_offset, 0, bankflip)
-        queue_flags_param = DMA_GCARRY;
+        queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
         QueueSpriteRect();
     //}
     t++;
@@ -282,7 +282,7 @@ void draw_world() {
            
             //if(tiles[t] != 0) {
                 SET_RECT(c2 - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t], tile_scroll_y+tilemap_offset, 0, bankflip)
-                queue_flags_param = DMA_GCARRY;
+                queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
                 QueueSpriteRect();
             //}
         }
@@ -300,7 +300,7 @@ void draw_world() {
             
             //if(tiles[t] != 0) {
                 SET_RECT(0, r2, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + tiles[t], tilemap_offset, 0, bankflip)
-                queue_flags_param = DMA_GCARRY;
+                queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
                 QueueSpriteRect();
             //}
 
@@ -310,7 +310,7 @@ void draw_world() {
                 if((cam_x + c) < MAP_W) {
                     //if(tiles[t] != 0) {
                         SET_RECT(c2, r2, TILE_SIZE, TILE_SIZE, tiles[t], tilemap_offset, 0, bankflip)
-                        queue_flags_param = DMA_GCARRY;
+                        queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
                         QueueSpriteRect();
                     //}
                 }

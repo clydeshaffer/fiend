@@ -214,10 +214,13 @@ void draw_fade(unsigned char opacity) {
     char oldBanks = banksMirror;
     flagsMirror |= DMA_ENABLE;
     flagsMirror &= ~DMA_GCARRY;
-    flagsMirror &= ~DMA_OPAQUE;
+    flagsMirror = flagsMirror & ~DMA_OPAQUE;
     flagsMirror &= ~DMA_COLORFILL_ENABLE;
     *dma_flags = flagsMirror;
+    banksMirror = banksMirror & 0xF8;
+    *bank_reg = banksMirror;
     SpriteRect(0, 0, 127, 127, opacity&0xF0, 64);
+    wait();
     flagsMirror = oldFlags;
     banksMirror = oldBanks;
     *dma_flags = flagsMirror;
