@@ -44,6 +44,8 @@ void FillRect(char x, char y, char w, char h, char c);
 
 void SpriteRect(char x, char y, char w, char h, char gx, char gy);
 
+void draw_fade(unsigned char opacity);
+
 void printnum(int num);
 
 void print(char* str);

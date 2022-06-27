@@ -20,19 +20,23 @@ Rect tmpRect;
 
 unsigned char tilemap_offset = 0;
 
+extern const unsigned char* Tileset_00;
+extern const unsigned char* Tileset_01;
+extern const unsigned char* Tileset_02;
+
 void switch_tileset(unsigned char level_num) {
     switch(level_num) {
         case 0:
-            tilemap_offset = 0;
+            load_spritesheet(&Tileset_00, 0);
             break;
         case 1:
         case 2:
         case 3:
         case 4:
-            tilemap_offset = 32;
+            load_spritesheet(&Tileset_01, 0);
             break;
         default:
-            tilemap_offset = 64;
+            load_spritesheet(&Tileset_02, 0);
     }
 }
 

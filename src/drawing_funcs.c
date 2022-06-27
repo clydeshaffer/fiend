@@ -209,6 +209,21 @@ void SpriteRect(char x, char y, char w, char h, char gx, char gy) {
     vram[START] = 1;
 }
 
+void draw_fade(unsigned char opacity) {
+    char oldFlags = flagsMirror;
+    char oldBanks = banksMirror;
+    flagsMirror |= DMA_ENABLE;
+    flagsMirror &= ~DMA_GCARRY;
+    flagsMirror &= ~DMA_OPAQUE;
+    flagsMirror &= ~DMA_COLORFILL_ENABLE;
+    *dma_flags = flagsMirror;
+    SpriteRect(0, 0, 127, 127, opacity&0xF0, 64);
+    flagsMirror = oldFlags;
+    banksMirror = oldBanks;
+    *dma_flags = flagsMirror;
+    *bank_reg = banksMirror;
+}
+
 void printnum(int num) {
     vram[VX] = cursorX;
     vram[VY] = cursorY;

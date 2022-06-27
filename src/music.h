@@ -4,6 +4,7 @@
 #define MUSIC_TRACK_TITLE 0
 #define MUSIC_TRACK_MAIN 1
 #define MUSIC_TRACK_DIED 2
+#define MUSIC_TRACK_STAIRS 3
 
 void init_music();
 
