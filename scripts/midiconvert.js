@@ -17,10 +17,11 @@ var numTracks = parsedInput.header.numTracks;
 var totalEntries = 0;
 
 var mergedTracks = [];
+var tempo = 120; //microseconds per quarter note
 
 parsedInput.tracks.forEach((track, i) => {
     var absTime = 0;
-    var tempo = 120; //microseconds per quarter note
+
     track.forEach((trackEvent) => {
         if(trackEvent.type == "setTempo") {
             tempo = 60000000 / trackEvent.microsecondsPerBeat;
