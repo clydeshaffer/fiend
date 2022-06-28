@@ -229,15 +229,15 @@ void face_player() {
 
 void check_player_attack() {
     if(player_hitbox_damage) {
-        temp1 = player_x + player_dir_x - tempEnemy.x;
-        temp2 = player_y + player_dir_y - tempEnemy.y;
+        temp1 = player_x + (player_dir_x>>1) - tempEnemy.x;
+        temp2 = player_y + (player_dir_y>>1) - tempEnemy.y;
         if(temp1 < 0) {
             temp1 = -temp1;
         }
         if(temp2 < 0) {
             temp2 = -temp2;
         }
-        if(temp1 + temp2 < 8) {
+        if(temp1 + temp2 < 14) {
             tempEnemy.mode = ENEMY_STATE_KNOCKBACK;
             tempEnemy.anim_frame = 0;
             --tempEnemy.health;
@@ -394,7 +394,7 @@ void update_enemies() {
                             tempEnemy.x = temp1;
                             tempEnemy.y = temp2;
                         }
-                if(tempEnemy.anim_frame == 12) {
+                if(tempEnemy.anim_frame == 16) {
                     if(enemy->health) {
                         tempEnemy.mode = ENEMY_STATE_NORMAL;
                     } else {
@@ -449,7 +449,8 @@ void update_enemies() {
                     tempEnemy.anim_frame = 0;
                     tempEnemy.mode = ENEMY_STATE_NORMAL;                    
                 }
-                break;
+                check_player_attack();
+                break; //out of enemy state attack
             }
             *enemy = tempEnemy;
         }
