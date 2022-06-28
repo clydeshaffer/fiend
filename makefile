@@ -9,10 +9,10 @@ PORT = COM3
 
 CFLAGS = -t none -Osir --cpu 65c02
 AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
-LFLAGS = -C gametank-32k.cfg -m $(ODIR)/out.map
+LFLAGS = -C gametank-2M.cfg -m $(ODIR)/out.map -vm
 LLIBS = lib/gametank.lib
 
-_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o main.o
+_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o banking.o main.o
 COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
 _AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
@@ -32,7 +32,7 @@ AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
 _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
-bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS)
+bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS) gametank-2M.cfg
 	mkdir -p $(@D)
 	$(LN) $(LFLAGS) $(AOBJS) $(COBJS) -o $@ $(LLIBS)
 

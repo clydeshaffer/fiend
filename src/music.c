@@ -2,6 +2,7 @@
 #include "gametank.h"
 #include "dynawave.h"
 #include "note_numbers.h"
+#include "banking.h"
 
 extern const unsigned char* MainMusic;
 extern const unsigned char* TitleMusic;
@@ -18,6 +19,7 @@ void init_music() {
 }
 
 void play_track(char track, char loop) {
+    ChangeRomBank(BANK_COMMON);
     switch (track)
     {
     case MUSIC_TRACK_TITLE:
@@ -46,6 +48,7 @@ void play_track(char track, char loop) {
 
 void tick_music() {
     unsigned char n, noteMask;
+    ChangeRomBank(BANK_COMMON);
     if(audio_amplitudes[0] > 0) {
         if(audio_amplitudes[0] < 4) {
             audio_amplitudes[0] = 0;

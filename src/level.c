@@ -1,5 +1,6 @@
 #include "enemies.h"
 #include "tilemap.h"
+#include "banking.h"
 
 unsigned char level_number = 0;
 
@@ -32,9 +33,10 @@ void load_enemies_for_level(char levnum) {
 
 void init_level(char levnum) {
         level_number = levnum;
-        switch_tileset(level_number);
+        switch_tileset(levnum);
         generate_map();
         load_enemies_for_level(level_number);
+        ChangeRomBank(BANK_COMMON);
 }
 
 void next_level() {

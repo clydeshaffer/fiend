@@ -8,6 +8,7 @@
 #include "music.h"
 #include "enemies.h"
 #include "level.h"
+#include "banking.h"
 
 extern const unsigned char* HudSprites;
 extern const unsigned char* HeroSprites;
@@ -77,6 +78,7 @@ void init_game_state(unsigned char new_state) {
         player_anim_frame = 0;
         player_health = 0;
         init_level(0);
+        ChangeRomBank(BANK_COMMON);
         play_track(MUSIC_TRACK_TITLE, 0);
     } else if(new_state == GAME_STATE_PLAY) {
         play_track(MUSIC_TRACK_MAIN, 1);
@@ -88,6 +90,7 @@ void init_game_state(unsigned char new_state) {
         player_anim_frame = 0;
         if(player_health != 0) {
             next_level();
+            ChangeRomBank(BANK_COMMON);
         }
         player_health = PLAYER_MAX_HEALTH;
         clear_enemies(); 
@@ -106,6 +109,7 @@ void init_game_state(unsigned char new_state) {
 }
 
 void draw_player() {
+    ChangeRomBank(BANK_COMMON);
     queue_flags_param = DMA_GCARRY;
     QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, (3 & (player_anim_frame >> 3)) + player_anim_dir + player_state_offsets[player_anim_state], player_anim_flip, bankflip | GRAM_PAGE(1) | BANK_CLIP_X | BANK_CLIP_Y, 0);
 }
@@ -142,6 +146,7 @@ void main() {
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
 
+    ChangeRomBank(BANK_INIT);
     init_dynawave();
     init_music();
 
@@ -392,7 +397,6 @@ void main() {
         banksMirror = bankflip;
         *dma_flags = flagsMirror;
         *bank_reg = banksMirror;
-
         tick_music();
     }
 }

@@ -4,6 +4,7 @@
 #include <zlib.h>
 #include "drawing_funcs.h"
 #include "gametank.h"
+#include "banking.h"
 
 char cursorX, cursorY;
 
@@ -14,7 +15,7 @@ extern void nop10();
 void load_spritesheet(char* spriteData, char bank) {
     char oldFlags = flagsMirror;
     char oldBanks = banksMirror;
-    flagsMirror = DMA_NMI | DMA_IRQ;
+    flagsMirror = 0;
     *dma_flags = flagsMirror;
     banksMirror = bankflip | GRAM_PAGE(bank);
     *bank_reg = banksMirror;
@@ -35,6 +36,7 @@ Frame temp_frame;
 void pushRect();
 
 void QueuePackedSprite(const Frame* sprite_table, char x, char y, char frame, char flip, char bank, char offset) {
+    ChangeRomBank(BANK_COMMON);
     while(queue_count >= QUEUE_MAX) {
         asm("CLI");
         wait();

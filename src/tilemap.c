@@ -2,7 +2,7 @@
 #include "gametank.h"
 #include "drawing_funcs.h"
 #include "random.h"
-#include <zlib.h>
+#include "banking.h"
 
 unsigned char tiles[MAP_SIZE];
 char* tmpptr_char;
@@ -25,6 +25,7 @@ extern const unsigned char* Tileset_01;
 extern const unsigned char* Tileset_02;
 
 void switch_tileset(unsigned char level_num) {
+    ChangeRomBank(BANK_TILES);
     switch(level_num) {
         case 0:
             load_spritesheet(&Tileset_00, 0);
@@ -166,7 +167,6 @@ void place_stairs(Rect *r) {
 unsigned char scratchpad[256];
 
 void generate_map() {
-    //inflatemem(tiles, &TestMap);
     unsigned int i, j, st;
     Rect *mapRects = (Rect*) scratchpad;
     st = rnd_range(0, 16);

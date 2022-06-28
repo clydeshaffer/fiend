@@ -17,3 +17,4 @@ extern unsigned char player_anim_dir;
 extern unsigned char player_anim_flip;
 extern unsigned char player_health;
 extern unsigned char player_anim_state;
+extern unsigned char romBankMirror;

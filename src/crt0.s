@@ -12,6 +12,9 @@
 
 .import    copydata, zerobss, initlib, donelib
 
+.import _romBankMirror
+.export _SwitchRomBank
+
 .PC02
 
 BankReg = $2005
@@ -55,7 +58,8 @@ viaWakeup:
 	STA VIA+DDRA
     LDA #$FF
     STA VIA+ORAr
-	lda #$7E
+	lda #$00
+	sta _romBankMirror
 	jsr ShiftHighBits
 
 ; ---------------------------------------------------------------------------
@@ -83,6 +87,14 @@ viaWakeup:
 
 _exit:    JSR     donelib              ; Run destructors
           BRK
+
+.proc _SwitchRomBank: near
+	PHP
+	SEI
+	JSR ShiftHighBits
+	PLP
+	RTS
+.endproc
 
 ShiftHighBits:
 	STA $0

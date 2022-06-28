@@ -6,6 +6,7 @@
 #include "dynawave.h"
 #include "music.h"
 #include "random.h"
+#include "banking.h"
 
 MobState tempEnemy;
 
@@ -75,6 +76,7 @@ const char* enemySpriteSheets[] = {
 
 void load_enemy_type(char type) {
     char i;
+    ChangeRomBank(BANK_MONSTERS);
     for(i = 0; i < ENEMY_TYPE_NUM_SLOTS; ++i) {
         if(enemy_type_slots[i] == type) {
             return;
@@ -179,6 +181,7 @@ void place_enemies() {
 void draw_enemies() {
     unsigned char i;
     MobState *enemy = enemies;
+    ChangeRomBank(BANK_COMMON);
     queue_flags_param = DMA_GCARRY;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         if(enemy->mode != ENEMY_STATE_INACTIVE) {
