@@ -1,5 +1,5 @@
     .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02
-    .export _HeroSprites, _HeroFrames, _DynaWave, _TestMap, _MainMusic, _TitleMusic, _DiedMusic, _StairsMusic
+    .export _HeroSprites, _HeroFrames, _DynaWave, _MainMusic, _TitleMusic, _DiedMusic, _StairsMusic
     .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC
     .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC
     .RODATA
@@ -47,9 +47,6 @@ _EnemySprites_ORC:
 
 _EnemyFrames_ORC:
     .incbin "chara_orc.gsi"
-
-_TestMap:
-    .incbin "testmap.gtg.deflate"
 
 _DynaWave:
     .incbin "audio_fw.bin.deflate"
