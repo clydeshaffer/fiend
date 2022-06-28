@@ -91,18 +91,7 @@ void init_game_state(unsigned char new_state) {
         }
         player_health = PLAYER_MAX_HEALTH;
         clear_enemies(); 
-        do {
-            for(i = 0; i < MAX_ENEMIES; ++i) {
-                enemies[i].x = (rnd() & 0b1111100000) | 16;
-                enemies[i].y = (rnd() & 0b1111100000) | 16;
-                init_enemy(random_loaded_enemy_slot(), &enemies[i]);
-                if(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
-                    enemies[i].mode = 0;
-                } else {
-                    ++enemy_count;
-                }
-            }
-        } while(enemy_count == 0);
+        place_enemies();
 
         do {
             player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
@@ -211,9 +200,6 @@ void main() {
             }
         }
         else if(game_state == GAME_STATE_PLAY) {    
-
-            QueueFillRect(1, 7, SCREEN_WIDTH-2, SCREEN_HEIGHT-7-8, BG_COLOR);
-
             i = 0;
             tx = player_x;
             ty = player_y;

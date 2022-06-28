@@ -1,7 +1,7 @@
 { "frames": [
    {
     "filename": "chara_orc 0.ase",
-    "frame": { "x": 16, "y": 53, "w": 16, "h": 17 },
+    "frame": { "x": 0, "y": 92, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
@@ -10,7 +10,7 @@
    },
    {
     "filename": "chara_orc 1.ase",
-    "frame": { "x": 26, "y": 35, "w": 16, "h": 18 },
+    "frame": { "x": 89, "y": 58, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
@@ -19,7 +19,7 @@
    },
    {
     "filename": "chara_orc 2.ase",
-    "frame": { "x": 32, "y": 53, "w": 16, "h": 17 },
+    "frame": { "x": 77, "y": 76, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
@@ -28,7 +28,7 @@
    },
    {
     "filename": "chara_orc 3.ase",
-    "frame": { "x": 42, "y": 35, "w": 16, "h": 18 },
+    "frame": { "x": 61, "y": 61, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
@@ -37,7 +37,7 @@
    },
    {
     "filename": "chara_orc 4.ase",
-    "frame": { "x": 48, "y": 53, "w": 16, "h": 17 },
+    "frame": { "x": 16, "y": 89, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
@@ -46,7 +46,7 @@
    },
    {
     "filename": "chara_orc 5.ase",
-    "frame": { "x": 0, "y": 38, "w": 16, "h": 18 },
+    "frame": { "x": 34, "y": 67, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
@@ -55,7 +55,7 @@
    },
    {
     "filename": "chara_orc 6.ase",
-    "frame": { "x": 0, "y": 56, "w": 16, "h": 17 },
+    "frame": { "x": 32, "y": 85, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
@@ -64,7 +64,7 @@
    },
    {
     "filename": "chara_orc 7.ase",
-    "frame": { "x": 92, "y": 39, "w": 16, "h": 18 },
+    "frame": { "x": 73, "y": 43, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
@@ -73,7 +73,7 @@
    },
    {
     "filename": "chara_orc 8.ase",
-    "frame": { "x": 89, "y": 57, "w": 16, "h": 17 },
+    "frame": { "x": 50, "y": 79, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
@@ -82,7 +82,7 @@
    },
    {
     "filename": "chara_orc 9.ase",
-    "frame": { "x": 108, "y": 41, "w": 16, "h": 18 },
+    "frame": { "x": 45, "y": 49, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
@@ -91,7 +91,7 @@
    },
    {
     "filename": "chara_orc 10.ase",
-    "frame": { "x": 105, "y": 59, "w": 16, "h": 17 },
+    "frame": { "x": 93, "y": 78, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
@@ -100,7 +100,7 @@
    },
    {
     "filename": "chara_orc 11.ase",
-    "frame": { "x": 73, "y": 43, "w": 16, "h": 18 },
+    "frame": { "x": 18, "y": 53, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
@@ -181,7 +181,7 @@
    },
    {
     "filename": "chara_orc 20.ase",
-    "frame": { "x": 64, "y": 61, "w": 16, "h": 16 },
+    "frame": { "x": 66, "y": 93, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 19, "w": 16, "h": 16 },
@@ -214,6 +214,114 @@
     "spriteSourceSize": { "x": 16, "y": 9, "w": 15, "h": 23 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
+   },
+   {
+    "filename": "chara_orc 24.ase",
+    "frame": { "x": 82, "y": 95, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 25.ase",
+    "frame": { "x": 26, "y": 35, "w": 19, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 13, "w": 19, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 26.ase",
+    "frame": { "x": 0, "y": 38, "w": 18, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 14, "w": 18, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 27.ase",
+    "frame": { "x": 105, "y": 60, "w": 16, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 28.ase",
+    "frame": { "x": 109, "y": 78, "w": 16, "h": 17 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 17 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 29.ase",
+    "frame": { "x": 92, "y": 39, "w": 16, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 13, "w": 16, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 30.ase",
+    "frame": { "x": 108, "y": 41, "w": 16, "h": 19 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 15, "y": 13, "w": 16, "h": 19 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 31.ase",
+    "frame": { "x": 16, "y": 71, "w": 16, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 32.ase",
+    "frame": { "x": 0, "y": 74, "w": 16, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 33.ase",
+    "frame": { "x": 98, "y": 95, "w": 17, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 19, "w": 17, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 34.ase",
+    "frame": { "x": 48, "y": 96, "w": 17, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 18, "w": 17, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_orc 35.ase",
+    "frame": { "x": 0, "y": 56, "w": 16, "h": 18 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 14, "w": 16, "h": 18 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
    }
  ],
  "meta": {
@@ -221,7 +329,7 @@
   "version": "1.2.35-x64",
   "image": "chara_orc.bmp",
   "format": "I8",
-  "size": { "w": 128, "h": 77 },
+  "size": { "w": 128, "h": 111 },
   "scale": "1",
   "frameTags": [
   ],

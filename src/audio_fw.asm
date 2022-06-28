@@ -7,6 +7,7 @@ FreqsH = $10
 FreqsL = $14
 Amplitudes = $18
 Bends = $1C
+WavePTR = $30
 WaveStatesH = $50
 WaveStatesL = $60
 Inputs = $70
@@ -23,6 +24,10 @@ Inputs = $70
 	.code
 RESET:
 	CLI
+    LDA #<Sine
+    STA WavePTR
+    LDA #>Sine
+    STA WavePTR+1
 Forever:
     WAI
 	JMP Forever

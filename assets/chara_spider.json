@@ -46,7 +46,7 @@
    },
    {
     "filename": "chara_spider 5.ase",
-    "frame": { "x": 0, "y": 21, "w": 18, "h": 17 },
+    "frame": { "x": 93, "y": 32, "w": 18, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 16, "w": 18, "h": 17 },
@@ -73,7 +73,7 @@
    },
    {
     "filename": "chara_spider 8.ase",
-    "frame": { "x": 93, "y": 32, "w": 18, "h": 17 },
+    "frame": { "x": 54, "y": 33, "w": 18, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 15, "w": 18, "h": 17 },
@@ -91,7 +91,7 @@
    },
    {
     "filename": "chara_spider 10.ase",
-    "frame": { "x": 54, "y": 33, "w": 18, "h": 17 },
+    "frame": { "x": 72, "y": 36, "w": 18, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 15, "w": 18, "h": 17 },
@@ -136,7 +136,7 @@
    },
    {
     "filename": "chara_spider 15.ase",
-    "frame": { "x": 36, "y": 35, "w": 18, "h": 17 },
+    "frame": { "x": 18, "y": 37, "w": 18, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 20, "w": 18, "h": 17 },
@@ -172,7 +172,7 @@
    },
    {
     "filename": "chara_spider 19.ase",
-    "frame": { "x": 0, "y": 54, "w": 18, "h": 15 },
+    "frame": { "x": 18, "y": 54, "w": 18, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 17, "w": 18, "h": 15 },
@@ -181,7 +181,7 @@
    },
    {
     "filename": "chara_spider 20.ase",
-    "frame": { "x": 72, "y": 36, "w": 18, "h": 17 },
+    "frame": { "x": 0, "y": 21, "w": 18, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 17, "w": 18, "h": 17 },
@@ -208,20 +208,135 @@
    },
    {
     "filename": "chara_spider 23.ase",
-    "frame": { "x": 18, "y": 37, "w": 18, "h": 17 },
+    "frame": { "x": 36, "y": 35, "w": 18, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 12, "w": 18, "h": 17 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
+   },
+   {
+    "filename": "chara_spider 24.ase",
+    "frame": { "x": 0, "y": 54, "w": 18, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 15, "y": 17, "w": 18, "h": 16 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 25.ase",
+    "frame": { "x": 90, "y": 64, "w": 16, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 15, "w": 16, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 26.ase",
+    "frame": { "x": 84, "y": 79, "w": 16, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 27.ase",
+    "frame": { "x": 74, "y": 53, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 28.ase",
+    "frame": { "x": 106, "y": 65, "w": 16, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 17, "w": 16, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 29.ase",
+    "frame": { "x": 0, "y": 70, "w": 15, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 15, "y": 17, "w": 15, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 30.ase",
+    "frame": { "x": 36, "y": 67, "w": 16, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 15, "y": 17, "w": 16, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 31.ase",
+    "frame": { "x": 18, "y": 69, "w": 16, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 17, "w": 16, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 32.ase",
+    "frame": { "x": 100, "y": 80, "w": 16, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 20, "w": 16, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 33.ase",
+    "frame": { "x": 52, "y": 69, "w": 16, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 19, "w": 16, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 34.ase",
+    "frame": { "x": 100, "y": 80, "w": 16, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 20, "w": 16, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_spider 35.ase",
+    "frame": { "x": 68, "y": 69, "w": 16, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 17, "w": 16, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
    }
  ],
  "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.2.16.3-x64",
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.35-x64",
   "image": "chara_spider.bmp",
   "format": "I8",
-  "size": { "w": 128, "h": 69 },
-  "scale": "1"
+  "size": { "w": 128, "h": 94 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
  }
 }

@@ -10,8 +10,10 @@
 #define SPRITE_CHAR_BLANK_X 0x70
 #define SPRITE_CHAR_BLANK_Y 0x78
 
+#define SPRITE_FLIP_NONE 0
 #define SPRITE_FLIP_X 1
 #define SPRITE_FLIP_Y 2
+#define SPRITE_FLIP_BOTH 3
 
 #define BG_COLOR 16
 #define WINDOW_COLOR 0
