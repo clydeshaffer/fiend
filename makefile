@@ -32,9 +32,15 @@ AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
 _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
-bin/fiend.gtr: $(AOBJS) $(COBJS) $(LLIBS) gametank-2M.cfg
+_BANKS = bank00 bank01 bank02 bank03 filler bank7f
+BANKS = $(patsubst %,bin/fiend.gtr.%,$(_BANKS))
+
+bin/fiend.gtr: $(BANKS)
+	cat $(BANKS) > $@
+
+ $(BANKS): $(AOBJS) $(COBJS) $(LLIBS) gametank-2M.cfg
 	mkdir -p $(@D)
-	$(LN) $(LFLAGS) $(AOBJS) $(COBJS) -o $@ $(LLIBS)
+	$(LN) $(LFLAGS) $(AOBJS) $(COBJS) -o bin/fiend.gtr $(LLIBS)
 
 $(ODIR)/assets.o: src/assets.s $(BMPOBJS) $(SPRITEMETA) $(AUDIO_FW) $(MUSIC)
 	mkdir -p $(@D)
