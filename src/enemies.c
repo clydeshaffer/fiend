@@ -160,7 +160,8 @@ void place_enemies() {
                 enemies[i].y = (rnd() & 0b1111100000) | 16;
                 init_enemy(random_loaded_enemy_slot(), &enemies[i]);
                 attempt = 0;
-                while(!character_tilemap_check(enemies[i].x, enemies[i].y)) {
+                while((!character_tilemap_check(enemies[i].x, enemies[i].y)) ||
+                    (enemies[i].x == player_x && enemies[i].y == player_y)) {
                     enemies[i].x = (rnd() & 0b1111100000) | 16;
                     enemies[i].y = (rnd() & 0b1111100000) | 16;
                     attempt++;
@@ -247,9 +248,33 @@ void check_player_attack() {
     }
 }
 
+void check_impact_attack() {
+    if(!((player_anim_state == PLAYER_STATE_HITSTUN) || (player_anim_state == PLAYER_STATE_DEAD))) {
+        temp1 = player_x - tempEnemy.x;
+        temp2 = player_y - tempEnemy.y;
+        if(temp1 < 0) {
+            temp1 = -temp1;
+        }
+        if(temp2 < 0) {
+            temp2 = -temp2;
+        }
+        if(temp1 + temp2 < RANGE_IMPACT) {
+            player_anim_state = PLAYER_STATE_HITSTUN;
+            player_anim_frame = 0;
+            --player_health;
+            player_face_enemy();
+            do_noise_effect(80, -8, 10);
+        }
+    }
+}
+
+int chase_offset_x = 0;
+int chase_offset_y = 0;
 void update_enemies() {
     char i, speed, type, flags;
     MobState *enemy = enemies;
+    chase_offset_x = 0;
+    chase_offset_y = 0;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         //Check enemy is on screen
         if((enemy->x + 8) > (camera_x)
@@ -272,6 +297,8 @@ void update_enemies() {
                 if((tempEnemy.anim_frame & move_frame_mask[type]) == 0) {
                     switch(flags & EFLAGS_MOVETYPE_MASK) {
                     case EFLAGS_MOVETYPE_CHASE:
+                        player_x += chase_offset_x;
+                        player_y += chase_offset_y;
                         if(tempEnemy.x > player_x) {
                             tempEnemy.x -= speed;
                         } else if(tempEnemy.x < player_x) {
@@ -289,7 +316,8 @@ void update_enemies() {
                         if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
                             tempEnemy.y = temp2;
                         }
-                        
+                        player_x -= chase_offset_x;
+                        player_y -= chase_offset_y;
                         face_player();
                         break;
                     case EFLAGS_MOVETYPE_DIRECTION:
@@ -332,25 +360,6 @@ void update_enemies() {
                     
                     if(player_health > 0) {
                         switch(flags & EFLAGS_ATTACK_MASK) {
-                            case EFLAGS_ATTACK_IMPACT:
-                                if(!((player_anim_state == PLAYER_STATE_HITSTUN) || (player_anim_state == PLAYER_STATE_DEAD))) {
-                                    temp1 = player_x - tempEnemy.x;
-                                    temp2 = player_y - tempEnemy.y;
-                                    if(temp1 < 0) {
-                                        temp1 = -temp1;
-                                    }
-                                    if(temp2 < 0) {
-                                        temp2 = -temp2;
-                                    }
-                                    if(temp1 + temp2 < RANGE_IMPACT) {
-                                        player_anim_state = PLAYER_STATE_HITSTUN;
-                                        player_anim_frame = 0;
-                                        --player_health;
-                                        player_face_enemy();
-                                        do_noise_effect(80, -8, 10);
-                                    }
-                                }
-                                break;
                             case EFLAGS_ATTACK_MELEE:
                                 temp1 = player_x - tempEnemy.x;
                                 temp2 = player_y - tempEnemy.y;
@@ -364,12 +373,16 @@ void update_enemies() {
                                     tempEnemy.mode = ENEMY_STATE_ATTACKING;
                                     tempEnemy.anim_frame = 0;
                                 }
-
+                            case EFLAGS_ATTACK_IMPACT:
+                                check_impact_attack();
+                                break;
                         }
                     }
                     
                 }
                 check_player_attack();
+                chase_offset_x = player_x - tempEnemy.x;
+                chase_offset_y = player_y - tempEnemy.y;
                 break;//out of ENEMY_STATE_NORMAL
             case ENEMY_STATE_KNOCKBACK:
                 ++(tempEnemy.anim_frame);
@@ -404,6 +417,7 @@ void update_enemies() {
                 }
                 break;//out of ENEMY_STATE_KNOCKBACK
             case ENEMY_STATE_ATTACKING:
+                check_impact_attack();
                 if(tempEnemy.anim_frame & 128) {
                     tempEnemy.anim_frame -= 128;
                     ++(tempEnemy.anim_frame);
@@ -411,24 +425,26 @@ void update_enemies() {
                     tempEnemy.anim_frame += 128;
                 }
                 if(tempEnemy.anim_frame == 8) {
-                    //calc melee hitbox
-                    temp3 = 0;
-                    temp4 = 0;
-                    switch(tempEnemy.anim_dir) {
-                        case ANIM_DIR_DOWN:
-                            temp4 = RANGE_MELEE;
-                            break;
-                        case ANIM_DIR_UP:
-                            temp4 = -RANGE_MELEE;
-                            break;
-                        case ANIM_DIR_SIDE:
-                            if(tempEnemy.anim_flip) {
-                                temp3 = -RANGE_MELEE;
-                            } else {
-                                temp3 = RANGE_MELEE;
-                            }
-                            break;
-                    }
+                    if(!((player_anim_state == PLAYER_STATE_HITSTUN) || (player_anim_state == PLAYER_STATE_DEAD))) {
+                        //calc melee hitbox
+                        temp3 = 0;
+                        temp4 = 0;
+                        switch(tempEnemy.anim_dir) {
+                            case ANIM_DIR_DOWN:
+                                temp4 = RANGE_MELEE;
+                                break;
+                            case ANIM_DIR_UP:
+                                temp4 = -RANGE_MELEE;
+                                break;
+                            case ANIM_DIR_SIDE:
+                                if(tempEnemy.anim_flip) {
+                                    temp3 = -RANGE_MELEE;
+                                } else {
+                                    temp3 = RANGE_MELEE;
+                                }
+                                break;
+                        }
+                    
                         temp1 = tempEnemy.x + temp3 - player_x;
                         temp2 = tempEnemy.y + temp4 - player_y;
                         if(temp1 < 0) {
@@ -444,6 +460,7 @@ void update_enemies() {
                             player_face_enemy();
                             do_noise_effect(80, -8, 10);
                         }
+                    }
                 }
                 else if(tempEnemy.anim_frame == 16) {
                     tempEnemy.anim_frame = 0;

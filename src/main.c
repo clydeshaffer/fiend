@@ -94,12 +94,14 @@ void init_game_state(unsigned char new_state) {
         }
         player_health = PLAYER_MAX_HEALTH;
         clear_enemies(); 
-        place_enemies();
 
         do {
             player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
             player_y = ((((rnd() & 0x7FFF) % (MAP_H - 2)) + 1) << TILE_ORD)+16;
         } while(!character_tilemap_check(player_x, player_y));
+
+        place_enemies();
+
         camera_x = player_x - 64;
         camera_y = player_y - 64;
         if(old_state == GAME_STATE_FADEOUT) {
