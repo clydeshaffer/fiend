@@ -223,35 +223,35 @@ void generate_map() {
 }
 
 char tile_at(unsigned int pos_x, unsigned int pos_y) {
-    pos_x += HITBOX_X;
-    pos_y += HITBOX_Y;
     tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
     return *tmpptr_char;
 }
 
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
-    pos_x += HITBOX_X;
-    pos_y += HITBOX_Y;
-    tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
-    pos_x &= (TILE_SIZE-1);
-    pos_y &= (TILE_SIZE-1);
+    static char cx, cy;
+    static int ix, iy;
+    ix = pos_x + HITBOX_X;
+    iy = pos_y + HITBOX_Y;
+    tmpptr_char = tiles + (ix >> TILE_ORD) + ((iy >> TILE_ORD) << MAP_ORD);
+    cx = ix & (TILE_SIZE-1);
+    cy = iy & (TILE_SIZE-1);
     if(!(*tmpptr_char & GROUND_TILE)) {
         return 0;
     }
-    tmpptr_char++;
-    if(pos_x + HITBOX_W >= TILE_SIZE) {
+    ++tmpptr_char;
+    if(cx >= TILE_SIZE-HITBOX_W) {
         if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
     tmpptr_char += MAP_W - 1;
-    if(pos_y + HITBOX_H >= TILE_SIZE) {
+    if(cy >= TILE_SIZE-HITBOX_H) {
         if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
-    tmpptr_char++;
-    if((pos_x + HITBOX_W >= TILE_SIZE) && (pos_y + HITBOX_H >= TILE_SIZE)) {
+    ++tmpptr_char;
+    if((cx >= TILE_SIZE-HITBOX_W) && (cy >= TILE_SIZE-HITBOX_H)) {
         if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   

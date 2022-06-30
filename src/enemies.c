@@ -29,6 +29,7 @@ extern const Frame EnemyFrames_ORC;
 
 #define RANGE_IMPACT 12
 #define RANGE_MELEE 18
+#define RANGE_MELEE_HITSIZE 12
 
 //Added to coordinates when moving
 char enemy_speeds[] = {
@@ -155,27 +156,27 @@ void place_enemies() {
     unsigned char i, attempt;
     do {
             //save the last three slots for projectile pool
-            for(i = 0; i < MAX_ENEMIES-3; ++i) {
-                enemies[i].x = (rnd() & 0b1111100000) | 16;
-                enemies[i].y = (rnd() & 0b1111100000) | 16;
-                init_enemy(random_loaded_enemy_slot(), &enemies[i]);
-                attempt = 0;
-                while((!character_tilemap_check(enemies[i].x, enemies[i].y)) ||
-                    (enemies[i].x == player_x && enemies[i].y == player_y)) {
+            for(i = 0; i < MAX_ENEMIES; ++i) {
+                enemies[i].mode = 0;
+                if(i < MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS) {
                     enemies[i].x = (rnd() & 0b1111100000) | 16;
                     enemies[i].y = (rnd() & 0b1111100000) | 16;
-                    attempt++;
-                    if(attempt == 5) {
-                        enemies[i].mode = 0;
+                    init_enemy(random_loaded_enemy_slot(), &enemies[i]);
+                    attempt = 0;
+                    while((!character_tilemap_check(enemies[i].x, enemies[i].y)) ||
+                        (enemies[i].x == player_x && enemies[i].y == player_y)) {
+                        enemies[i].x = (rnd() & 0b1111100000) | 16;
+                        enemies[i].y = (rnd() & 0b1111100000) | 16;
+                        attempt++;
+                        if(attempt == 5) {
+                            enemies[i].mode = 0;
+                        }
+                    }
+                    if(enemies[i].mode != 0) {
+                        enemy_count++;
                     }
                 }
-                if(enemies[i].mode != 0) {
-                    enemy_count++;
-                }
             }
-            enemies[MAX_ENEMIES-1].mode = 0;
-            enemies[MAX_ENEMIES-2].mode = 0;
-            enemies[MAX_ENEMIES-3].mode = 0;
     } while(enemy_count == 0);
 }
 
@@ -268,25 +269,34 @@ void check_impact_attack() {
     }
 }
 
-int chase_offset_x = 0;
-int chase_offset_y = 0;
-void update_enemies() {
-    char i, speed, type, flags;
-    MobState *enemy = enemies;
-    chase_offset_x = 0;
-    chase_offset_y = 0;
-    for(i = 0; i < MAX_ENEMIES; ++i) {
+unsigned char update_enemies() {
+    static char i = 0;
+    char speed, type, flags, cnt = 0;
+    static int chase_offset_x = 0;
+    static int chase_offset_y = 0;
+    int camRIGHT = camera_x + 136;
+    int camBOTTOM = camera_y + 128;
+    MobState *enemy = &enemies[i];
+    if(i == 0) {
+        chase_offset_x = 0;
+        chase_offset_y = 0;
+    }
+    for(; (i < MAX_ENEMIES) && (cnt < MAX_ENEMIES_PER_FRAME); ++i) {
         //Check enemy is on screen
         if((enemy->x + 8) > (camera_x)
                 && enemy->y > camera_y
-                && enemy->x < (camera_x + 136)
-                && enemy->y < (camera_y + 128)) {
+                && enemy->x < camRIGHT
+                && enemy->y < camBOTTOM) {
             //LD_tempEnemy(enemy);
             tempEnemy = *enemy;
             type = enemy_type_slots[tempEnemy.slot];
             speed = enemy_speeds[type];
             if(player_health == 0) {
                 speed = 0;
+            }
+            if(i == MAX_ENEMIES-RESERVED_PROJECTILE_SLOTS) {
+                chase_offset_x = 0;
+                chase_offset_y = 0;
             }
             flags = enemy_type_flags[type];
             switch(tempEnemy.mode) {
@@ -295,6 +305,7 @@ void update_enemies() {
                 temp2 = tempEnemy.y;
                 ++(tempEnemy.anim_frame);
                 if((tempEnemy.anim_frame & move_frame_mask[type]) == 0) {
+                    ++cnt;
                     switch(flags & EFLAGS_MOVETYPE_MASK) {
                     case EFLAGS_MOVETYPE_CHASE:
                         player_x += chase_offset_x;
@@ -312,7 +323,6 @@ void update_enemies() {
                         } else if (tempEnemy.y < player_y) {
                             tempEnemy.y += speed;
                         }
-                        
                         if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
                             tempEnemy.y = temp2;
                         }
@@ -357,7 +367,7 @@ void update_enemies() {
                         face_player();
                         break;
                     } //end switch MOVETYPE
-                    
+
                     if(player_health > 0) {
                         switch(flags & EFLAGS_ATTACK_MASK) {
                             case EFLAGS_ATTACK_MELEE:
@@ -381,8 +391,8 @@ void update_enemies() {
                     
                 }
                 check_player_attack();
-                chase_offset_x = player_x - tempEnemy.x;
-                chase_offset_y = player_y - tempEnemy.y;
+                chase_offset_x = tempEnemy.y - player_y;
+                chase_offset_y = player_x - tempEnemy.x;
                 break;//out of ENEMY_STATE_NORMAL
             case ENEMY_STATE_KNOCKBACK:
                 ++(tempEnemy.anim_frame);
@@ -453,7 +463,7 @@ void update_enemies() {
                         if(temp2 < 0) {
                             temp2 = -temp2;
                         }
-                        if(temp1 + temp2 < 8) {
+                        if(temp1 + temp2 < RANGE_MELEE_HITSIZE) {
                             player_anim_state = PLAYER_STATE_HITSTUN;
                             player_anim_frame = 0;
                             --player_health;
@@ -473,6 +483,10 @@ void update_enemies() {
         }
         ++enemy;
     }
+    if(i == MAX_ENEMIES) {
+        i = 0;
+    }
+    return cnt;
 }
 
 void player_face_enemy() {

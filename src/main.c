@@ -178,6 +178,8 @@ void main() {
 
     init_game_state(GAME_STATE_TITLE);
     while(1){
+        via[ORB] = 0x80;
+        via[ORB] = 0x00;
         asm("SEI");
         queue_start = 0;
         queue_end = 0;
@@ -388,6 +390,9 @@ void main() {
                 cursorX = 0;
                 cursorY = 108;
                 print("press b to enter");
+            } else {
+                cursorX = 100;
+                cursorY = 108;
             }
         }
 
@@ -400,5 +405,7 @@ void main() {
         *dma_flags = flagsMirror;
         *bank_reg = banksMirror;
         tick_music();
+        via[ORB] = 0x80;
+        via[ORB] = 0x40;
     }
 }

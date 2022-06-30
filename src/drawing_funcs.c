@@ -36,7 +36,6 @@ Frame temp_frame;
 void pushRect();
 
 void QueuePackedSprite(const Frame* sprite_table, char x, char y, char frame, char flip, char bank, char offset) {
-    ChangeRomBank(BANK_COMMON);
     while(queue_count >= QUEUE_MAX) {
         asm("CLI");
         wait();

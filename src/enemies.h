@@ -2,7 +2,9 @@
 #define ENEMIES_H
 
 #define MAX_ENEMIES 32
+#define MAX_ENEMIES_PER_FRAME 4
 #define ENEMY_TYPE_NUM_SLOTS 6
+#define RESERVED_PROJECTILE_SLOTS 3
 
 #define ENEMY_STATE_INACTIVE 0
 #define ENEMY_STATE_NORMAL 1
@@ -62,7 +64,7 @@ void place_enemies();
 
 void draw_enemies();
 
-void update_enemies();
+unsigned char update_enemies();
 
 void player_face_enemy();
 
