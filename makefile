@@ -2,12 +2,14 @@ CC = cc65
 AS = ca65
 LN = ld65
 
+FLASHTOOL = ~/repos/GTFO/bin/GTFO.exe
+
 SDIR = src
 ODIR = build
 
 PORT = COM3
 
-CFLAGS = -t none -Osir --cpu 65c02
+CFLAGS = -t none -Osr --cpu 65c02 --codesize 1000
 AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
 LFLAGS = -C gametank-2M.cfg -m $(ODIR)/out.map -vm
 LLIBS = lib/gametank.lib
@@ -97,9 +99,8 @@ $(ODIR)/assets/audio_fw.bin: src/audio_fw.asm gametank-acp.cfg
 clean:
 	rm -rf $(ODIR)/*
 
-flash:
-	cd ../eepromProgrammer/flashtool ;\
-	 node flashtool.js --sector 126 --offset 0 -f ~/repos/fiend/bin/fiend.gtr -p $(PORT)
+flash: $(BANKS)
+	$(FLASHTOOL) bin/fiend.gtr.bank*
 
 emulate:
 	../GameTankEmulator/bin/$(OS)/GameTankEmulator bin/fiend.gtr
