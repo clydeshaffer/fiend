@@ -217,109 +217,109 @@
    },
    {
     "filename": "projectile_arrow 24.ase",
-    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 25.ase",
-    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 26.ase",
-    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 27.ase",
-    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 28.ase",
-    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 29.ase",
-    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 30.ase",
-    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 31.ase",
-    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 32.ase",
-    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 33.ase",
-    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 34.ase",
-    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    },
    {
     "filename": "projectile_arrow 35.ase",
-    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "frame": { "x": 26, "y": 0, "w": 1, "h": 1 },
     "rotated": false,
     "trimmed": true,
-    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1, "h": 1 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
    }

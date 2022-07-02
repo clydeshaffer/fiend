@@ -107,6 +107,34 @@ const char* enemySpriteSheets[] = {
     &EnemySprites_FIREBALL,
 };
 
+void attack_sound_for_enemy(char type) {
+    switch (type)
+    {
+    case ENEMY_TYPE_RAT:
+            do_noise_effect(30, 64, 8);
+            break;
+    case ENEMY_TYPE_SPIDER:
+            do_noise_effect(30, 32, 8);
+            break;
+    case ENEMY_TYPE_BAT:
+            do_noise_effect(30, 32, 8);
+            break;
+    case ENEMY_TYPE_ORC:
+            do_noise_effect(30, 32, 8);
+            break;
+    case ENEMY_TYPE_SNIPER: 
+            do_noise_effect(80, 0, 1);
+            break;
+    case ENEMY_TYPE_ARROW:
+            break;
+    case ENEMY_TYPE_GHOST:
+            do_noise_effect(107, -64, 16);
+            break;
+    case ENEMY_TYPE_FIREBALL:
+            break;
+    }
+}
+
 void load_enemy_type(char type) {
     char i;
     ChangeRomBank(type > ENEMY_TYPE_ARROW ? BANK_MONSTERS2: BANK_MONSTERS);
@@ -493,6 +521,7 @@ unsigned char update_enemies() {
                                 if(temp1 + temp2 < RANGE_MELEE) {
                                     tempEnemy.mode = ENEMY_STATE_ATTACKING;
                                     tempEnemy.anim_frame = 0;
+                                    attack_sound_for_enemy(type);
                                 }
                             case EFLAGS_ATTACK_IMPACT:
                                 check_impact_attack((type == ENEMY_TYPE_ARROW) ? RANGE_ARROW : RANGE_IMPACT);
@@ -501,6 +530,7 @@ unsigned char update_enemies() {
                                 if(((tempEnemy.anim_frame == 120) && (moveflags == EFLAGS_MOVETYPE_TELEPORT)) || (tempEnemy.x == player_x) || (tempEnemy.y == player_y)) {
                                     tempEnemy.mode = ENEMY_STATE_ATTACKING;
                                     tempEnemy.anim_frame = 0;
+                                    
                                     face_player();
                                 }
                                 break;
@@ -593,6 +623,7 @@ unsigned char update_enemies() {
                         }
                         break;
                     case EFLAGS_ATTACK_PROJECTILE:
+                        attack_sound_for_enemy(type);
                         init_enemy(tempEnemy.slot+1, &enemies[nextProjectile]);
                         enemies[nextProjectile].anim_dir = tempEnemy.anim_dir;
                         enemies[nextProjectile].anim_flip = tempEnemy.anim_flip;

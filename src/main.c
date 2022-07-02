@@ -391,8 +391,15 @@ void main() {
                 cursorY = 108;
                 print("press b to enter");
             } else {
-                cursorX = 100;
+                cursorX = 72;
                 cursorY = 108;
+                if(level_number == 0) {
+                    print("surface");    
+                } else {
+                    print("floor");
+                    cursorX = 116;
+                    printnum(level_number);
+                }
             }
         }
 
