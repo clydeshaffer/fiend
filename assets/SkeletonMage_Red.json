@@ -1,0 +1,677 @@
+{ "frames": [
+   {
+    "filename": "SkeletonMage_Red #export 0.ase",
+    "frame": { "x": 135, "y": 41, "w": 18, "h": 43 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 5, "w": 18, "h": 43 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 1.ase",
+    "frame": { "x": 61, "y": 73, "w": 17, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 7, "w": 17, "h": 42 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 2.ase",
+    "frame": { "x": 61, "y": 73, "w": 17, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 7, "w": 17, "h": 42 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 3.ase",
+    "frame": { "x": 97, "y": 42, "w": 18, "h": 43 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 6, "w": 18, "h": 43 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 4.ase",
+    "frame": { "x": 230, "y": 0, "w": 20, "h": 43 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 5, "w": 20, "h": 43 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 5.ase",
+    "frame": { "x": 172, "y": 80, "w": 17, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 7, "w": 17, "h": 42 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 6.ase",
+    "frame": { "x": 172, "y": 80, "w": 17, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 7, "w": 17, "h": 42 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 7.ase",
+    "frame": { "x": 237, "y": 82, "w": 16, "h": 43 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 6, "w": 16, "h": 43 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 8.ase",
+    "frame": { "x": 216, "y": 124, "w": 13, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 26, "y": 5, "w": 13, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 9.ase",
+    "frame": { "x": 206, "y": 83, "w": 17, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 7, "w": 17, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 10.ase",
+    "frame": { "x": 53, "y": 115, "w": 15, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 6, "w": 15, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 11.ase",
+    "frame": { "x": 53, "y": 115, "w": 15, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 6, "w": 15, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 12.ase",
+    "frame": { "x": 229, "y": 125, "w": 11, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 27, "y": 5, "w": 11, "h": 42 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 13.ase",
+    "frame": { "x": 115, "y": 40, "w": 20, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 7, "w": 20, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 14.ase",
+    "frame": { "x": 202, "y": 123, "w": 14, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 25, "y": 6, "w": 14, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 15.ase",
+    "frame": { "x": 202, "y": 123, "w": 14, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 25, "y": 6, "w": 14, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 16.ase",
+    "frame": { "x": 79, "y": 42, "w": 18, "h": 43 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 5, "w": 18, "h": 43 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 17.ase",
+    "frame": { "x": 78, "y": 85, "w": 16, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 7, "w": 16, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 18.ase",
+    "frame": { "x": 42, "y": 73, "w": 19, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 6, "w": 19, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 19.ase",
+    "frame": { "x": 42, "y": 73, "w": 19, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 6, "w": 19, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 20.ase",
+    "frame": { "x": 180, "y": 37, "w": 19, "h": 43 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 5, "w": 19, "h": 43 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 21.ase",
+    "frame": { "x": 189, "y": 81, "w": 17, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 7, "w": 17, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 22.ase",
+    "frame": { "x": 23, "y": 73, "w": 19, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 6, "w": 19, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 23.ase",
+    "frame": { "x": 23, "y": 73, "w": 19, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 6, "w": 19, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 24.ase",
+    "frame": { "x": 115, "y": 0, "w": 23, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 7, "w": 23, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 25.ase",
+    "frame": { "x": 138, "y": 0, "w": 22, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 18, "y": 6, "w": 22, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 26.ase",
+    "frame": { "x": 237, "y": 43, "w": 19, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 8, "w": 19, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 27.ase",
+    "frame": { "x": 0, "y": 37, "w": 25, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 25, "h": 34 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 28.ase",
+    "frame": { "x": 67, "y": 0, "w": 26, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 12, "w": 26, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 29.ase",
+    "frame": { "x": 114, "y": 116, "w": 16, "h": 38 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 26, "y": 10, "w": 16, "h": 38 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 30.ase",
+    "frame": { "x": 37, "y": 112, "w": 16, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 26, "y": 9, "w": 16, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 31.ase",
+    "frame": { "x": 199, "y": 40, "w": 19, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 23, "y": 6, "w": 19, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 32.ase",
+    "frame": { "x": 208, "y": 0, "w": 22, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 17, "y": 7, "w": 22, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 33.ase",
+    "frame": { "x": 160, "y": 37, "w": 20, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 18, "y": 6, "w": 20, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 34.ase",
+    "frame": { "x": 115, "y": 80, "w": 20, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 18, "y": 11, "w": 20, "h": 36 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 35.ase",
+    "frame": { "x": 33, "y": 0, "w": 34, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 25, "y": 13, "w": 34, "h": 34 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 36.ase",
+    "frame": { "x": 0, "y": 0, "w": 33, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 25, "y": 10, "w": 33, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 37.ase",
+    "frame": { "x": 94, "y": 117, "w": 15, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 25, "y": 8, "w": 15, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 38.ase",
+    "frame": { "x": 152, "y": 116, "w": 15, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 25, "y": 7, "w": 15, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 39.ase",
+    "frame": { "x": 68, "y": 115, "w": 10, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 27, "y": 6, "w": 10, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 40.ase",
+    "frame": { "x": 33, "y": 34, "w": 22, "h": 39 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 7, "w": 22, "h": 39 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 41.ase",
+    "frame": { "x": 153, "y": 78, "w": 19, "h": 38 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 8, "w": 19, "h": 38 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 42.ase",
+    "frame": { "x": 18, "y": 112, "w": 19, "h": 33 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 13, "w": 19, "h": 33 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 43.ase",
+    "frame": { "x": 93, "y": 0, "w": 22, "h": 42 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 5, "w": 22, "h": 42 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 44.ase",
+    "frame": { "x": 218, "y": 43, "w": 19, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 7, "w": 19, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 45.ase",
+    "frame": { "x": 130, "y": 124, "w": 14, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 7, "w": 14, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 46.ase",
+    "frame": { "x": 223, "y": 83, "w": 14, "h": 41 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 24, "y": 6, "w": 14, "h": 41 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 47.ase",
+    "frame": { "x": 135, "y": 84, "w": 17, "h": 40 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 6, "w": 17, "h": 40 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 48.ase",
+    "frame": { "x": 94, "y": 85, "w": 20, "h": 32 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 15, "w": 20, "h": 32 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 49.ase",
+    "frame": { "x": 94, "y": 85, "w": 20, "h": 32 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 15, "w": 20, "h": 32 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 50.ase",
+    "frame": { "x": 160, "y": 0, "w": 24, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 10, "w": 24, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 51.ase",
+    "frame": { "x": 160, "y": 0, "w": 24, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 10, "w": 24, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 52.ase",
+    "frame": { "x": 160, "y": 0, "w": 24, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 10, "w": 24, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 53.ase",
+    "frame": { "x": 184, "y": 0, "w": 24, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 10, "w": 24, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 54.ase",
+    "frame": { "x": 184, "y": 0, "w": 24, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 10, "w": 24, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 55.ase",
+    "frame": { "x": 184, "y": 0, "w": 24, "h": 37 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 10, "w": 24, "h": 37 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 56.ase",
+    "frame": { "x": 240, "y": 125, "w": 14, "h": 31 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 27, "y": 16, "w": 14, "h": 31 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 57.ase",
+    "frame": { "x": 240, "y": 125, "w": 14, "h": 31 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 27, "y": 16, "w": 14, "h": 31 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 58.ase",
+    "frame": { "x": 0, "y": 104, "w": 18, "h": 35 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 12, "w": 18, "h": 35 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 59.ase",
+    "frame": { "x": 0, "y": 104, "w": 18, "h": 35 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 12, "w": 18, "h": 35 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 60.ase",
+    "frame": { "x": 0, "y": 104, "w": 18, "h": 35 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 12, "w": 18, "h": 35 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 61.ase",
+    "frame": { "x": 167, "y": 122, "w": 16, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 11, "w": 16, "h": 36 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 62.ase",
+    "frame": { "x": 167, "y": 122, "w": 16, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 11, "w": 16, "h": 36 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 63.ase",
+    "frame": { "x": 167, "y": 122, "w": 16, "h": 36 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 21, "y": 11, "w": 16, "h": 36 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 64.ase",
+    "frame": { "x": 183, "y": 122, "w": 19, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 19, "h": 30 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 65.ase",
+    "frame": { "x": 183, "y": 122, "w": 19, "h": 30 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 19, "h": 30 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 66.ase",
+    "frame": { "x": 0, "y": 71, "w": 23, "h": 33 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 13, "w": 23, "h": 33 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 67.ase",
+    "frame": { "x": 0, "y": 71, "w": 23, "h": 33 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 13, "w": 23, "h": 33 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 68.ase",
+    "frame": { "x": 0, "y": 71, "w": 23, "h": 33 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 13, "w": 23, "h": 33 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 69.ase",
+    "frame": { "x": 55, "y": 39, "w": 24, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 12, "w": 24, "h": 34 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 70.ase",
+    "frame": { "x": 55, "y": 39, "w": 24, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 12, "w": 24, "h": 34 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   },
+   {
+    "filename": "SkeletonMage_Red #export 71.ase",
+    "frame": { "x": 55, "y": 39, "w": 24, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 19, "y": 12, "w": 24, "h": 34 },
+    "sourceSize": { "w": 64, "h": 64 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.35-x64",
+  "image": "SkeletonMage_Red.bmp",
+  "format": "I8",
+  "size": { "w": 256, "h": 167 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "export", "from": 0, "to": 71, "direction": "forward" },
+   { "name": "walk_down", "from": 0, "to": 7, "direction": "forward" },
+   { "name": "walk_right", "from": 8, "to": 15, "direction": "forward" },
+   { "name": "walk_up", "from": 16, "to": 23, "direction": "forward" },
+   { "name": "attack_down", "from": 24, "to": 31, "direction": "forward" },
+   { "name": "attack_right", "from": 32, "to": 39, "direction": "forward" },
+   { "name": "attack_up", "from": 40, "to": 47, "direction": "forward" },
+   { "name": "flinch", "from": 48, "to": 71, "direction": "forward" },
+   { "name": "down", "from": 48, "to": 55, "direction": "forward" },
+   { "name": "right", "from": 56, "to": 63, "direction": "forward" },
+   { "name": "up", "from": 64, "to": 71, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

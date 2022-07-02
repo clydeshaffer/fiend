@@ -24,7 +24,7 @@ void load_enemies_for_level(char levnum) {
     clear_enemy_slots();
     switch(levnum) {
         case 0:
-            load_enemy_type(ENEMY_TYPE_RAT);
+            load_enemy_type(ENEMY_TYPE_SKELETON_BOSS);
             load_enemy_type(ENEMY_TYPE_BAT);
             break;
         case 1:

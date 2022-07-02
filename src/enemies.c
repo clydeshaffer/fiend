@@ -25,6 +25,10 @@ extern const unsigned char* EnemySprites_SNIPER;
 extern const unsigned char* EnemySprites_ARROW;
 extern const unsigned char* EnemySprites_GHOST;
 extern const unsigned char* EnemySprites_FIREBALL;
+extern const unsigned char* EnemySprites_SKELETON_0;
+extern const unsigned char* EnemySprites_SKELETON_1;
+extern const unsigned char* EnemySprites_SKELETON_2;
+extern const unsigned char* EnemySprites_SKELETON_3;
 
 extern const Frame EnemyFrames_RAT;
 extern const Frame EnemyFrames_SPIDER;
@@ -34,6 +38,7 @@ extern const Frame EnemyFrames_SNIPER;
 extern const Frame EnemyFrames_ARROW;
 extern const Frame EnemyFrames_GHOST;
 extern const Frame EnemyFrames_FIREBALL;
+extern const Frame EnemyFrames_SKELETON;
 
 #define RANGE_IMPACT 12
 #define RANGE_MELEE 18
@@ -53,6 +58,7 @@ char enemy_speeds[] = {
     3, //ARROW
     0, //GHOST
     1, //FIREBALL
+    1, //SKELETON_BOSS
 };
 
 //Update if anim_frame & mask == 0
@@ -64,7 +70,8 @@ unsigned char move_frame_mask[] = {
     1, //SNIPER
     1,  //ARROW
     7, //GHOST
-    1, //FIREBALL
+    1, //FIREBALL,
+    7, //SKELETON_BOSS
 };
 
 unsigned char anim_state_offsets[] = {
@@ -72,6 +79,13 @@ unsigned char anim_state_offsets[] = {
     0, //NORMAL
     24, //KNOCKBACK
     12 //ATTACKING
+};
+
+unsigned char anim_state_offsets_big[] = {
+    0, //INACTIVE
+    0, //NORMAL
+    48, //KNOCKBACK
+    24 //ATTACKING
 };
 
 //Flags mask for mob types
@@ -84,6 +98,14 @@ unsigned char enemy_type_flags[] = {
     EFLAGS_MOVETYPE_DIRECTION|EFLAGS_ATTACK_IMPACT, //ARROW
     EFLAGS_PLACEABLE|EFLAGS_LARGE|EFLAGS_MOVETYPE_TELEPORT|EFLAGS_ATTACK_PROJECTILE, //GHOST
     EFLAGS_MOVETYPE_CHASE|EFLAGS_ATTACK_IMPACT, //FIREBALL
+    EFLAGS_PLACEABLE|EFLAGS_LARGE|EFLAGS_MOVETYPE_CHASE|EFLAGS_ATTACK_MELEE, //SKELETON_BOSS
+};
+
+const char* Multisheet_Skeleton[] = {
+    &EnemySprites_SKELETON_0,
+    &EnemySprites_SKELETON_1,
+    &EnemySprites_SKELETON_2,
+    &EnemySprites_SKELETON_3,
 };
 
 const Frame* enemyFrameData[] = {
@@ -95,8 +117,9 @@ const Frame* enemyFrameData[] = {
     &EnemyFrames_ARROW,
     &EnemyFrames_GHOST,
     &EnemyFrames_FIREBALL,
+    &EnemyFrames_SKELETON,
 };
-const char* enemySpriteSheets[] = {
+const char** enemySpriteSheets[] = {
     &EnemySprites_RAT,
     &EnemySprites_SPIDER,
     &EnemySprites_BAT,
@@ -105,6 +128,11 @@ const char* enemySpriteSheets[] = {
     &EnemySprites_ARROW,
     &EnemySprites_GHOST,
     &EnemySprites_FIREBALL,
+    &Multisheet_Skeleton
+};
+
+const char loadSpecial[] = {
+    0,0,0,0,0,0,0,0,4
 };
 
 void attack_sound_for_enemy(char type) {
@@ -132,11 +160,14 @@ void attack_sound_for_enemy(char type) {
             break;
     case ENEMY_TYPE_FIREBALL:
             break;
+    case ENEMY_TYPE_SKELETON_BOSS:
+            do_noise_effect(30, 32, 8);
+            break;
     }
 }
 
 void load_enemy_type(char type) {
-    char i;
+    char i, j;
     ChangeRomBank(type > ENEMY_TYPE_ARROW ? BANK_MONSTERS2: BANK_MONSTERS);
     for(i = 0; i < ENEMY_TYPE_NUM_SLOTS; ++i) {
         if(enemy_type_slots[i] == type) {
@@ -147,7 +178,13 @@ void load_enemy_type(char type) {
         if(enemy_type_slots[i] == ENEMY_TYPE_NONE) {
             enemy_type_slots[i] = type;
             ++enemy_type_used_slots;
-            load_spritesheet(enemySpriteSheets[type], i+2);
+            if(loadSpecial[type]) {
+                for(j = 0; j < loadSpecial[type]; ++j) {
+                    load_spritesheet( enemySpriteSheets[type][j], (i+2) | (j << 3));    
+                }
+            } else {
+                load_spritesheet(enemySpriteSheets[type], i+2);
+            }
             return;
         }
     }
@@ -212,6 +249,9 @@ void init_enemy(char slot, MobState* enemy) {
     case ENEMY_TYPE_FIREBALL:
             enemy->health = 0;
             break;
+    case ENEMY_TYPE_SKELETON_BOSS:
+            enemy->health = 8;
+            break;
     }
 }
 
@@ -256,10 +296,10 @@ void place_enemies() {
     } while(enemy_count == 0);
 }
 
+#pragma codeseg (push, "CODE2");
 void draw_enemies() {
     unsigned char i;
     MobState *enemy = enemies;
-    ChangeRomBank(BANK_COMMON);
     queue_flags_param = DMA_GCARRY;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         if(enemy->mode != ENEMY_STATE_INACTIVE) {
@@ -267,12 +307,25 @@ void draw_enemies() {
                 && enemy->y > camera_y
                 && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
-                    QueuePackedSprite(enemyFrameData[enemy_type_slots[enemy->slot]], enemy->x - camera_x, enemy->y - camera_y, ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir + anim_state_offsets[enemy->mode], enemy->anim_flip, GRAM_PAGE(enemy->slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                    if(enemy_type_slots[enemy->slot] == ENEMY_TYPE_SKELETON_BOSS) {
+                        QueuePackedSprite(enemyFrameData[enemy_type_slots[enemy->slot]],
+                        enemy->x - camera_x, enemy->y - camera_y,
+                        ((enemy->anim_frame >> 2) & 7) + (enemy->anim_dir << 1) + anim_state_offsets_big[enemy->mode],
+                        enemy->anim_flip,
+                        GRAM_PAGE(enemy->slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                    } else {
+                        QueuePackedSprite(enemyFrameData[enemy_type_slots[enemy->slot]],
+                        enemy->x - camera_x, enemy->y - camera_y,
+                        ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir + anim_state_offsets[enemy->mode],
+                        enemy->anim_flip,
+                        GRAM_PAGE(enemy->slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                    }
                 } 
         }
         ++enemy;
     }
 }
+#pragma codeseg (pop);
 
 void face_player() {
     temp3 = player_x - tempEnemy.x;
@@ -576,13 +629,19 @@ unsigned char update_enemies() {
                 break;//out of ENEMY_STATE_KNOCKBACK
             case ENEMY_STATE_ATTACKING:
                 check_impact_attack(RANGE_IMPACT);
-                if(tempEnemy.anim_frame & 128) {
+                temp3 = 8;
+                temp4 = 16;
+                if(type == ENEMY_TYPE_SKELETON_BOSS) {
+                    ++(tempEnemy.anim_frame);
+                    temp3 = 16;
+                    temp4 = 31;
+                } else if(tempEnemy.anim_frame & 128) {
                     tempEnemy.anim_frame -= 128;
                     ++(tempEnemy.anim_frame);
                 } else {
                     tempEnemy.anim_frame += 128;
                 }
-                if(tempEnemy.anim_frame == 8) {
+                if(tempEnemy.anim_frame == temp3) {
                     switch(atkflags) {
                     case EFLAGS_ATTACK_MELEE:
                         if(!((player_anim_state == PLAYER_STATE_HITSTUN) || (player_anim_state == PLAYER_STATE_DEAD))) {
@@ -636,7 +695,7 @@ unsigned char update_enemies() {
                         break;
                     }
                 }
-                else if(tempEnemy.anim_frame == 16) {
+                else if(tempEnemy.anim_frame == temp4) {
                     tempEnemy.anim_frame = 0;
                     tempEnemy.mode = ENEMY_STATE_NORMAL;                    
                 }

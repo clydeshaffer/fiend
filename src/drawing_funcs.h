@@ -15,6 +15,11 @@
 #define SPRITE_FLIP_Y 2
 #define SPRITE_FLIP_BOTH 3
 
+#define QUADRANT_0 0
+#define QUADRANT_1 8
+#define QUADRANT_2 16
+#define QUADRANT_3 24
+
 #define BG_COLOR 16
 #define WINDOW_COLOR 0
 

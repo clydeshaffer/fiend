@@ -5,6 +5,8 @@
     .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC, _EnemySprites_SNIPER, _EnemySprites_ARROW
     .export _EnemyFrames_GHOST, _EnemyFrames_FIREBALL
     .export _EnemySprites_GHOST, _EnemySprites_FIREBALL
+    .export _EnemySprites_SKELETON_0, _EnemySprites_SKELETON_1, _EnemySprites_SKELETON_2, _EnemySprites_SKELETON_3
+    .export _EnemyFrames_SKELETON
 
     .segment "COMMON"
 
@@ -56,6 +58,8 @@ _EnemyFrames_GHOST:
 _EnemyFrames_FIREBALL:
     .incbin "projectile_fireball.gsi"
     
+_EnemyFrames_SKELETON:
+    .incbin "SkeletonMage_Red.gsi"
 
     .segment "LOADONCE"
 
@@ -109,3 +113,15 @@ _EnemySprites_GHOST:
     
 _EnemySprites_FIREBALL:
     .incbin "projectile_fireball.gtg.deflate"
+
+_EnemySprites_SKELETON_0:
+    .incbin "SkeletonMage_Red.gtg.deflate"
+
+_EnemySprites_SKELETON_1:
+    .incbin "SkeletonMage_Red.gtg.1.deflate"
+
+_EnemySprites_SKELETON_2:
+    .incbin "SkeletonMage_Red.gtg.2.deflate"
+
+_EnemySprites_SKELETON_3:
+    .incbin "SkeletonMage_Red.gtg.3.deflate"

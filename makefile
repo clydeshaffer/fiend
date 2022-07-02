@@ -22,12 +22,13 @@ AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 _BMPOBJS = hud_graphics.gtg.deflate \
 tileset_00.gtg.deflate tileset_01.gtg.deflate tileset_02.gtg.deflate tileset_03.gtg.deflate \
 chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.gtg.deflate chara_orc.gtg.deflate \
-chara_goblin_sniper.gtg.deflate projectile_arrow.gtg.deflate chara_ghost.gtg.deflate projectile_fireball.gtg.deflate
+chara_goblin_sniper.gtg.deflate projectile_arrow.gtg.deflate chara_ghost.gtg.deflate projectile_fireball.gtg.deflate \
+SkeletonMage_Red.gtg.deflate SkeletonMage_Red.gtg.1.deflate SkeletonMage_Red.gtg.2.deflate SkeletonMage_Red.gtg.3.deflate 
 
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
 _SPRITEMETA = chara_hero.gsi chara_spider.gsi chara_bat.gsi chara_rat.gsi chara_orc.gsi \
-chara_goblin_sniper.gsi projectile_arrow.gsi chara_ghost.gsi projectile_fireball.gsi
+chara_goblin_sniper.gsi projectile_arrow.gsi chara_ghost.gsi projectile_fireball.gsi SkeletonMage_Red.gsi
 SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
 _AUDIO_FW = audio_fw.bin.deflate

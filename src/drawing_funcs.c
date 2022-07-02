@@ -15,6 +15,20 @@ extern void nop10();
 void load_spritesheet(char* spriteData, char bank) {
     char oldFlags = flagsMirror;
     char oldBanks = banksMirror;
+    char bankNum = bank & 7;
+    char xbit = (bank & 8) << 4;
+    char ybit = (bank & 16) << 3;
+    flagsMirror = DMA_ENABLE;
+    *dma_flags = flagsMirror;
+    *vram_VX = 0;
+    *vram_VY = 0;
+    *vram_GX = xbit;
+    *vram_GY = ybit;
+    *vram_WIDTH = 1;
+    *vram_HEIGHT = 1;
+    *vram_START = 1;
+    *vram_START = 0;
+
     flagsMirror = 0;
     *dma_flags = flagsMirror;
     banksMirror = bankflip | GRAM_PAGE(bank);
@@ -35,6 +49,7 @@ Frame temp_frame;
 
 void pushRect();
 
+#pragma codeseg (push, "CODE2");
 void QueuePackedSprite(const Frame* sprite_table, char x, char y, char frame, char flip, char bank, char offset) {
     while(queue_count >= QUEUE_MAX) {
         asm("CLI");
@@ -68,6 +83,7 @@ void QueuePackedSprite(const Frame* sprite_table, char x, char y, char frame, ch
     }
     asm("CLI");
 }
+#pragma codeseg (pop);
 
 void QueueSpriteRect() {
     if(rect.x > 127) {

@@ -26,12 +26,12 @@ function frame2Buf(gtFrameObj) {
     const buf = Buffer.alloc(8);
     buf.writeInt8(gtFrameObj.vxo, 0);
     buf.writeInt8(gtFrameObj.vyo, 1);
-    buf.writeInt8(gtFrameObj.w, 2);
-    buf.writeInt8(gtFrameObj.h, 3);
-    buf.writeInt8(gtFrameObj.gx, 4);
-    buf.writeInt8(gtFrameObj.gy, 5);
-    buf.writeInt8(0, 6);
-    buf.writeInt8(0, 7);
+    buf.writeUInt8(gtFrameObj.w, 2);
+    buf.writeUInt8(gtFrameObj.h, 3);
+    buf.writeUInt8(gtFrameObj.gx, 4);
+    buf.writeUInt8(gtFrameObj.gy, 5);
+    buf.writeUInt8(0, 6);
+    buf.writeUInt8(0, 7);
     return buf;
 }
 
