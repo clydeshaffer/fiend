@@ -7,5 +7,6 @@ void ChangeRomBank(unsigned char banknum);
 #define BANK_TILES 1
 #define BANK_MONSTERS 2
 #define BANK_INIT 3
+#define BANK_MONSTERS2 4
 
 #endif

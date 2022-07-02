@@ -1,12 +1,24 @@
-    .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02
-    .export _HeroSprites, _HeroFrames, _DynaWave, _MainMusic, _TitleMusic, _DiedMusic, _StairsMusic
-    .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC
-    .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC
+    .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02, _Tileset_03
+    .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _DiedMusic, _StairsMusic
+    .export _MainMusic, _SecondMusic, _ThirdMusic, _FourthMusic
+    .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC, _EnemyFrames_SNIPER, _EnemyFrames_ARROW
+    .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC, _EnemySprites_SNIPER, _EnemySprites_ARROW
+    .export _EnemyFrames_GHOST, _EnemyFrames_FIREBALL
+    .export _EnemySprites_GHOST, _EnemySprites_FIREBALL
 
     .segment "COMMON"
 
 _MainMusic:
     .incbin "fiend_loop.gtm2"
+
+_SecondMusic:
+    .incbin "darker_loop.gtm2"
+
+_ThirdMusic:
+    .incbin "march_loop.gtm2"
+
+_FourthMusic:
+    .incbin "spooky_loop.gtm2"
 
 _TitleMusic:
     .incbin "title.gtm2"
@@ -32,6 +44,19 @@ _EnemyFrames_RAT:
 _EnemyFrames_ORC:
     .incbin "chara_orc.gsi"
 
+_EnemyFrames_SNIPER:
+    .incbin "chara_goblin_sniper.gsi"
+    
+_EnemyFrames_ARROW:
+    .incbin "projectile_arrow.gsi"
+
+_EnemyFrames_GHOST:
+    .incbin "chara_ghost.gsi"
+
+_EnemyFrames_FIREBALL:
+    .incbin "projectile_fireball.gsi"
+    
+
     .segment "LOADONCE"
 
 _DynaWave:
@@ -54,6 +79,8 @@ _Tileset_01:
 _Tileset_02:
     .incbin "tileset_02.gtg.deflate"
 
+_Tileset_03:
+    .incbin "tileset_03.gtg.deflate"
 
     .segment "MONSTERS"
     
@@ -68,3 +95,17 @@ _EnemySprites_RAT:
 
 _EnemySprites_ORC:
     .incbin "chara_orc.gtg.deflate"
+
+_EnemySprites_SNIPER:
+    .incbin "chara_goblin_sniper.gtg.deflate"
+
+_EnemySprites_ARROW:
+    .incbin "projectile_arrow.gtg.deflate"
+
+    .segment "MONSTERS2"
+
+_EnemySprites_GHOST:
+    .incbin "chara_ghost.gtg.deflate"
+    
+_EnemySprites_FIREBALL:
+    .incbin "projectile_fireball.gtg.deflate"

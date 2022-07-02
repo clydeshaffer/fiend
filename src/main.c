@@ -81,7 +81,6 @@ void init_game_state(unsigned char new_state) {
         ChangeRomBank(BANK_COMMON);
         play_track(MUSIC_TRACK_TITLE, 0);
     } else if(new_state == GAME_STATE_PLAY) {
-        play_track(MUSIC_TRACK_MAIN, 1);
         player_x = PLAYER_START_X;
         player_y = PLAYER_START_Y;
         player_dir_x = 0;
@@ -107,6 +106,7 @@ void init_game_state(unsigned char new_state) {
         if(old_state == GAME_STATE_FADEOUT) {
             game_state = GAME_STATE_FADEIN;
         }
+        play_track(music_for_level(), 1);
     }
 }
 
@@ -247,7 +247,7 @@ void main() {
                     do_noise_effect(95, 12, 4);
                     i = 1;
                 } else if(inputs & INPUT_MASK_B & ~last_inputs) {
-                    if(tile_at(player_x, player_y) == STAIRS_TILE) {
+                    if((tile_at(player_x, player_y) == STAIRS_TILE) || (inputs & INPUT_MASK_START)) {
                         play_track(MUSIC_TRACK_STAIRS, 0);
                         game_state = GAME_STATE_FADEOUT;
                         go_to_next_level = 1;
@@ -404,6 +404,7 @@ void main() {
         banksMirror = bankflip;
         *dma_flags = flagsMirror;
         *bank_reg = banksMirror;
+        ChangeRomBank(BANK_COMMON);
         tick_music();
         via[ORB] = 0x80;
         via[ORB] = 0x40;

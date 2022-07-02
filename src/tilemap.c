@@ -23,6 +23,7 @@ unsigned char tilemap_offset = 0;
 extern const unsigned char* Tileset_00;
 extern const unsigned char* Tileset_01;
 extern const unsigned char* Tileset_02;
+extern const unsigned char* Tileset_03;
 
 void switch_tileset(unsigned char level_num) {
     ChangeRomBank(BANK_TILES);
@@ -32,12 +33,14 @@ void switch_tileset(unsigned char level_num) {
             break;
         case 1:
         case 2:
-        case 3:
-        case 4:
             load_spritesheet(&Tileset_01, 0);
             break;
-        default:
+        case 3:
+        case 4:
             load_spritesheet(&Tileset_02, 0);
+            break;
+        default:
+            load_spritesheet(&Tileset_03, 0);
     }
 }
 

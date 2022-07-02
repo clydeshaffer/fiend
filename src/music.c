@@ -5,6 +5,9 @@
 #include "banking.h"
 
 extern const unsigned char* MainMusic;
+extern const unsigned char* SecondMusic;
+extern const unsigned char* ThirdMusic;
+extern const unsigned char* FourthMusic;
 extern const unsigned char* TitleMusic;
 extern const unsigned char* DiedMusic;
 extern const unsigned char* StairsMusic;
@@ -28,6 +31,15 @@ void play_track(char track, char loop) {
     case MUSIC_TRACK_MAIN:
         music_cursor = &MainMusic;
         break;
+    case MUSIC_TRACK_AREA2:
+        music_cursor = &SecondMusic;
+        break;
+    case MUSIC_TRACK_AREA3:
+        music_cursor = &ThirdMusic;
+        break;
+    case MUSIC_TRACK_AREA4:
+        music_cursor = &FourthMusic;
+        break;
     case MUSIC_TRACK_DIED:
         music_cursor = &DiedMusic;
         break;
@@ -46,24 +58,17 @@ void play_track(char track, char loop) {
     delay_counter = *(music_cursor++);
 }
 
+#pragma codeseg (push, "CODE2");
 void tick_music() {
     unsigned char n, noteMask;
     ChangeRomBank(BANK_COMMON);
     if(audio_amplitudes[0] > 0) {
-        if(audio_amplitudes[0] < 4) {
-            audio_amplitudes[0] = 0;
-        } else {
-            audio_amplitudes[0] -= 4;
-        }
+        audio_amplitudes[0]--;
         push_audio_param(AMPLITUDE, audio_amplitudes[0]);
     }
 
     if(audio_amplitudes[1] > 0) {
-        if(audio_amplitudes[1] < 4) {
-            audio_amplitudes[1] = 0;
-        } else {
-            audio_amplitudes[1] -= 4;
-        }
+        audio_amplitudes[1]--;
         push_audio_param(AMPLITUDE+1, audio_amplitudes[1]);
     }
 
@@ -94,8 +99,8 @@ void tick_music() {
                 n = *(music_cursor++);
                 if(n > 0) {
                     set_note(0, n);
-                    audio_amplitudes[0] = 96;
-                    push_audio_param(AMPLITUDE, 96);
+                    audio_amplitudes[0] = 64;
+                    push_audio_param(AMPLITUDE, 64);
                 } else {
                     audio_amplitudes[0] = 0;
                     push_audio_param(AMPLITUDE, 0);
@@ -105,8 +110,8 @@ void tick_music() {
                 n = *(music_cursor++);
                 if(n > 0) {
                     set_note(1, n);
-                    audio_amplitudes[1] = 96;
-                    push_audio_param(AMPLITUDE+1, 96);
+                    audio_amplitudes[1] = 64;
+                    push_audio_param(AMPLITUDE+1, 64);
                 } else {
                     audio_amplitudes[1] = 0;
                     push_audio_param(AMPLITUDE+1, 0);
@@ -117,7 +122,7 @@ void tick_music() {
                 if(n > 0) {
                     set_note(2, n);
                     audio_amplitudes[2] = 4;
-                    push_audio_param(AMPLITUDE+2, 128);
+                    push_audio_param(AMPLITUDE+2, 64);
                     push_audio_param(PITCHBEND+2, -16);
                 } else {
                     audio_amplitudes[2] = 0;
@@ -128,9 +133,8 @@ void tick_music() {
                 n = *(music_cursor++);
                 if(n > 0) {
                     set_note(3, n);
-                    audio_amplitudes[3] = 127;
-                    push_audio_param(AMPLITUDE+3, 127);
-                    push_audio_param(PITCHBEND+3, -64);
+                    audio_amplitudes[3] = 63;
+                    push_audio_param(AMPLITUDE+3, 63);
                 } else {
                     audio_amplitudes[3] = 0;
                     push_audio_param(AMPLITUDE+3, 0);
@@ -149,6 +153,7 @@ void tick_music() {
 
     flush_audio_params();
 }
+#pragma codeseg (pop);
 
 void do_noise_effect(char note, char bend, char duration) {
     set_note(2, note);

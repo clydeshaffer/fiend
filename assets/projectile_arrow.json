@@ -1,0 +1,342 @@
+{ "frames": [
+   {
+    "filename": "projectile_arrow 0.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 1.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 2.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 3.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 4.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 5.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 6.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 7.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 8.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 9.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 10.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 11.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 12.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 13.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 14.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 15.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 16.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 17.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 18.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 19.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 20.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 21.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 22.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 23.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 24.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 25.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 26.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 27.ase",
+    "frame": { "x": 16, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 16, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 28.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 29.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 30.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 31.ase",
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 5 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 22, "w": 16, "h": 5 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 32.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 33.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 34.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "projectile_arrow 35.ase",
+    "frame": { "x": 21, "y": 0, "w": 5, "h": 15 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 22, "y": 17, "w": 5, "h": 15 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.35-x64",
+  "image": "projectile_arrow.bmp",
+  "format": "I8",
+  "size": { "w": 128, "h": 15 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
