@@ -1,5 +1,6 @@
+    .export _SineTable, _BossMap
     .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02, _Tileset_03
-    .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _DiedMusic, _StairsMusic
+    .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _DiedMusic, _StairsMusic, _BossMusic, _BossMusic2, _EndMusic
     .export _MainMusic, _SecondMusic, _ThirdMusic, _FourthMusic
     .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC, _EnemyFrames_SNIPER, _EnemyFrames_ARROW
     .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC, _EnemySprites_SNIPER, _EnemySprites_ARROW
@@ -7,8 +8,28 @@
     .export _EnemySprites_GHOST, _EnemySprites_FIREBALL
     .export _EnemySprites_SKELETON_0, _EnemySprites_SKELETON_1, _EnemySprites_SKELETON_2, _EnemySprites_SKELETON_3
     .export _EnemyFrames_SKELETON
+    .export _EnemySprites_CULTIST_0, _EnemySprites_CULTIST_1, _EnemySprites_CULTIST_2, _EnemySprites_CULTIST_3, _EnemyFrames_CULTIST
+    .export _EnemyFrames_BAT2, _EnemySprites_BAT2
 
     .segment "COMMON"
+
+_SineTable:
+	.byte 128,131,134,137,140,143,146,149,152,155,158,162,165,167,170,173
+	.byte 176,179,182,185,188,190,193,196,198,201,203,206,208,211,213,215
+	.byte 218,220,222,224,226,228,230,232,234,235,237,238,240,241,243,244
+	.byte 245,246,248,249,250,250,251,252,253,253,254,254,254,255,255,255
+	.byte 255,255,255,255,254,254,254,253,253,252,251,250,250,249,248,246
+	.byte 245,244,243,241,240,238,237,235,234,232,230,228,226,224,222,220
+	.byte 218,215,213,211,208,206,203,201,198,196,193,190,188,185,182,179
+	.byte 176,173,170,167,165,162,158,155,152,149,146,143,140,137,134,131
+	.byte 128,124,121,118,115,112,109,106,103,100,97,93,90,88,85,82
+	.byte 79,76,73,70,67,65,62,59,57,54,52,49,47,44,42,40
+	.byte 37,35,33,31,29,27,25,23,21,20,18,17,15,14,12,11
+	.byte 10,9,7,6,5,5,4,3,2,2,1,1,1,0,0,0 
+	.byte 0,0,0,0,1,1,1,2,2,3,4,5,5,6,7,9
+	.byte 10,11,12,14,15,17,18,20,21,23,25,27,29,31,33,35
+	.byte 37,40,42,44,47,49,52,54,57,59,62,65,67,70,73,76
+	.byte 79,82,85,88,90,93,97,100,103,106,109,112,115,118,121,124
 
 _MainMusic:
     .incbin "fiend_loop.gtm2"
@@ -30,6 +51,15 @@ _DiedMusic:
 
 _StairsMusic:
     .incbin "stairs.gtm2"
+
+_BossMusic:
+    .incbin "boss_loop.gtm2"
+
+_BossMusic2:
+    .incbin "boss_loop_p2.gtm2"
+
+_EndMusic:
+    .incbin "end.gtm2"
 
 _HeroFrames:
     .incbin "chara_hero.gsi"
@@ -61,6 +91,12 @@ _EnemyFrames_FIREBALL:
 _EnemyFrames_SKELETON:
     .incbin "SkeletonMage_Red.gsi"
 
+_EnemyFrames_CULTIST:
+    .incbin "Cultist_Red.gsi"
+
+_EnemyFrames_BAT2:
+    .incbin "chara_bat2.gsi"
+
     .segment "LOADONCE"
 
 _DynaWave:
@@ -85,6 +121,9 @@ _Tileset_02:
 
 _Tileset_03:
     .incbin "tileset_03.gtg.deflate"
+
+_BossMap:
+    .incbin "bossmap.gtg.deflate"
 
     .segment "MONSTERS"
     
@@ -125,3 +164,20 @@ _EnemySprites_SKELETON_2:
 
 _EnemySprites_SKELETON_3:
     .incbin "SkeletonMage_Red.gtg.3.deflate"
+
+    .segment "MONSTERS3"
+
+_EnemySprites_CULTIST_0:
+    .incbin "Cultist_Red.gtg.deflate"
+
+_EnemySprites_CULTIST_1:
+    .incbin "Cultist_Red.gtg.1.deflate"
+
+_EnemySprites_CULTIST_2:
+    .incbin "Cultist_Red.gtg.2.deflate"
+
+_EnemySprites_CULTIST_3:
+    .incbin "Cultist_Red.gtg.3.deflate"
+
+_EnemySprites_BAT2:
+    .incbin "chara_bat2.gtg.deflate"

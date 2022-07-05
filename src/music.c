@@ -11,6 +11,9 @@ extern const unsigned char* FourthMusic;
 extern const unsigned char* TitleMusic;
 extern const unsigned char* DiedMusic;
 extern const unsigned char* StairsMusic;
+extern const unsigned char* BossMusic;
+extern const unsigned char* BossMusic2;
+extern const unsigned char* EndMusic;
 unsigned char audio_amplitudes[4] = {0, 0, 0, 0};
 unsigned char* music_cursor = 0;
 unsigned char delay_counter = 0;
@@ -46,6 +49,15 @@ void play_track(char track, char loop) {
     case MUSIC_TRACK_STAIRS:
         music_cursor = &StairsMusic;
         break;
+    case MUSIC_TRACK_BOSS:
+        music_cursor = &BossMusic;
+        break;
+    case MUSIC_TRACK_BOSS2:
+        music_cursor = &BossMusic2;
+        break;
+    case MUSIC_TRACK_END:
+        music_cursor = &EndMusic;
+        break;
     default:
         music_cursor = 0;
         break;
@@ -55,7 +67,9 @@ void play_track(char track, char loop) {
     } else {
         repeat_point = 0;
     }
-    delay_counter = *(music_cursor++);
+    if(music_cursor) {
+        delay_counter = *(music_cursor++);
+    }
 }
 
 #pragma codeseg (push, "CODE2");

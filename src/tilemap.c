@@ -3,6 +3,7 @@
 #include "drawing_funcs.h"
 #include "random.h"
 #include "banking.h"
+#include <zlib.h>
 
 unsigned char tiles[MAP_SIZE];
 char* tmpptr_char;
@@ -19,6 +20,8 @@ typedef struct Rect {
 Rect tmpRect;
 
 unsigned char tilemap_offset = 0;
+
+unsigned char min_room_size = 2;
 
 extern const unsigned char* Tileset_00;
 extern const unsigned char* Tileset_01;
@@ -148,15 +151,15 @@ void map_fill_tile_rect(Rect *r) {
     }
 }
 
-void maybe_add_pillars(Rect *r) {
+void maybe_add_pillars(Rect *r, char min, char tile) {
     char num_pillars, i, x, y;
-    if(r->w < 5) return;
-    if(r->h < 5) return;
-    num_pillars = rnd_range(1,4);
+    if(r->w < min) return;
+    if(r->h < min) return;
+    num_pillars = rnd_range(0,4);
     for(i = 0; i < num_pillars; ++i) {
         x = rnd_range(2, r->w - 1) + r->x;
         y = rnd_range(2, r->h - 1) + r->y;
-        tiles[x + (y << MAP_ORD)] = EMPTY_TILE;
+        tiles[x + (y << MAP_ORD)] = tile;
     }
 }
 
@@ -168,7 +171,7 @@ void place_stairs(Rect *r) {
 }
 
 unsigned char scratchpad[256];
-
+#pragma codeseg (push, "CODE2");
 void generate_map() {
     unsigned int i, j, st;
     Rect *mapRects = (Rect*) scratchpad;
@@ -193,7 +196,8 @@ void generate_map() {
             trim_edge_rects(mapRects);
             random_reduce_rect(mapRects);
             map_fill_tile_rect(mapRects);
-            maybe_add_pillars(mapRects);
+            maybe_add_pillars(mapRects, 4, GROUND_TILE|128);
+            maybe_add_pillars(mapRects, 5, WALL_TILE|128);
             if(st == 0) {
                 place_stairs(mapRects);
             }
@@ -224,10 +228,24 @@ void generate_map() {
         ++j;
     }
 }
+#pragma codeseg (pop);
+
+void load_map(char* data) {
+    inflatemem(tiles, data);
+}
 
 char tile_at(unsigned int pos_x, unsigned int pos_y) {
     tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
     return *tmpptr_char;
+}
+
+char tile_at_cell(char x, char y) {
+    return *(tiles + x + (y << MAP_ORD));
+}
+
+void set_tile(unsigned int pos_x, unsigned int pos_y, char tile) {
+    tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
+    *tmpptr_char = tile;
 }
 
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
@@ -262,6 +280,18 @@ char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
     return 1;
 }
 
+char find_start_tile(unsigned int* x, unsigned int* y) {
+    unsigned int i;
+    for(i = 0; i < MAP_SIZE; ++i) {
+        if((tiles[i] & SPECIAL_TILE_MASK) == SPECIAL_TILE_START) {
+            *x = ((i & (MAP_W-1)) << 5) | 16;
+            *y = (i & ~(MAP_H-1)) | 16;
+            return 1;
+        }
+    }
+    return 0;
+}
+
 void draw_world() {
     char r, c, tile_scroll_x, tile_scroll_y, cam_x, cam_y, r2, c2;
     int t;
@@ -274,7 +304,7 @@ void draw_world() {
     c = 0;
     t = (cam_x + c) + ((cam_y + r) << MAP_ORD);
     //if(tiles[t] != 0) {
-        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t]), tile_scroll_y+tilemap_offset, 0, bankflip)
+        SET_RECT(0, 0, TILE_SIZE - tile_scroll_x, TILE_SIZE - tile_scroll_y, tile_scroll_x + (tiles[t] & 0x60), tile_scroll_y+((tiles[t]&128) >> 2), 0, bankflip)
         queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
         QueueSpriteRect();
     //}
@@ -284,7 +314,7 @@ void draw_world() {
         if((cam_x + c) < MAP_W) {
            
             //if(tiles[t] != 0) {
-                SET_RECT(c2 - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t], tile_scroll_y+tilemap_offset, 0, bankflip)
+                SET_RECT(c2 - tile_scroll_x, 0, TILE_SIZE, TILE_SIZE - tile_scroll_y, tiles[t] & 0x60, tile_scroll_y+((tiles[t]&128) >> 2), 0, bankflip)
                 queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
                 QueueSpriteRect();
             //}
@@ -302,7 +332,7 @@ void draw_world() {
         if((cam_y + r) < MAP_H) {
             
             //if(tiles[t] != 0) {
-                SET_RECT(0, r2, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + tiles[t], tilemap_offset, 0, bankflip)
+                SET_RECT(0, r2, TILE_SIZE - tile_scroll_x, TILE_SIZE, tile_scroll_x + (tiles[t] & 0x60), ((tiles[t]&128) >> 2), 0, bankflip)
                 queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
                 QueueSpriteRect();
             //}
@@ -312,7 +342,7 @@ void draw_world() {
             for(c = 1; c < VISIBLE_W; ++c) {
                 if((cam_x + c) < MAP_W) {
                     //if(tiles[t] != 0) {
-                        SET_RECT(c2, r2, TILE_SIZE, TILE_SIZE, tiles[t], tilemap_offset, 0, bankflip)
+                        SET_RECT(c2, r2, TILE_SIZE, TILE_SIZE, tiles[t] & 0x60, ((tiles[t]&128) >> 2), 0, bankflip)
                         queue_flags_param = DMA_GCARRY | DMA_OPAQUE;
                         QueueSpriteRect();
                     //}

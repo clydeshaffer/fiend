@@ -8,5 +8,6 @@ void ChangeRomBank(unsigned char banknum);
 #define BANK_MONSTERS 2
 #define BANK_INIT 3
 #define BANK_MONSTERS2 4
+#define BANK_MONSTERS3 5
 
 #endif

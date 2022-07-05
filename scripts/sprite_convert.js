@@ -10,7 +10,7 @@ const outFileName = argv._.length == 2 ?
 
 //Input must either be 128 or 256 px wide
 function splitV(inputImage) {
-    if(inputImage.width == 128) {
+    if(inputImage.width <= 128) {
         return [inputImage];
     }
     var outImages = [

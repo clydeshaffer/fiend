@@ -2,8 +2,12 @@
 #include "tilemap.h"
 #include "banking.h"
 #include "music.h"
+#include "globals.h"
+#include "random.h"
 
 unsigned char level_number = 0;
+
+extern char BossMap;
 
 char music_for_level() {
     switch(level_number) {
@@ -15,8 +19,10 @@ char music_for_level() {
         case 3:
         case 4:
             return MUSIC_TRACK_AREA3;
-        default:
+        case 5:
             return MUSIC_TRACK_AREA4;
+        default:
+            return MUSIC_TRACK_NONE;
     }
 }
 
@@ -24,7 +30,7 @@ void load_enemies_for_level(char levnum) {
     clear_enemy_slots();
     switch(levnum) {
         case 0:
-            load_enemy_type(ENEMY_TYPE_SKELETON_BOSS);
+            load_enemy_type(ENEMY_TYPE_RAT);
             load_enemy_type(ENEMY_TYPE_BAT);
             break;
         case 1:
@@ -44,7 +50,14 @@ void load_enemies_for_level(char levnum) {
             load_enemy_type(ENEMY_TYPE_SNIPER);
             load_enemy_type(ENEMY_TYPE_ARROW);
             break;
-        default:
+        case 5:
+            load_enemy_type(ENEMY_TYPE_GHOST);
+            load_enemy_type(ENEMY_TYPE_FIREBALL);
+            break;
+        case 6 :
+            load_enemy_type(ENEMY_TYPE_CULTIST_BOSS);
+            load_enemy_type(ENEMY_TYPE_GHOSTBAT);
+            load_enemy_type(ENEMY_TYPE_SKELETON_BOSS);
             load_enemy_type(ENEMY_TYPE_GHOST);
             load_enemy_type(ENEMY_TYPE_FIREBALL);
             break;
@@ -54,9 +67,26 @@ void load_enemies_for_level(char levnum) {
 void init_level(char levnum) {
         level_number = levnum;
         switch_tileset(levnum);
-        generate_map();
+        
+        if(level_number == 6) {
+            load_map(&BossMap);
+        } else {
+            ChangeRomBank(BANK_COMMON);
+            generate_map();
+        }
+        
         load_enemies_for_level(level_number);
         ChangeRomBank(BANK_COMMON);
+
+        if(!find_start_tile(&player_x, &player_y)) {
+            do {
+                player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
+                player_y = ((((rnd() & 0x7FFF) % (MAP_H - 2)) + 1) << TILE_ORD)+16;
+            } while(!character_tilemap_check(player_x, player_y));
+        }
+
+        clear_enemies(); 
+        place_enemies();
 }
 
 void next_level() {

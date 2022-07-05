@@ -23,21 +23,25 @@ _BMPOBJS = hud_graphics.gtg.deflate \
 tileset_00.gtg.deflate tileset_01.gtg.deflate tileset_02.gtg.deflate tileset_03.gtg.deflate \
 chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.gtg.deflate chara_orc.gtg.deflate \
 chara_goblin_sniper.gtg.deflate projectile_arrow.gtg.deflate chara_ghost.gtg.deflate projectile_fireball.gtg.deflate \
-SkeletonMage_Red.gtg.deflate SkeletonMage_Red.gtg.1.deflate SkeletonMage_Red.gtg.2.deflate SkeletonMage_Red.gtg.3.deflate 
+SkeletonMage_Red.gtg.deflate SkeletonMage_Red.gtg.1.deflate SkeletonMage_Red.gtg.2.deflate SkeletonMage_Red.gtg.3.deflate \
+Cultist_Red.gtg.deflate Cultist_Red.gtg.1.deflate Cultist_Red.gtg.2.deflate Cultist_Red.gtg.3.deflate \
+chara_bat2.gtg.deflate bossmap.gtg.deflate 
 
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
 _SPRITEMETA = chara_hero.gsi chara_spider.gsi chara_bat.gsi chara_rat.gsi chara_orc.gsi \
-chara_goblin_sniper.gsi projectile_arrow.gsi chara_ghost.gsi projectile_fireball.gsi SkeletonMage_Red.gsi
+chara_goblin_sniper.gsi projectile_arrow.gsi chara_ghost.gsi projectile_fireball.gsi SkeletonMage_Red.gsi \
+Cultist_Red.gsi chara_bat2.gsi
 SPRITEMETA = $(patsubst %,$(ODIR)/assets/%,$(_SPRITEMETA))
 
 _AUDIO_FW = audio_fw.bin.deflate
 AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
 
-_MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march_loop.gtm2 spooky_loop.gtm2
+_MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march_loop.gtm2 spooky_loop.gtm2 \
+boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
-_BANKS = bank00 bank01 bank02 bank03 bank04 filler bank7f
+_BANKS = bank00 bank01 bank02 bank03 bank04 bank05 filler bank7f
 BANKS = $(patsubst %,bin/fiend.gtr.%,$(_BANKS))
 
 bin/fiend.gtr: $(BANKS)

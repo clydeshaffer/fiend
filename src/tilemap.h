@@ -24,13 +24,24 @@
 #define WALL_TILE 64
 #define STAIRS_TILE 96
 
+#define SPECIAL_TILE_MASK 31
+#define SPECIAL_TILE_MUNDANE 0
+#define SPECIAL_TILE_START 1
+#define SPECIAL_TILE_WALLTRAP 2
+#define SPECIAL_TILE_GATE 3
+#define SPECIAL_TILE_SPAWN_ENEMY 16
+
 extern unsigned int camera_x;
 extern unsigned int camera_y;
 
 void switch_tileset(unsigned char level_num);
 void generate_map();
+void load_map(char* data);
 char tile_at(unsigned int pos_x, unsigned int pos_y);
+char tile_at_cell(char x, char y);
+void set_tile(unsigned int pos_x, unsigned int pos_y, char tile);
 char character_tilemap_check(unsigned int pos_x, unsigned int pos_y);
 void draw_world();
+char find_start_tile(unsigned int* x, unsigned int* y);
 
 #endif

@@ -44,6 +44,8 @@ void updateInputs(){
 #define GAME_STATE_PLAY 1
 #define GAME_STATE_FADEIN 2
 #define GAME_STATE_FADEOUT 3
+#define GAME_STATE_PAUSED 4
+#define GAME_STATE_ENDSCREEN 5
 
 unsigned char game_state = GAME_STATE_TITLE;
 unsigned char game_over_timer = 0;
@@ -81,8 +83,6 @@ void init_game_state(unsigned char new_state) {
         ChangeRomBank(BANK_COMMON);
         play_track(MUSIC_TRACK_TITLE, 0);
     } else if(new_state == GAME_STATE_PLAY) {
-        player_x = PLAYER_START_X;
-        player_y = PLAYER_START_Y;
         player_dir_x = 0;
         player_dir_y = 16;
         player_anim_state = PLAYER_STATE_NEUTRAL;
@@ -92,19 +92,14 @@ void init_game_state(unsigned char new_state) {
             ChangeRomBank(BANK_COMMON);
         }
         player_health = PLAYER_MAX_HEALTH;
-        clear_enemies(); 
-
-        do {
-            player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
-            player_y = ((((rnd() & 0x7FFF) % (MAP_H - 2)) + 1) << TILE_ORD)+16;
-        } while(!character_tilemap_check(player_x, player_y));
-
-        place_enemies();
 
         camera_x = player_x - 64;
         camera_y = player_y - 64;
         if(old_state == GAME_STATE_FADEOUT) {
             game_state = GAME_STATE_FADEIN;
+            if(level_number == 7) {
+                game_state = GAME_STATE_ENDSCREEN;
+            }
         }
         play_track(music_for_level(), 1);
     }
@@ -170,6 +165,7 @@ void main() {
     queue_pending = 0;
     vram[START] = 0;
 
+    ChangeRomBank(BANK_COMMON);
     generate_map();
 
     via[DDRB] = 0xFF;
@@ -241,7 +237,10 @@ void main() {
                     player_anim_state = PLAYER_STATE_NEUTRAL;
                 }
             } else if(player_anim_state == PLAYER_STATE_NEUTRAL) {
-                if(inputs & INPUT_MASK_A & ~last_inputs) {
+                if(inputs & INPUT_MASK_START & ~last_inputs) {
+                    game_state = GAME_STATE_PAUSED;
+                }
+                else if(inputs & INPUT_MASK_A & ~last_inputs) {
                     player_anim_frame = 0;
                     player_anim_state = PLAYER_STATE_ATTACK;
                     do_noise_effect(95, 12, 4);
@@ -322,12 +321,20 @@ void main() {
             draw_player();
             
             draw_hud();
-        } else if(game_state == GAME_STATE_FADEOUT || game_state == GAME_STATE_FADEIN) {
+        } else if((game_state == GAME_STATE_FADEOUT) || (game_state == GAME_STATE_FADEIN)) {
             draw_world();
             draw_enemies();
             draw_player();
             draw_hud();
-        } 
+        } else if(game_state == GAME_STATE_PAUSED) {
+            draw_world();
+            draw_enemies();
+            draw_player();
+            draw_hud();
+            if(inputs & INPUT_MASK_START & ~last_inputs) {
+                game_state = GAME_STATE_PLAY;
+            }
+        }
         
         CLB(16);
 
@@ -395,14 +402,30 @@ void main() {
                 cursorY = 108;
                 if(level_number == 0) {
                     print("surface");    
+                } else if(level_number == 6) {
+                    cursorX = 96;
+                    print("lair");
                 } else {
                     print("floor");
                     cursorX = 116;
                     printnum(level_number);
                 }
             }
+        } else if(game_state == GAME_STATE_PAUSED) {
+            cursorX = 40;
+            cursorY = 60;
+            print("paused");
+        } else if(game_state == GAME_STATE_ENDSCREEN) {
+            cursorX = 8;
+            cursorY = 60;
+            print("fiend is slain");
+            cursorX = 64;
+            cursorY = 90;
+            print("for now");
+            if(inputs & ~last_inputs & INPUT_MASK_START) {
+                init_game_state(GAME_STATE_TITLE);
+            }
         }
-
 
         Sleep(1);
         frameflip ^= DMA_PAGE_OUT;
