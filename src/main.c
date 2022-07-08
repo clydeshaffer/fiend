@@ -233,6 +233,12 @@ void main() {
                     player_hitbox_damage = 1;
                 }
                 i = 1;
+		if(level_number == 0) {
+		    if(player_anim_frame == 8)
+		    if(tile_at(player_x + player_dir_x, player_y + player_dir_y) == (GROUND_TILE | 128)) {
+		        set_tile(player_x + player_dir_x, player_y + player_dir_y, GROUND_TILE);
+		    }
+		}
                 if(player_anim_frame == 32) {
                     player_anim_state = PLAYER_STATE_NEUTRAL;
                 }
