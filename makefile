@@ -41,7 +41,7 @@ _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march
 boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
-_BANKS = bank00 bank01 bank02 bank03 bank04 bank05 filler bank7f
+_BANKS = bank00 bank01 bank02 bank03 bank04 bank05 filler bank7F
 BANKS = $(patsubst %,bin/fiend.gtr.%,$(_BANKS))
 
 bin/fiend.gtr: $(BANKS)

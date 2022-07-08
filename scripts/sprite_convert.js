@@ -1,7 +1,6 @@
 const fs = require('fs');
 const argv = require('minimist')(process.argv.slice(2));
 const BMP = require('bitmap-manipulation');
-const { flip } = require('jimp');
 
 const inFileName = argv._[0];
 const outFileName = argv._.length == 2 ?
