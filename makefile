@@ -20,7 +20,7 @@ _AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
 _BMPOBJS = hud_graphics.gtg.deflate \
-tileset_00.gtg.deflate tileset_01.gtg.deflate tileset_02.gtg.deflate tileset_03.gtg.deflate \
+tileset_00.gtg.deflate tileset_01.gtg.deflate tileset_02.gtg.deflate tileset_03.gtg.deflate pause.gtg.deflate \
 chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.gtg.deflate chara_orc.gtg.deflate \
 chara_goblin_sniper.gtg.deflate projectile_arrow.gtg.deflate chara_ghost.gtg.deflate projectile_fireball.gtg.deflate \
 SkeletonMage_Red.gtg.deflate SkeletonMage_Red.gtg.1.deflate SkeletonMage_Red.gtg.2.deflate SkeletonMage_Red.gtg.3.deflate \

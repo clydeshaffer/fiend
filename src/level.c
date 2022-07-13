@@ -4,6 +4,7 @@
 #include "music.h"
 #include "globals.h"
 #include "random.h"
+#include "drawing_funcs.h"
 
 unsigned char level_number = 0;
 
@@ -67,6 +68,7 @@ void load_enemies_for_level(char levnum) {
 void init_level(char levnum) {
         level_number = levnum;
         switch_tileset(levnum);
+        clear_spritebank(16);
         
         if(level_number == 6) {
             load_map(&BossMap);

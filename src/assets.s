@@ -1,4 +1,4 @@
-    .export _SineTable, _BossMap
+    .export _SineTable, _BossMap, _PauseScreen
     .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02, _Tileset_03
     .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _DiedMusic, _StairsMusic, _BossMusic, _BossMusic2, _EndMusic
     .export _MainMusic, _SecondMusic, _ThirdMusic, _FourthMusic
@@ -107,6 +107,9 @@ _HudSprites:
 
 _HeroSprites:
     .incbin "chara_hero.gtg.deflate"
+
+_PauseScreen:
+    .incbin "pause.gtg.deflate"
 
     .segment "TILES"
 

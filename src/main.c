@@ -12,6 +12,7 @@
 
 extern const unsigned char* HudSprites;
 extern const unsigned char* HeroSprites;
+extern const unsigned char* PauseScreen;
 
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
@@ -125,7 +126,7 @@ void draw_hud() {
 }
 
 void main() {
-    unsigned char i;
+    unsigned char i, j, k;
     unsigned int tx, ty;
     asm ("SEI");
 
@@ -154,6 +155,7 @@ void main() {
 
     load_spritesheet(&HudSprites, 0);
     load_spritesheet(&HeroSprites, 1);
+    load_spritesheet(&PauseScreen, 8);
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
     *dma_flags = flagsMirror;
@@ -337,9 +339,14 @@ void main() {
             draw_enemies();
             draw_player();
             draw_hud();
+            SET_RECT(28, 16, 74,84, 156, 16, 0, bankflip)
+            QueueSpriteRect();
+            SET_RECT(48, 48, 32,32, 0, 128, 0, bankflip)
+            QueueSpriteRect();
             if(inputs & INPUT_MASK_START & ~last_inputs) {
                 game_state = GAME_STATE_PLAY;
             }
+            QueueFillRect(48+(player_x>>5), 48+(player_y>>5), 1, 1, 124);
         }
         
         CLB(16);
@@ -417,10 +424,41 @@ void main() {
                     printnum(level_number);
                 }
             }
+            *vram_VX = 0;
+            *vram_VY = 0;
+            *vram_GX = 0;
+            *vram_GY = 128;
+            *vram_WIDTH = 1;
+            *vram_HEIGHT = 1;
+            *vram_START = 1;
+            *vram_START = 0;
+            flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
+            banksMirror = bankflip;
+            *dma_flags = flagsMirror;
+            *bank_reg = banksMirror;
+            cursorX = camera_x >> 5;
+            cursorY = camera_y >> 5;
+            temp1 = (cursorY << 7) + cursorX;
+            for(i = 0; i < 5; ++i) {
+                for(j = 0; j < 5; ++j) {
+                    k = tile_at_cell(cursorX, cursorY);
+                    if(k & GROUND_TILE) {
+                        vram[temp1] = (k == STAIRS_TILE) ? 28 : 75;
+                    }
+                    ++cursorX;
+                    ++temp1;
+                }
+                ++cursorY;
+                cursorX-=5;
+                temp1 += 123;
+            }
+            if(tile_at_cell(cursorX, cursorY) & GROUND_TILE) {
+                vram[temp1] = 75;
+            }
         } else if(game_state == GAME_STATE_PAUSED) {
-            cursorX = 40;
+            /*cursorX = 40;
             cursorY = 60;
-            print("paused");
+            print("paused");*/
         } else if(game_state == GAME_STATE_ENDSCREEN) {
             cursorX = 8;
             cursorY = 60;

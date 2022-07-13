@@ -40,6 +40,37 @@ void load_spritesheet(char* spriteData, char bank) {
     *bank_reg = banksMirror;
 }
 
+void clear_spritebank(char bank) {
+    char oldFlags = flagsMirror;
+    char oldBanks = banksMirror;
+    char bankNum = bank & 7;
+    char xbit = (bank & 8) << 4;
+    char ybit = (bank & 16) << 3;
+    unsigned int i = 0;
+    flagsMirror = DMA_ENABLE;
+    *dma_flags = flagsMirror;
+    *vram_VX = 0;
+    *vram_VY = 0;
+    *vram_GX = xbit;
+    *vram_GY = ybit;
+    *vram_WIDTH = 1;
+    *vram_HEIGHT = 1;
+    *vram_START = 1;
+    *vram_START = 0;
+
+    flagsMirror = 0;
+    *dma_flags = flagsMirror;
+    banksMirror = bankflip | GRAM_PAGE(bank);
+    *bank_reg = banksMirror;
+    for(i = 0; i < 16384; i++) {
+        vram[i] = 0;
+    }
+    flagsMirror = oldFlags;
+    banksMirror = oldBanks;
+    *dma_flags = flagsMirror;
+    *bank_reg = banksMirror;
+}
+
 unsigned char queue_start = 0;
 unsigned char queue_end = 0;
 unsigned char queue_count = 0;
