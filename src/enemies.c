@@ -524,8 +524,8 @@ void big_circle(int* x, int* y, char angle) {
 unsigned char update_enemies() {
     static char i = 0;
     static char speed, type, flags, cnt, movemask, moveflags, atkflags;
-    static int chase_offset_x = 0;
-    static int chase_offset_y = 0;
+    static signed char chase_offset_x = 0;
+    static signed char chase_offset_y = 0;
     int camRIGHT = camera_x + 136;
     int camBOTTOM = camera_y + 128;
     MobState *proj;
@@ -663,8 +663,7 @@ unsigned char update_enemies() {
                                 break;
                         }
                         if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
-                            tempEnemy.mode = ENEMY_STATE_INACTIVE;
-                            enemy_count--;   
+                            tempEnemy.mode = ENEMY_STATE_INACTIVE; 
                         }
                         break;
                     case EFLAGS_MOVETYPE_TELEPORT:
