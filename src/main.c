@@ -124,6 +124,21 @@ void draw_hud() {
         QueueSpriteRect();
     }
 }
+//Separate from draw_hud because of synchronous draw calls
+void print_floor_number() {
+    cursorX = 72;
+    cursorY = 108;
+    if(level_number == 0) {
+        print("surface");    
+    } else if(level_number == 6) {
+        cursorX = 96;
+        print("lair");
+    } else {
+        print("floor");
+        cursorX = 116;
+        printnum(level_number);
+    }
+}
 
 void main() {
     unsigned char i, j, k;
@@ -205,6 +220,12 @@ void main() {
             if(inputs & INPUT_MASK_START) {
                 init_game_state(GAME_STATE_PLAY);
             }
+            //DRAW TITLE TEXT
+            queue_flags_param = DMA_GCARRY;
+            SET_RECT(2, 32, 126, 13, 0, 82, 0, bankflip);
+            QueueSpriteRect();
+            SET_RECT(35, 80, 59, 8, 0, 96, 0, bankflip);
+            QueueSpriteRect();
         }
         else if(game_state == GAME_STATE_PLAY) {    
             i = 0;
@@ -238,7 +259,7 @@ void main() {
 		if(level_number == 0) {
 		    if(player_anim_frame == 8)
 		    if(tile_at(player_x + player_dir_x, player_y + player_dir_y) == (GROUND_TILE | 128)) {
-		        set_tile(player_x + player_dir_x, player_y + player_dir_y, GROUND_TILE);
+		        set_tile(player_x + player_dir_x, player_y + player_dir_y, STAIRS_TILE | 128);
 		    }
 		}
                 if(player_anim_frame == 32) {
@@ -337,7 +358,6 @@ void main() {
         } else if(game_state == GAME_STATE_PAUSED) {
             draw_world();
             draw_enemies();
-            draw_player();
             draw_hud();
             SET_RECT(28, 16, 74,84, 156, 16, 0, bankflip)
             QueueSpriteRect();
@@ -357,7 +377,7 @@ void main() {
         }
 
         if(game_state == GAME_STATE_TITLE) {
-            flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
+            /*flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
             *dma_flags = flagsMirror;
             banksMirror = bankflip;
             *bank_reg = banksMirror;
@@ -366,7 +386,7 @@ void main() {
             print("accursed fiend");
             cursorX = 20;
             cursorY = 80;
-            print("press start");
+            print("press start");*/
             if(game_over_timer >= 4) {
                 draw_fade(game_over_timer);
                 game_over_timer -= 4;
@@ -411,18 +431,7 @@ void main() {
                 cursorY = 108;
                 print("press b to enter");
             } else {
-                cursorX = 72;
-                cursorY = 108;
-                if(level_number == 0) {
-                    print("surface");    
-                } else if(level_number == 6) {
-                    cursorX = 96;
-                    print("lair");
-                } else {
-                    print("floor");
-                    cursorX = 116;
-                    printnum(level_number);
-                }
+                print_floor_number();
             }
             *vram_VX = 0;
             *vram_VY = 0;
@@ -456,9 +465,9 @@ void main() {
                 vram[temp1] = 75;
             }
         } else if(game_state == GAME_STATE_PAUSED) {
-            /*cursorX = 40;
-            cursorY = 60;
-            print("paused");*/
+            flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
+            *dma_flags = flagsMirror;
+            print_floor_number();
         } else if(game_state == GAME_STATE_ENDSCREEN) {
             cursorX = 8;
             cursorY = 60;
