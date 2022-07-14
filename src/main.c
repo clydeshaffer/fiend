@@ -49,7 +49,7 @@ void updateInputs(){
 #define GAME_STATE_ENDSCREEN 5
 
 unsigned char game_state = GAME_STATE_TITLE;
-unsigned char game_over_timer = 0;
+unsigned char game_over_timer = 256;
 
 #define PLAYER_MAX_HEALTH 3
 
@@ -145,12 +145,18 @@ void main() {
     unsigned int tx, ty;
     asm ("SEI");
 
-    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE;
-    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 41);
+    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_COLORFILL_ENABLE;
+    *dma_flags = flagsMirror;
+    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 16);
     wait();
-    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_PAGE_OUT;
+    FillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-1, 16);
+    wait();
+    flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_PAGE_OUT | DMA_COLORFILL_ENABLE;
+    *dma_flags = flagsMirror;
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
-    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 41);
+    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 16);
+    wait();
+    FillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-1, 16);
     wait();
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
     *bank_reg = 0;
@@ -188,6 +194,13 @@ void main() {
     via[DDRB] = 0xFF;
 
     asm ("CLI");
+
+    for(game_over_timer = 0; game_over_timer < 116; game_over_timer+=4) {
+        banksMirror = 0;
+        *bank_reg = banksMirror;
+        draw_fade(game_over_timer);
+        Sleep(1);
+    }
 
     init_game_state(GAME_STATE_TITLE);
     while(1){
@@ -245,6 +258,7 @@ void main() {
                         play_track(MUSIC_TRACK_DIED, 0);
                         player_anim_state = PLAYER_STATE_DEAD;
                         player_anim_frame = 0;
+                        game_over_timer = 255;
                         i = 0;
                     }
                 } else if(player_health == 0) {
@@ -350,11 +364,43 @@ void main() {
             draw_player();
             
             draw_hud();
+            if(player_anim_state == PLAYER_STATE_DEAD) {
+                if(game_over_timer > 223) {
+                    queue_flags_param = 0;
+                    SET_RECT(0, 60, 127, 8, ((255 - game_over_timer) << 2), 64, 0, bankflip);
+                    QueueSpriteRect();
+                } else if (game_over_timer > 196) {
+                    queue_flags_param = 0;
+                    SET_RECT(0, 60, 127, 8, 112, 64, 0, bankflip);
+                    QueueSpriteRect();
+                    queue_flags_param = DMA_GCARRY;
+                    SET_RECT(40, 60, 47, 8, 64, 96, 0, bankflip);
+                    QueueSpriteRect();
+                    queue_flags_param = 0;
+                    SET_RECT(0, 60, 127, 8, ((game_over_timer & 0x3C) << 2), 64, 0, bankflip);
+                    QueueSpriteRect();
+                } else {
+                    queue_flags_param = 0;
+                    SET_RECT(0, 60, 127, 8, 112, 64, 0, bankflip);
+                    QueueSpriteRect();
+                    queue_flags_param = DMA_GCARRY;
+                    SET_RECT(40, 60, 47, 8, 64, 96, 0, bankflip);
+                    QueueSpriteRect();
+                }
+            }
         } else if((game_state == GAME_STATE_FADEOUT) || (game_state == GAME_STATE_FADEIN)) {
             draw_world();
             draw_enemies();
             draw_player();
             draw_hud();
+            if(player_anim_state == PLAYER_STATE_DEAD) {
+                queue_flags_param = 0;
+                SET_RECT(0, 60, 127, 8, 112, 64, 0, bankflip);
+                QueueSpriteRect();
+                queue_flags_param = DMA_GCARRY;
+                SET_RECT(40, 60, 47, 8, 64, 96, 0, bankflip);
+                QueueSpriteRect();
+            }
         } else if(game_state == GAME_STATE_PAUSED) {
             draw_world();
             draw_enemies();
@@ -377,16 +423,6 @@ void main() {
         }
 
         if(game_state == GAME_STATE_TITLE) {
-            /*flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | frameflip;
-            *dma_flags = flagsMirror;
-            banksMirror = bankflip;
-            *bank_reg = banksMirror;
-            cursorX = 8;
-            cursorY = 32;
-            print("accursed fiend");
-            cursorX = 20;
-            cursorY = 80;
-            print("press start");*/
             if(game_over_timer >= 4) {
                 draw_fade(game_over_timer);
                 game_over_timer -= 4;
@@ -416,9 +452,6 @@ void main() {
             }
             draw_fade(game_over_timer);
         } else if(player_anim_state == PLAYER_STATE_DEAD) {
-            cursorX = 32;
-            cursorY = 60;
-            print("you died");
             game_over_timer--;
             if(game_over_timer == 0) {
                 game_state = GAME_STATE_FADEOUT;
