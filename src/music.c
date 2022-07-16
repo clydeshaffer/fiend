@@ -14,10 +14,16 @@ extern const unsigned char* StairsMusic;
 extern const unsigned char* BossMusic;
 extern const unsigned char* BossMusic2;
 extern const unsigned char* EndMusic;
+extern const unsigned char* PickupMusic;
+extern const unsigned char* FanfareMusic;
 unsigned char audio_amplitudes[4] = {0, 0, 0, 0};
 unsigned char* music_cursor = 0;
 unsigned char delay_counter = 0;
 unsigned char* repeat_point;
+
+unsigned char* paused_cursor;
+unsigned char paused_delay;
+unsigned char* paused_repeat_point;
 
 void init_music() {
     music_cursor = 0;
@@ -58,18 +64,43 @@ void play_track(char track, char loop) {
     case MUSIC_TRACK_END:
         music_cursor = &EndMusic;
         break;
+    case MUSIC_TRACK_PICKUP:
+        music_cursor = &PickupMusic;
+        break;;
+    case MUSIC_TRACK_FANFARE:
+        music_cursor = &FanfareMusic;
+        break;
     default:
         music_cursor = 0;
         break;
     }
-    if(loop) {
-        repeat_point = music_cursor;
-    } else {
-        repeat_point = 0;
+    switch(loop) {
+        case REPEAT_NONE:
+            repeat_point = 0;
+            break;
+        case REPEAT_LOOP:
+            repeat_point = music_cursor;
+            break;
+        case REPEAT_RESUME:
+            repeat_point = paused_cursor;
+            break;
     }
     if(music_cursor) {
         delay_counter = *(music_cursor++);
     }
+}
+
+void pause_music() {
+    paused_cursor = music_cursor;
+    paused_delay = delay_counter;
+    paused_repeat_point = repeat_point;
+    music_cursor = 0;
+}
+
+void unpause_music() {
+    music_cursor = paused_cursor;
+    delay_counter = paused_delay;
+    repeat_point = paused_repeat_point;
 }
 
 #pragma codeseg (push, "CODE2");
@@ -157,6 +188,10 @@ void tick_music() {
             delay_counter = *(music_cursor++);
             if(delay_counter == 0) {
                 music_cursor = repeat_point;
+                if(paused_repeat_point != 0) {
+                    repeat_point = paused_repeat_point;
+                    paused_repeat_point = 0;
+                }
                 if(music_cursor) {
                     delay_counter = *(music_cursor++);
                 }

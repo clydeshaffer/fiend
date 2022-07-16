@@ -12,6 +12,12 @@
 #define MUSIC_TRACK_BOSS 8
 #define MUSIC_TRACK_BOSS2 9
 #define MUSIC_TRACK_END 10
+#define MUSIC_TRACK_PICKUP 11
+#define MUSIC_TRACK_FANFARE 12
+
+#define REPEAT_NONE 0
+#define REPEAT_LOOP 1
+#define REPEAT_RESUME 2
 
 void init_music();
 
@@ -22,5 +28,9 @@ void tick_music();
 void do_noise_effect(char note, char bend, char duration);
 
 void stop_music();
+
+void pause_music();
+
+void unpause_music();
 
 #endif

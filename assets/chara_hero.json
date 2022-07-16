@@ -1,7 +1,7 @@
 { "frames": [
    {
     "filename": "chara_hero 0.ase",
-    "frame": { "x": 15, "y": 67, "w": 16, "h": 15 },
+    "frame": { "x": 51, "y": 85, "w": 16, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 17, "w": 16, "h": 15 },
@@ -10,7 +10,7 @@
    },
    {
     "filename": "chara_hero 1.ase",
-    "frame": { "x": 69, "y": 16, "w": 13, "h": 23 },
+    "frame": { "x": 0, "y": 23, "w": 13, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 9, "w": 13, "h": 23 },
@@ -19,7 +19,7 @@
    },
    {
     "filename": "chara_hero 2.ase",
-    "frame": { "x": 105, "y": 26, "w": 13, "h": 23 },
+    "frame": { "x": 13, "y": 27, "w": 13, "h": 23 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 9, "w": 13, "h": 23 },
@@ -28,7 +28,7 @@
    },
    {
     "filename": "chara_hero 3.ase",
-    "frame": { "x": 67, "y": 43, "w": 16, "h": 17 },
+    "frame": { "x": 26, "y": 44, "w": 16, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 17, "w": 16, "h": 17 },
@@ -37,7 +37,7 @@
    },
    {
     "filename": "chara_hero 4.ase",
-    "frame": { "x": 51, "y": 53, "w": 15, "h": 17 },
+    "frame": { "x": 0, "y": 64, "w": 15, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 16, "w": 15, "h": 17 },
@@ -46,7 +46,7 @@
    },
    {
     "filename": "chara_hero 5.ase",
-    "frame": { "x": 0, "y": 59, "w": 15, "h": 17 },
+    "frame": { "x": 110, "y": 63, "w": 15, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 17, "w": 15, "h": 17 },
@@ -55,7 +55,7 @@
    },
    {
     "filename": "chara_hero 6.ase",
-    "frame": { "x": 17, "y": 27, "w": 16, "h": 18 },
+    "frame": { "x": 107, "y": 27, "w": 16, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 16, "w": 16, "h": 18 },
@@ -64,7 +64,7 @@
    },
    {
     "filename": "chara_hero 7.ase",
-    "frame": { "x": 96, "y": 81, "w": 14, "h": 15 },
+    "frame": { "x": 43, "y": 27, "w": 14, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 17, "w": 14, "h": 15 },
@@ -73,7 +73,7 @@
    },
    {
     "filename": "chara_hero 8.ase",
-    "frame": { "x": 31, "y": 67, "w": 15, "h": 16 },
+    "frame": { "x": 0, "y": 81, "w": 15, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 16, "w": 15, "h": 16 },
@@ -82,7 +82,7 @@
    },
    {
     "filename": "chara_hero 9.ase",
-    "frame": { "x": 46, "y": 70, "w": 16, "h": 15 },
+    "frame": { "x": 88, "y": 79, "w": 16, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 17, "w": 16, "h": 15 },
@@ -91,7 +91,7 @@
    },
    {
     "filename": "chara_hero 10.ase",
-    "frame": { "x": 0, "y": 76, "w": 15, "h": 16 },
+    "frame": { "x": 15, "y": 77, "w": 15, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 16, "w": 15, "h": 16 },
@@ -100,7 +100,7 @@
    },
    {
     "filename": "chara_hero 11.ase",
-    "frame": { "x": 81, "y": 61, "w": 16, "h": 15 },
+    "frame": { "x": 35, "y": 73, "w": 16, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 17, "w": 16, "h": 15 },
@@ -109,7 +109,7 @@
    },
    {
     "filename": "chara_hero 12.ase",
-    "frame": { "x": 97, "y": 65, "w": 15, "h": 16 },
+    "frame": { "x": 73, "y": 69, "w": 15, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 16, "w": 15, "h": 16 },
@@ -118,7 +118,7 @@
    },
    {
     "filename": "chara_hero 13.ase",
-    "frame": { "x": 81, "y": 76, "w": 15, "h": 15 },
+    "frame": { "x": 67, "y": 85, "w": 15, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 17, "w": 15, "h": 15 },
@@ -127,7 +127,7 @@
    },
    {
     "filename": "chara_hero 14.ase",
-    "frame": { "x": 98, "y": 49, "w": 16, "h": 16 },
+    "frame": { "x": 19, "y": 61, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 14, "y": 16, "w": 16, "h": 16 },
@@ -136,7 +136,7 @@
    },
    {
     "filename": "chara_hero 15.ase",
-    "frame": { "x": 29, "y": 83, "w": 14, "h": 14 },
+    "frame": { "x": 111, "y": 96, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 18, "w": 14, "h": 14 },
@@ -145,7 +145,7 @@
    },
    {
     "filename": "chara_hero 16.ase",
-    "frame": { "x": 18, "y": 0, "w": 17, "h": 27 },
+    "frame": { "x": 40, "y": 0, "w": 17, "h": 27 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 16, "w": 17, "h": 27 },
@@ -154,7 +154,7 @@
    },
    {
     "filename": "chara_hero 17.ase",
-    "frame": { "x": 105, "y": 0, "w": 16, "h": 26 },
+    "frame": { "x": 57, "y": 16, "w": 16, "h": 26 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 17, "w": 16, "h": 26 },
@@ -163,7 +163,7 @@
    },
    {
     "filename": "chara_hero 18.ase",
-    "frame": { "x": 52, "y": 34, "w": 15, "h": 19 },
+    "frame": { "x": 91, "y": 34, "w": 15, "h": 19 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 17, "w": 15, "h": 19 },
@@ -172,7 +172,7 @@
    },
    {
     "filename": "chara_hero 19.ase",
-    "frame": { "x": 43, "y": 85, "w": 13, "h": 14 },
+    "frame": { "x": 0, "y": 97, "w": 13, "h": 14 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 18, "w": 13, "h": 14 },
@@ -181,7 +181,7 @@
    },
    {
     "filename": "chara_hero 20.ase",
-    "frame": { "x": 62, "y": 0, "w": 27, "h": 16 },
+    "frame": { "x": 57, "y": 0, "w": 27, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 16, "w": 27, "h": 16 },
@@ -190,7 +190,7 @@
    },
    {
     "filename": "chara_hero 21.ase",
-    "frame": { "x": 35, "y": 0, "w": 27, "h": 16 },
+    "frame": { "x": 84, "y": 0, "w": 27, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 16, "w": 27, "h": 16 },
@@ -199,7 +199,7 @@
    },
    {
     "filename": "chara_hero 22.ase",
-    "frame": { "x": 82, "y": 27, "w": 18, "h": 16 },
+    "frame": { "x": 73, "y": 36, "w": 18, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 16, "w": 18, "h": 16 },
@@ -208,7 +208,7 @@
    },
    {
     "filename": "chara_hero 23.ase",
-    "frame": { "x": 110, "y": 81, "w": 15, "h": 14 },
+    "frame": { "x": 82, "y": 94, "w": 15, "h": 14 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 18, "w": 15, "h": 14 },
@@ -217,7 +217,7 @@
    },
    {
     "filename": "chara_hero 24.ase",
-    "frame": { "x": 0, "y": 0, "w": 18, "h": 27 },
+    "frame": { "x": 22, "y": 0, "w": 18, "h": 27 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 5, "w": 18, "h": 27 },
@@ -226,7 +226,7 @@
    },
    {
     "filename": "chara_hero 25.ase",
-    "frame": { "x": 89, "y": 0, "w": 16, "h": 27 },
+    "frame": { "x": 111, "y": 0, "w": 16, "h": 27 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 14, "y": 5, "w": 16, "h": 27 },
@@ -235,7 +235,7 @@
    },
    {
     "filename": "chara_hero 26.ase",
-    "frame": { "x": 83, "y": 43, "w": 15, "h": 18 },
+    "frame": { "x": 106, "y": 45, "w": 15, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 14, "w": 15, "h": 18 },
@@ -244,7 +244,7 @@
    },
    {
     "filename": "chara_hero 27.ase",
-    "frame": { "x": 62, "y": 77, "w": 16, "h": 14 },
+    "frame": { "x": 30, "y": 88, "w": 16, "h": 14 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 18, "w": 16, "h": 14 },
@@ -253,7 +253,7 @@
    },
    {
     "filename": "chara_hero 28.ase",
-    "frame": { "x": 35, "y": 16, "w": 17, "h": 20 },
+    "frame": { "x": 73, "y": 16, "w": 17, "h": 20 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 12, "w": 17, "h": 20 },
@@ -262,7 +262,7 @@
    },
    {
     "filename": "chara_hero 29.ase",
-    "frame": { "x": 52, "y": 16, "w": 17, "h": 18 },
+    "frame": { "x": 90, "y": 16, "w": 17, "h": 18 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 14, "w": 17, "h": 18 },
@@ -271,7 +271,7 @@
    },
    {
     "filename": "chara_hero 30.ase",
-    "frame": { "x": 19, "y": 51, "w": 16, "h": 16 },
+    "frame": { "x": 62, "y": 52, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
@@ -280,7 +280,7 @@
    },
    {
     "filename": "chara_hero 31.ase",
-    "frame": { "x": 15, "y": 82, "w": 14, "h": 14 },
+    "frame": { "x": 97, "y": 96, "w": 14, "h": 14 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 18, "y": 18, "w": 14, "h": 14 },
@@ -289,7 +289,7 @@
    },
    {
     "filename": "chara_hero 32.ase",
-    "frame": { "x": 0, "y": 27, "w": 17, "h": 17 },
+    "frame": { "x": 26, "y": 27, "w": 17, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 13, "y": 15, "w": 17, "h": 17 },
@@ -298,7 +298,7 @@
    },
    {
     "filename": "chara_hero 33.ase",
-    "frame": { "x": 35, "y": 51, "w": 16, "h": 16 },
+    "frame": { "x": 78, "y": 53, "w": 16, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
@@ -307,7 +307,7 @@
    },
    {
     "filename": "chara_hero 34.ase",
-    "frame": { "x": 114, "y": 49, "w": 14, "h": 16 },
+    "frame": { "x": 15, "y": 93, "w": 14, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 17, "y": 16, "w": 14, "h": 16 },
@@ -316,7 +316,7 @@
    },
    {
     "filename": "chara_hero 35.ase",
-    "frame": { "x": 66, "y": 60, "w": 15, "h": 17 },
+    "frame": { "x": 58, "y": 68, "w": 15, "h": 17 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 15, "w": 15, "h": 17 },
@@ -325,7 +325,7 @@
    },
    {
     "filename": "chara_hero 36.ase",
-    "frame": { "x": 0, "y": 45, "w": 19, "h": 14 },
+    "frame": { "x": 0, "y": 50, "w": 19, "h": 14 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 12, "y": 18, "w": 19, "h": 14 },
@@ -334,7 +334,7 @@
    },
    {
     "filename": "chara_hero 37.ase",
-    "frame": { "x": 33, "y": 36, "w": 19, "h": 15 },
+    "frame": { "x": 43, "y": 42, "w": 19, "h": 15 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 12, "y": 17, "w": 19, "h": 15 },
@@ -343,20 +343,99 @@
    },
    {
     "filename": "chara_hero 38.ase",
-    "frame": { "x": 112, "y": 65, "w": 15, "h": 16 },
+    "frame": { "x": 104, "y": 80, "w": 15, "h": 16 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 15, "y": 16, "w": 15, "h": 16 },
     "sourceSize": { "w": 48, "h": 48 },
     "duration": 100
+   },
+   {
+    "filename": "chara_hero 39.ase",
+    "frame": { "x": 62, "y": 42, "w": 8, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 20, "w": 8, "h": 7 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 40.ase",
+    "frame": { "x": 94, "y": 53, "w": 8, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 20, "w": 8, "h": 7 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 41.ase",
+    "frame": { "x": 119, "y": 80, "w": 8, "h": 13 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 20, "y": 18, "w": 8, "h": 13 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 42.ase",
+    "frame": { "x": 0, "y": 0, "w": 22, "h": 23 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 13, "y": 13, "w": 22, "h": 23 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 43.ase",
+    "frame": { "x": 46, "y": 100, "w": 13, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 18, "y": 17, "w": 13, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 44.ase",
+    "frame": { "x": 59, "y": 100, "w": 12, "h": 14 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 18, "y": 20, "w": 12, "h": 14 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 45.ase",
+    "frame": { "x": 42, "y": 57, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
+   },
+   {
+    "filename": "chara_hero 46.ase",
+    "frame": { "x": 94, "y": 63, "w": 16, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 16, "y": 16, "w": 16, "h": 16 },
+    "sourceSize": { "w": 48, "h": 48 },
+    "duration": 100
    }
  ],
  "meta": {
-  "app": "http://www.aseprite.org/",
-  "version": "1.2.16.3-x64",
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.35-x64",
   "image": "chara_hero.bmp",
   "format": "I8",
-  "size": { "w": 128, "h": 99 },
-  "scale": "1"
+  "size": { "w": 128, "h": 114 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
  }
 }

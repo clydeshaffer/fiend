@@ -396,20 +396,27 @@ void draw_enemies() {
         if(enemy->mode != ENEMY_STATE_INACTIVE) {
             if(enemy->on_screen) {
                     LD_enemy_index(i);
-                    if(enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_SKELETON_BOSS || enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_CULTIST_BOSS) {
-                        QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
-                        (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
-                        ((tempEnemy.anim_frame >> 2) & 7) + (tempEnemy.anim_dir << 1) + anim_state_offsets_big[tempEnemy.mode],
-                        tempEnemy.anim_flip,
-                        GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                    if(tempEnemy.mode == ENEMY_STATE_ITEM) {
+                        QueuePackedSprite(&HeroFrames,
+                            (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
+                            tempEnemy.anim_frame,
+                            0,
+                            GRAM_PAGE(1) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
                     } else {
-                        QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
-                        (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
-                        ((tempEnemy.anim_frame >> 2) & 3) + tempEnemy.anim_dir + anim_state_offsets[tempEnemy.mode],
-                        tempEnemy.anim_flip,
-                        GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                        if(enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_SKELETON_BOSS || enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_CULTIST_BOSS) {
+                            QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
+                            (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
+                            ((tempEnemy.anim_frame >> 2) & 7) + (tempEnemy.anim_dir << 1) + anim_state_offsets_big[tempEnemy.mode],
+                            tempEnemy.anim_flip,
+                            GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                        } else {
+                            QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
+                            (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
+                            ((tempEnemy.anim_frame >> 2) & 3) + tempEnemy.anim_dir + anim_state_offsets[tempEnemy.mode],
+                            tempEnemy.anim_flip,
+                            GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                        }
                     }
-                    ST_enemy_index(i);
                 } 
         }
         ++enemy;
@@ -469,17 +476,21 @@ void check_player_attack(char hitsize) {
     }
 }
 
+char player_dist_check(char dist) {
+    temp1 = player_x.i - tempEnemy.x.i;
+    temp2 = player_y.i - tempEnemy.y.i;
+    if(temp1 < 0) {
+        temp1 = -temp1;
+    }
+    if(temp2 < 0) {
+        temp2 = -temp2;
+    }
+    return (temp1 + temp2) < dist;
+}
+
 void check_impact_attack(char dist) {
     if(!((player_anim_state == PLAYER_STATE_HITSTUN) || (player_anim_state == PLAYER_STATE_DEAD))) {
-        temp1 = player_x.i - tempEnemy.x.i;
-        temp2 = player_y.i - tempEnemy.y.i;
-        if(temp1 < 0) {
-            temp1 = -temp1;
-        }
-        if(temp2 < 0) {
-            temp2 = -temp2;
-        }
-        if(temp1 + temp2 < dist) {
+        if(player_dist_check(dist)) {
             player_anim_state = PLAYER_STATE_HITSTUN;
             player_anim_frame = 0;
             --player_health;
@@ -770,6 +781,10 @@ unsigned char update_enemies() {
                             tempEnemy.mode = ENEMY_STATE_INACTIVE;
                             if(i < (MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS)) {
                                 --enemy_count;
+                                if(!(rnd() & 7)) {
+                                    tempEnemy.mode = ENEMY_STATE_ITEM;
+                                    tempEnemy.anim_frame = ITEM_TYPE_HEART;
+                                }
                                 if(enemy_count == 0) {
                                     open_gates();
                                     if(ignoreCamera) {
@@ -857,6 +872,16 @@ unsigned char update_enemies() {
                 if(type != ENEMY_TYPE_CULTIST_BOSS)
                     check_player_attack((flags & EFLAGS_LARGE) ? RANGE_LARGE_HURTBOX : RANGE_HURTBOX);
                 break; //out of enemy state attack
+            case ENEMY_STATE_ITEM:
+                if(player_dist_check(RANGE_IMPACT)) {
+                    if(player_health < player_max_health) {
+                        ++player_health;
+                    }
+                    tempEnemy.mode = ENEMY_STATE_INACTIVE;
+                    pause_music();
+                    play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
+                }
+                break; //out of enemy_state_item
             }
             ST_enemy_index(i);
         } else {

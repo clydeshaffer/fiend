@@ -10,10 +10,6 @@
 #include "level.h"
 #include "banking.h"
 
-extern const unsigned char* HudSprites;
-extern const unsigned char* HeroSprites;
-extern const unsigned char* PauseScreen;
-
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
 
@@ -51,12 +47,8 @@ void updateInputs(){
 unsigned char game_state = GAME_STATE_TITLE;
 unsigned char game_over_timer = 256;
 
-#define PLAYER_MAX_HEALTH 3
-
 #define PLAYER_START_X 48
 #define PLAYER_START_Y 48
-
-extern const Frame* HeroFrames;
 
 unsigned char go_to_next_level = 0;
 
@@ -82,7 +74,7 @@ void init_game_state(unsigned char new_state) {
         player_health = 0;
         init_level(0);
         ChangeRomBank(BANK_COMMON);
-        play_track(MUSIC_TRACK_TITLE, 0);
+        play_track(MUSIC_TRACK_TITLE, REPEAT_NONE);
     } else if(new_state == GAME_STATE_PLAY) {
         player_dir_x = 0;
         player_dir_y = 128;
@@ -92,7 +84,8 @@ void init_game_state(unsigned char new_state) {
             next_level();
             ChangeRomBank(BANK_COMMON);
         }
-        player_health = PLAYER_MAX_HEALTH;
+        player_max_health = INITIAL_MAX_HEALTH;
+        player_health = INITIAL_MAX_HEALTH;
 
         camera_x.i = player_x.i - 512;
         camera_y.i = player_y.i - 512;
@@ -103,9 +96,9 @@ void init_game_state(unsigned char new_state) {
             }
         }
         if(game_state == GAME_STATE_ENDSCREEN)
-            play_track(MUSIC_TRACK_END, 0);
+            play_track(MUSIC_TRACK_END, REPEAT_NONE);
         else 
-            play_track(music_for_level(), 1);
+            play_track(music_for_level(), REPEAT_LOOP);
     }
 }
 
@@ -122,7 +115,7 @@ void draw_hud() {
         SET_RECT((i << 3) + 4, 10, 8, 8, 88, 120, 0, bankflip)
         QueueSpriteRect();
     }
-    for(;i < PLAYER_MAX_HEALTH; ++i) {
+    for(;i < player_max_health; ++i) {
         SET_RECT((i<<3)+4, 10, 8,8, 96, 120, 0, bankflip)
         QueueSpriteRect();
     }
@@ -262,7 +255,7 @@ void main() {
                 if(player_anim_frame == 24) {
                     player_anim_state = PLAYER_STATE_NEUTRAL;
                     if(player_health == 0) {
-                        play_track(MUSIC_TRACK_DIED, 0);
+                        play_track(MUSIC_TRACK_DIED, REPEAT_NONE);
                         player_anim_state = PLAYER_STATE_DEAD;
                         player_anim_frame = 0;
                         game_over_timer = 255;
@@ -297,7 +290,7 @@ void main() {
                     i = 1;
                 } else if(inputs & INPUT_MASK_B & ~last_inputs) {
                     if((tile_at(player_x.i, player_y.i) == STAIRS_TILE) || (inputs & INPUT_MASK_START)) {
-                        play_track(MUSIC_TRACK_STAIRS, 0);
+                        play_track(MUSIC_TRACK_STAIRS, REPEAT_NONE);
                         game_state = GAME_STATE_FADEOUT;
                         go_to_next_level = 1;
                         game_over_timer = 0;

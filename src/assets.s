@@ -1,6 +1,7 @@
     .export _SineTable, _BossMap, _PauseScreen
     .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02, _Tileset_03
-    .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _DiedMusic, _StairsMusic, _BossMusic, _BossMusic2, _EndMusic
+    .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _BossMusic, _BossMusic2, _EndMusic
+    .export _DiedMusic, _StairsMusic, _PickupMusic, _FanfareMusic
     .export _MainMusic, _SecondMusic, _ThirdMusic, _FourthMusic
     .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC, _EnemyFrames_SNIPER, _EnemyFrames_ARROW
     .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC, _EnemySprites_SNIPER, _EnemySprites_ARROW
@@ -60,6 +61,12 @@ _BossMusic2:
 
 _EndMusic:
     .incbin "end.gtm2"
+
+_PickupMusic:
+    .incbin "pickup.gtm2"
+
+_FanfareMusic:
+    .incbin "fanfare.gtm2"
 
 _HeroFrames:
     .incbin "chara_hero.gsi"

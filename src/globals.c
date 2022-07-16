@@ -12,3 +12,4 @@ unsigned char player_anim_dir = 4;
 unsigned char player_anim_flip = 0;
 unsigned char player_health = 0;
 unsigned char player_anim_state = PLAYER_STATE_NEUTRAL;
+unsigned char player_max_health = INITIAL_MAX_HEALTH;

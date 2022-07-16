@@ -64,4 +64,9 @@ extern unsigned char queue_flags_param; //defined in draw_util.s
 
 extern Frame rect; //Defined in draw_util.s
 
+extern const unsigned char* HudSprites;
+extern const unsigned char* HeroSprites;
+extern const unsigned char* PauseScreen;
+extern const Frame* HeroFrames;
+
 #endif

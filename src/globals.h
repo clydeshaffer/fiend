@@ -5,6 +5,7 @@
 #define PLAYER_STATE_HITSTUN 2
 #define PLAYER_STATE_SPELLCAST 3
 #define PLAYER_STATE_DEAD 4
+#define INITIAL_MAX_HEALTH 3
 
 extern int temp1;
 extern int temp2;
@@ -20,3 +21,4 @@ extern unsigned char player_anim_flip;
 extern unsigned char player_health;
 extern unsigned char player_anim_state;
 extern unsigned char romBankMirror;
+extern unsigned char player_max_health;
