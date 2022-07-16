@@ -136,10 +136,74 @@ void print_floor_number() {
     }
 }
 
+void fill_local_map() {
+    static unsigned char i, j, k;
+    static char *tmpptr_char, *tmpptr_char2;
+    *vram_VX = 0;
+    *vram_VY = 0;
+    *vram_GX = 0;
+    *vram_GY = 128;
+    *vram_WIDTH = 1;
+    *vram_HEIGHT = 1;
+    *vram_START = 1;
+    *vram_START = 0;
+    flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
+    banksMirror = bankflip;
+    *dma_flags = flagsMirror;
+    *bank_reg = banksMirror;
+    cursorX = camera_x.b.msb;
+    cursorY = camera_y.b.msb;
+    tmpptr_char = &vram[(cursorY << 7) + cursorX];
+    tmpptr_char2 = &tiles[(cursorY << 5) + cursorX];
+    for(i = 0; i < 5; ++i) {
+        for(j = 0; j < 5; ++j) {
+            k = *tmpptr_char2;
+            if(k & GROUND_TILE) {
+                *tmpptr_char = (k == STAIRS_TILE) ? 28 : 75;
+            }
+            ++tmpptr_char;
+            ++tmpptr_char2;
+        }
+        tmpptr_char2 += 27;
+        tmpptr_char += 123;
+    }
+}
+
+void fill_whole_map() {
+    unsigned char i, j, k;
+    char *tmpptr_char, *tmpptr_char2;
+    *vram_VX = 0;
+    *vram_VY = 0;
+    *vram_GX = 0;
+    *vram_GY = 128;
+    *vram_WIDTH = 1;
+    *vram_HEIGHT = 1;
+    *vram_START = 1;
+    *vram_START = 0;
+    flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
+    banksMirror = bankflip;
+    *dma_flags = flagsMirror;
+    *bank_reg = banksMirror;
+    cursorX = camera_x.b.msb;
+    cursorY = camera_y.b.msb;
+    tmpptr_char = vram;
+    tmpptr_char2 = tiles;
+    for(i = 0; i < MAP_H; ++i) {
+        for(j = 0; j < MAP_W; ++j) {
+            k = *tmpptr_char2;
+            if(k & GROUND_TILE) {
+                *tmpptr_char = (k == STAIRS_TILE) ? 28 : 75;
+            }
+            ++tmpptr_char;
+            ++tmpptr_char2;
+        }
+        tmpptr_char += 96;
+    }
+}
+
 void main() {
     unsigned char i, j, k;
     unsigned int tx, ty;
-    char *tmpptr_char, *tmpptr_char2;
     asm ("SEI");
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_COLORFILL_ENABLE;
@@ -466,43 +530,24 @@ void main() {
         } else if(game_state == GAME_STATE_PLAY) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;
-            if(tile_at(player_x.i, player_y.i) == STAIRS_TILE) {
-                cursorX = 0;
+            if(temp_msg_counter > 0) {
+                cursorX = 1;
                 cursorY = 108;
-                print("press b to enter");
-            }
-            *vram_VX = 0;
-            *vram_VY = 0;
-            *vram_GX = 0;
-            *vram_GY = 128;
-            *vram_WIDTH = 1;
-            *vram_HEIGHT = 1;
-            *vram_START = 1;
-            *vram_START = 0;
-            flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
-            banksMirror = bankflip;
-            *dma_flags = flagsMirror;
-            *bank_reg = banksMirror;
-            cursorX = camera_x.b.msb;
-            cursorY = camera_y.b.msb;
-            tmpptr_char = &vram[(cursorY << 7) + cursorX];
-            tmpptr_char2 = &tiles[(cursorY << 5) + cursorX];
-            via[ORB] = 0x80;
-            via[ORB] = 0x04;
-            for(i = 0; i < 5; ++i) {
-                for(j = 0; j < 5; ++j) {
-                    k = *tmpptr_char2;
-                    if(k & GROUND_TILE) {
-                        *tmpptr_char = (k == STAIRS_TILE) ? 28 : 75;
-                    }
-                    ++tmpptr_char;
-                    ++tmpptr_char2;
+                print(message_string);
+                --temp_msg_counter;
+            } else {
+                if(tile_at(player_x.i, player_y.i) == STAIRS_TILE) {
+                    cursorX = 1;
+                    cursorY = 108;
+                    print("press b to enter");
                 }
-                tmpptr_char2 += 27;
-                tmpptr_char += 123;
             }
-            via[ORB] = 0x80;
-            via[ORB] = 0x44;
+            if(do_fill_map) {
+                do_fill_map = 0;
+                fill_whole_map();
+            } else {
+                fill_local_map();
+            }
         } else if(game_state == GAME_STATE_PAUSED) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;

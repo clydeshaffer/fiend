@@ -15,7 +15,11 @@ MobState tempEnemy;
 
 MobState enemies[MAX_ENEMIES];
 
+char *mapMessage = "map filled";
+char *maxHpMessage = "hearts increased";
+
 unsigned char enemy_count = 0;
+unsigned char drop_counter = 16;
 
 unsigned char enemy_type_slots[ENEMY_TYPE_NUM_SLOTS];
 unsigned char enemy_type_used_slots = 0;
@@ -781,9 +785,16 @@ unsigned char update_enemies() {
                             tempEnemy.mode = ENEMY_STATE_INACTIVE;
                             if(i < (MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS)) {
                                 --enemy_count;
-                                if(!(rnd() & 7)) {
+                                if(drop_counter == 0) {
                                     tempEnemy.mode = ENEMY_STATE_ITEM;
-                                    tempEnemy.anim_frame = ITEM_TYPE_HEART;
+                                    tempEnemy.anim_frame = (rnd()&1) ? ITEM_TYPE_MAXHP : ITEM_TYPE_MAP;
+                                    drop_counter = rnd_range(4,16);
+                                } else {
+                                    --drop_counter;
+                                    if(!(rnd() & 7)) {
+                                        tempEnemy.mode = ENEMY_STATE_ITEM;
+                                        tempEnemy.anim_frame = ITEM_TYPE_HEART;
+                                    }
                                 }
                                 if(enemy_count == 0) {
                                     open_gates();
@@ -874,12 +885,30 @@ unsigned char update_enemies() {
                 break; //out of enemy state attack
             case ENEMY_STATE_ITEM:
                 if(player_dist_check(RANGE_IMPACT)) {
-                    if(player_health < player_max_health) {
-                        ++player_health;
+                    switch(tempEnemy.anim_frame) {
+                        case ITEM_TYPE_HEART:
+                        if(player_health < player_max_health) {
+                            ++player_health;
+                        }
+                        pause_music();
+                        play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
+                        break;
+                        case ITEM_TYPE_MAXHP:
+                        ++player_max_health;
+                        pause_music();
+                        temp_msg_counter = 180;
+                        message_string = maxHpMessage;
+                        play_track(MUSIC_TRACK_FANFARE, REPEAT_RESUME);
+                        break;
+                        case ITEM_TYPE_MAP:
+                        do_fill_map = 1;
+                        pause_music();
+                        play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
+                        temp_msg_counter = 180;
+                        message_string = mapMessage;
+                        break;
                     }
                     tempEnemy.mode = ENEMY_STATE_INACTIVE;
-                    pause_music();
-                    play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
                 }
                 break; //out of enemy_state_item
             }

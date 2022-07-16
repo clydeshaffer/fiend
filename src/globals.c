@@ -13,3 +13,6 @@ unsigned char player_anim_flip = 0;
 unsigned char player_health = 0;
 unsigned char player_anim_state = PLAYER_STATE_NEUTRAL;
 unsigned char player_max_health = INITIAL_MAX_HEALTH;
+unsigned char do_fill_map = 0;
+unsigned char temp_msg_counter = 0;
+char *message_string;

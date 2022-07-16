@@ -66,6 +66,7 @@ void load_enemies_for_level(char levnum) {
 }
 
 void init_level(char levnum) {
+        do_fill_map = 0;
         level_number = levnum;
         switch_tileset(levnum);
         clear_spritebank(16);

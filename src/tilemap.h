@@ -46,5 +46,6 @@ void set_tile(unsigned int pos_x, unsigned int pos_y, char tile);
 char character_tilemap_check(coordinate pos_x, coordinate pos_y);
 void draw_world();
 char find_start_tile(unsigned int* x, unsigned int* y);
+void fill_map_screen();
 
 #endif

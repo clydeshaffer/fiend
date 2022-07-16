@@ -22,3 +22,6 @@ extern unsigned char player_health;
 extern unsigned char player_anim_state;
 extern unsigned char romBankMirror;
 extern unsigned char player_max_health;
+extern unsigned char do_fill_map;
+extern unsigned char temp_msg_counter;
+extern char *message_string;
