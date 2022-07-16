@@ -8,8 +8,8 @@
 unsigned char tiles[MAP_SIZE];
 char* tmpptr_char;
 char tile_passmap[4] = { 0, 1, 0, 1};
-unsigned int camera_x = 0;
-unsigned int camera_y = 0;
+coordinate camera_x = {0};
+coordinate camera_y = {0};
 
 extern const unsigned char* TestMap;
 
@@ -235,7 +235,7 @@ void load_map(char* data) {
 }
 
 char tile_at(unsigned int pos_x, unsigned int pos_y) {
-    tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
+    tmpptr_char = tiles + (pos_x >> 8) + ((pos_y >> 8) << MAP_ORD);
     return *tmpptr_char;
 }
 
@@ -244,35 +244,31 @@ char tile_at_cell(char x, char y) {
 }
 
 void set_tile(unsigned int pos_x, unsigned int pos_y, char tile) {
-    tmpptr_char = tiles + (pos_x >> TILE_ORD) + ((pos_y >> TILE_ORD) << MAP_ORD);
+    tmpptr_char = tiles + (pos_x >> 8) + ((pos_y >> 8) << MAP_ORD);
     *tmpptr_char = tile;
 }
 
-char character_tilemap_check(unsigned int pos_x, unsigned int pos_y) {
-    static char cx, cy;
-    static int ix, iy;
-    ix = pos_x + HITBOX_X;
-    iy = pos_y + HITBOX_Y;
-    tmpptr_char = tiles + (ix >> TILE_ORD) + ((iy >> TILE_ORD) << MAP_ORD);
-    cx = ix & (TILE_SIZE-1);
-    cy = iy & (TILE_SIZE-1);
+char character_tilemap_check(coordinate pos_x, coordinate pos_y) {
+    pos_x.i += HITBOX_X;
+    pos_y.i += HITBOX_Y;
+    tmpptr_char = tiles + (pos_x.b.msb) + ((pos_y.b.msb) << MAP_ORD);
     if(!(*tmpptr_char & GROUND_TILE)) {
         return 0;
     }
     ++tmpptr_char;
-    if(cx >= TILE_SIZE-HITBOX_W) {
+    if(pos_x.b.lsb >= 256-HITBOX_W) {
         if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
     tmpptr_char += MAP_W - 1;
-    if(cy >= TILE_SIZE-HITBOX_H) {
+    if(pos_y.b.lsb >= 256-HITBOX_H) {
         if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
     }
     ++tmpptr_char;
-    if((cx >= TILE_SIZE-HITBOX_W) && (cy >= TILE_SIZE-HITBOX_H)) {
+    if((pos_x.b.lsb >= 256-HITBOX_W) && (pos_y.b.lsb >= 256-HITBOX_H)) {
         if(!(*tmpptr_char & GROUND_TILE)) {
             return 0;
         }   
@@ -284,8 +280,8 @@ char find_start_tile(unsigned int* x, unsigned int* y) {
     unsigned int i;
     for(i = 0; i < MAP_SIZE; ++i) {
         if((tiles[i] & SPECIAL_TILE_MASK) == SPECIAL_TILE_START) {
-            *x = ((i & (MAP_W-1)) << 5) | 16;
-            *y = (i & ~(MAP_H-1)) | 16;
+            *x = (((i & (MAP_W-1)) << 5) | 16)<<3;
+            *y = ((i & ~(MAP_H-1)) | 16)<<3;
             return 1;
         }
     }
@@ -295,10 +291,10 @@ char find_start_tile(unsigned int* x, unsigned int* y) {
 void draw_world() {
     char r, c, tile_scroll_x, tile_scroll_y, cam_x, cam_y, r2, c2;
     int t;
-    tile_scroll_x = camera_x & (TILE_SIZE-1);
-    tile_scroll_y = camera_y & (TILE_SIZE-1);
-    cam_x = camera_x >> TILE_ORD;
-    cam_y = camera_y >> TILE_ORD;
+    tile_scroll_x = (camera_x.i >> 3) & (TILE_SIZE-1);
+    tile_scroll_y = (camera_y.i >> 3) & (TILE_SIZE-1);
+    cam_x = camera_x.b.msb;
+    cam_y = camera_y.b.msb;
 
     r = 0;
     c = 0;

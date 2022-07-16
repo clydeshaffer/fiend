@@ -39,7 +39,7 @@ void updateInputs(){
 }
 #pragma optimize(on)
 
-#define CAMERA_LIMIT 895 // (TILE_SIZE * (MAP_W - VISIBLE_W + 1)) - 1
+#define CAMERA_LIMIT 7160 // (TILE_SIZE * (MAP_W - VISIBLE_W + 1)) - 1
 
 #define GAME_STATE_TITLE 0
 #define GAME_STATE_PLAY 1
@@ -74,10 +74,10 @@ void init_game_state(unsigned char new_state) {
     game_state = new_state;
     stop_music();
     if(new_state == GAME_STATE_TITLE) {
-        player_dir_x = 1;
-        player_dir_y = 1;
-        camera_x = 64;
-        camera_y = 0;
+        player_dir_x = 8;
+        player_dir_y = 8;
+        camera_x.i = 64;
+        camera_y.i = 0;
         player_anim_frame = 0;
         player_health = 0;
         init_level(0);
@@ -85,7 +85,7 @@ void init_game_state(unsigned char new_state) {
         play_track(MUSIC_TRACK_TITLE, 0);
     } else if(new_state == GAME_STATE_PLAY) {
         player_dir_x = 0;
-        player_dir_y = 16;
+        player_dir_y = 128;
         player_anim_state = PLAYER_STATE_NEUTRAL;
         player_anim_frame = 0;
         if(player_health != 0) {
@@ -94,22 +94,25 @@ void init_game_state(unsigned char new_state) {
         }
         player_health = PLAYER_MAX_HEALTH;
 
-        camera_x = player_x - 64;
-        camera_y = player_y - 64;
+        camera_x.i = player_x.i - 512;
+        camera_y.i = player_y.i - 512;
         if(old_state == GAME_STATE_FADEOUT) {
             game_state = GAME_STATE_FADEIN;
             if(level_number == 7) {
                 game_state = GAME_STATE_ENDSCREEN;
             }
         }
-        play_track(music_for_level(), 1);
+        if(game_state == GAME_STATE_ENDSCREEN)
+            play_track(MUSIC_TRACK_END, 0);
+        else 
+            play_track(music_for_level(), 1);
     }
 }
 
 void draw_player() {
     ChangeRomBank(BANK_COMMON);
     queue_flags_param = DMA_GCARRY;
-    QueuePackedSprite(&HeroFrames, player_x - camera_x, player_y - camera_y, (3 & (player_anim_frame >> 3)) + player_anim_dir + player_state_offsets[player_anim_state], player_anim_flip, bankflip | GRAM_PAGE(1) | BANK_CLIP_X | BANK_CLIP_Y, 0);
+    QueuePackedSprite(&HeroFrames, (player_x.i - camera_x.i)>>3, (player_y.i - camera_y.i)>>3, (3 & (player_anim_frame >> 3)) + player_anim_dir + player_state_offsets[player_anim_state], player_anim_flip, bankflip | GRAM_PAGE(1) | BANK_CLIP_X | BANK_CLIP_Y, 0);
 }
 
 void draw_hud() {
@@ -143,6 +146,7 @@ void print_floor_number() {
 void main() {
     unsigned char i, j, k;
     unsigned int tx, ty;
+    char *tmpptr_char, *tmpptr_char2;
     asm ("SEI");
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_COLORFILL_ENABLE;
@@ -164,6 +168,7 @@ void main() {
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
+    
 
     ChangeRomBank(BANK_INIT);
     init_dynawave();
@@ -220,14 +225,14 @@ void main() {
             draw_world();
             ++player_anim_frame;
             if(player_anim_frame & 1) {
-                camera_x += player_dir_x;
-                if((camera_x + 32 > CAMERA_LIMIT) || (camera_x == 0)) {
+                camera_x.i += player_dir_x;
+                if((camera_x.i + 32 > CAMERA_LIMIT) || (camera_x.i == 0)) {
                     player_dir_x = -player_dir_x;
                 }
             }
 
-            camera_y += player_dir_y;
-            if((camera_y + 32 > CAMERA_LIMIT) || (camera_y == 0)) {
+            camera_y.i += player_dir_y;
+            if((camera_y.i + 32 > CAMERA_LIMIT) || (camera_y.i == 0)) {
                 player_dir_y = -player_dir_y;
             }
             if(inputs & INPUT_MASK_START) {
@@ -242,15 +247,17 @@ void main() {
         }
         else if(game_state == GAME_STATE_PLAY) {    
             i = 0;
-            tx = player_x;
-            ty = player_y;
+            tx = player_x.i;
+            ty = player_y.i;
             player_hitbox_damage = 0;
 
             if(player_anim_state == PLAYER_STATE_HITSTUN) {
                 i = 1;
-                if(character_tilemap_check(player_x - player_dir_x, player_y - player_dir_y)) {
-                    player_x -= player_dir_x;
-                    player_y -= player_dir_y;
+                player_x.i -= player_dir_x;
+                player_y.i -= player_dir_y;
+                if(character_tilemap_check(player_x, player_y)) {
+                    player_x.i += player_dir_x;
+                    player_y.i += player_dir_y;
                 }
                 if(player_anim_frame == 24) {
                     player_anim_state = PLAYER_STATE_NEUTRAL;
@@ -272,8 +279,8 @@ void main() {
                 i = 1;
 		if(level_number == 0) {
 		    if(player_anim_frame == 8)
-		    if(tile_at(player_x + player_dir_x, player_y + player_dir_y) == (GROUND_TILE | 128)) {
-		        set_tile(player_x + player_dir_x, player_y + player_dir_y, STAIRS_TILE | 128);
+		    if(tile_at(player_x.i + player_dir_x, player_y.i + player_dir_y) == (GROUND_TILE | 128)) {
+		        set_tile(player_x.i + player_dir_x, player_y.i + player_dir_y, STAIRS_TILE | 128);
 		    }
 		}
                 if(player_anim_frame == 32) {
@@ -289,7 +296,7 @@ void main() {
                     do_noise_effect(95, 12, 4);
                     i = 1;
                 } else if(inputs & INPUT_MASK_B & ~last_inputs) {
-                    if((tile_at(player_x, player_y) == STAIRS_TILE) || (inputs & INPUT_MASK_START)) {
+                    if((tile_at(player_x.i, player_y.i) == STAIRS_TILE) || (inputs & INPUT_MASK_START)) {
                         play_track(MUSIC_TRACK_STAIRS, 0);
                         game_state = GAME_STATE_FADEOUT;
                         go_to_next_level = 1;
@@ -300,38 +307,38 @@ void main() {
                         player_anim_dir = 4;
                         player_anim_flip = 0;
                         i = 1;
-                        player_x++;
-                        player_dir_x = 16;
+                        player_x.i+=8;
+                        player_dir_x = 127;
                         player_dir_y = 0;
                     } else if(inputs & INPUT_MASK_LEFT) {
                         player_anim_dir = 4;
                         player_anim_flip = SPRITE_FLIP_X;
                         i = 1;
-                        player_x--;
-                        player_dir_x = -16;
+                        player_x.i-=8;
+                        player_dir_x = -127;
                         player_dir_y = 0;
                     }
                     if(!character_tilemap_check(player_x, player_y)) {
-                        player_x = tx;
+                        player_x.i = tx;
                     }
 
                     if(inputs & INPUT_MASK_DOWN) {
                         player_anim_dir = 0;
                         player_anim_flip = 0;
                         i = 1;
-                        player_y++;
+                        player_y.i+=8;
                         player_dir_x = 0;
-                        player_dir_y = 16;
+                        player_dir_y = 127;
                     } else if(inputs & INPUT_MASK_UP) {
                         player_anim_dir = 8;
                         player_anim_flip = 0;
                         i = 1;
-                        player_y--;
+                        player_y.i-=8;
                         player_dir_x = 0;
-                        player_dir_y = -16;
+                        player_dir_y = -127;
                     }
                     if(!character_tilemap_check(player_x, player_y)) {
-                        player_y = ty;
+                        player_y.i = ty;
                     }
                 }
             }
@@ -340,24 +347,28 @@ void main() {
                 player_anim_frame++;
             }
             
-            camera_x = player_x - 64;
-            camera_y = player_y - 64;
-            if(camera_x & 0x8000) {
-                camera_x = 0;
+            camera_x.i = player_x.i - 512;
+            camera_y.i = player_y.i - 512;
+            if(camera_x.i & 0x8000) {
+                camera_x.i = 0;
             }
-            if(camera_y & 0x8000) {
-                camera_y = 0;
+            if(camera_y.i & 0x8000) {
+                camera_y.i = 0;
             }
-            if(camera_x > CAMERA_LIMIT) {
-                camera_x = CAMERA_LIMIT;
+            if(camera_x.i > CAMERA_LIMIT) {
+                camera_x.i = CAMERA_LIMIT;
             }
-            if(camera_y > CAMERA_LIMIT) {
-                camera_y = CAMERA_LIMIT;
+            if(camera_y.i > CAMERA_LIMIT) {
+                camera_y.i = CAMERA_LIMIT;
             }
 
             draw_world();
 
+            via[ORB] = 0x80;
+            via[ORB] = 0x01;
             update_enemies();
+            via[ORB] = 0x80;
+            via[ORB] = 0x41;
 
             draw_enemies();
 
@@ -412,7 +423,10 @@ void main() {
             if(inputs & INPUT_MASK_START & ~last_inputs) {
                 game_state = GAME_STATE_PLAY;
             }
-            QueueFillRect(48+(player_x>>5), 48+(player_y>>5), 1, 1, 124);
+            //QueueFillRect(48+(player_x.i>>8), 48+(player_y.i>>8), 1, 1, 124);
+            queue_flags_param = DMA_GCARRY;
+            SET_RECT(47+(player_x.b.msb), 47+(player_y.b.msb), 3, 3, 104, 120, 0, bankflip);
+            QueueSpriteRect();
         }
         
         CLB(16);
@@ -459,12 +473,10 @@ void main() {
         } else if(game_state == GAME_STATE_PLAY) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;
-            if(tile_at(player_x, player_y) == STAIRS_TILE) {
+            if(tile_at(player_x.i, player_y.i) == STAIRS_TILE) {
                 cursorX = 0;
                 cursorY = 108;
                 print("press b to enter");
-            } else {
-                print_floor_number();
             }
             *vram_VX = 0;
             *vram_VY = 0;
@@ -478,25 +490,26 @@ void main() {
             banksMirror = bankflip;
             *dma_flags = flagsMirror;
             *bank_reg = banksMirror;
-            cursorX = camera_x >> 5;
-            cursorY = camera_y >> 5;
-            temp1 = (cursorY << 7) + cursorX;
+            cursorX = camera_x.b.msb;
+            cursorY = camera_y.b.msb;
+            tmpptr_char = &vram[(cursorY << 7) + cursorX];
+            tmpptr_char2 = &tiles[(cursorY << 5) + cursorX];
+            via[ORB] = 0x80;
+            via[ORB] = 0x04;
             for(i = 0; i < 5; ++i) {
                 for(j = 0; j < 5; ++j) {
-                    k = tile_at_cell(cursorX, cursorY);
+                    k = *tmpptr_char2;
                     if(k & GROUND_TILE) {
-                        vram[temp1] = (k == STAIRS_TILE) ? 28 : 75;
+                        *tmpptr_char = (k == STAIRS_TILE) ? 28 : 75;
                     }
-                    ++cursorX;
-                    ++temp1;
+                    ++tmpptr_char;
+                    ++tmpptr_char2;
                 }
-                ++cursorY;
-                cursorX-=5;
-                temp1 += 123;
+                tmpptr_char2 += 27;
+                tmpptr_char += 123;
             }
-            if(tile_at_cell(cursorX, cursorY) & GROUND_TILE) {
-                vram[temp1] = 75;
-            }
+            via[ORB] = 0x80;
+            via[ORB] = 0x44;
         } else if(game_state == GAME_STATE_PAUSED) {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;

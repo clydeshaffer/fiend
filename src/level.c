@@ -82,13 +82,16 @@ void init_level(char levnum) {
 
         if(!find_start_tile(&player_x, &player_y)) {
             do {
-                player_x = ((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16;
-                player_y = ((((rnd() & 0x7FFF) % (MAP_H - 2)) + 1) << TILE_ORD)+16;
+                player_x.i = (((((rnd() & 0x7FFF) % (MAP_W - 2)) + 1) << TILE_ORD)+16)<<3;
+                player_y.i = (((((rnd() & 0x7FFF) % (MAP_H - 2)) + 1) << TILE_ORD)+16)<<3;
             } while(!character_tilemap_check(player_x, player_y));
         }
+        camera_x.i = player_x.i - 512;
+        camera_y.i = player_y.i - 512;
 
         clear_enemies(); 
         place_enemies();
+        update_enemies();
 }
 
 void next_level() {

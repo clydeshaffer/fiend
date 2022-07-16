@@ -9,6 +9,7 @@
 
 void LD_enemy_index(char i);
 void ST_enemy_index(char i);
+char enemy_index_on_screen(char i);
 
 MobState tempEnemy;
 
@@ -53,27 +54,27 @@ extern const Frame EnemyFrames_SKELETON;
 extern const Frame EnemyFrames_CULTIST;
 extern const Frame EnemyFrames_BAT2;
 
-#define RANGE_IMPACT 12
-#define RANGE_MELEE 18
-#define RANGE_MELEE_HITSIZE 12
-#define RANGE_SHOOT 32
-#define RANGE_ARROW 4
-#define RANGE_HURTBOX 14
-#define RANGE_LARGE_HURTBOX 24
+#define RANGE_IMPACT 96
+#define RANGE_MELEE 144
+#define RANGE_MELEE_HITSIZE 96
+#define RANGE_SHOOT 256
+#define RANGE_ARROW 32
+#define RANGE_HURTBOX 112
+#define RANGE_LARGE_HURTBOX 192
 
 //Added to coordinates when moving
 char enemy_speeds[] = {
-    1, //RAT
-    1, //SPIDER
-    1, //BAT
-    1, //ORC
-    1, //SNIPER
-    3, //ARROW
+    8, //RAT
+    8, //SPIDER
+    8, //BAT
+    8, //ORC
+    8, //SNIPER
+    24, //ARROW
     0, //GHOST
-    1, //FIREBALL
-    1, //SKELETON_BOSS
-    1, //CULTIST_BOSS
-    1, //GHOSTBAT
+    8, //FIREBALL
+    8, //SKELETON_BOSS
+    8, //CULTIST_BOSS
+    8, //GHOSTBAT
 };
 
 //Update if anim_frame & mask == 0
@@ -253,6 +254,7 @@ void init_enemy(char slot, MobState* enemy) {
     enemy->mode = ENEMY_STATE_NORMAL; //change to set on per-enemy basis
     enemy->slot = slot;
     enemy->anim_flip = SPRITE_FLIP_NONE;
+    enemy->on_screen = 0;
     switch(rnd()&3) {
         case 0:
             enemy->anim_flip = SPRITE_FLIP_X;
@@ -305,8 +307,8 @@ void clear_enemies() {
     ignoreCamera = 0;
     for(i = 0; i < MAX_ENEMIES; ++i) {
         enemies[i].mode = ENEMY_STATE_INACTIVE;
-        enemies[i].x = 0;
-        enemies[i].y = 0;
+        enemies[i].x.i = 0;
+        enemies[i].y.i = 0;
         enemies[i].anim_flip = 0;
         enemies[i].anim_dir = 0;
         enemies[i].anim_frame = 0; 
@@ -320,7 +322,7 @@ void close_wall_traps() {
         for(c = 0; c < MAP_W; ++c) {
             if((tile_at_cell(c, r) & SPECIAL_TILE_MASK) == SPECIAL_TILE_WALLTRAP)
             {
-                set_tile(c << 5, r << 5, WALL_TILE);
+                set_tile(c << 8, r << 8, WALL_TILE);
             }
         }
     }
@@ -332,7 +334,7 @@ void open_gates() {
         for(c = 0; c < MAP_W; ++c) {
             if((tile_at_cell(c, r) & SPECIAL_TILE_MASK) == SPECIAL_TILE_GATE)
             {
-                set_tile(c << 5, r << 5, GROUND_TILE);
+                set_tile(c << 8, r << 8, GROUND_TILE);
             }
         }
     }
@@ -346,8 +348,9 @@ void place_enemies() {
             if(attempt & SPECIAL_TILE_SPAWN_ENEMY) {
                 attempt = attempt & (SPECIAL_TILE_SPAWN_ENEMY-1);
                 init_enemy(attempt, &enemies[i]);
-                enemies[i].x = (c << TILE_ORD) | 16;
-                enemies[i].y = (r << TILE_ORD) | 16;
+                enemies[i].x.i = ((c << TILE_ORD) | 16)<<3;
+                enemies[i].y.i = ((r << TILE_ORD) | 16)<<3;
+                enemy_index_on_screen(i);
                 ++i;
                 ++enemy_count;
             }
@@ -355,18 +358,19 @@ void place_enemies() {
     }
     if(i == 0) {
         do {
+            i = 0;
                 //save the last three slots for projectile pool
                 for(; i < MAX_ENEMIES; ++i) {
                     enemies[i].mode = 0;
                     if(i < MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS) {
-                        enemies[i].x = (rnd() & 0b1111100000) | 16;
-                        enemies[i].y = (rnd() & 0b1111100000) | 16;
+                        enemies[i].x.i = (rnd() & 0x1F00) | 128;
+                        enemies[i].y.i = (rnd() & 0x1F00) | 128;
                         init_enemy(random_loaded_enemy_slot(), &enemies[i]);
                         attempt = 0;
-                        while((!character_tilemap_check(enemies[i].x, enemies[i].y)) ||
-                            (enemies[i].x == player_x && enemies[i].y == player_y)) {
-                            enemies[i].x = (rnd() & 0b1111100000) | 16;
-                            enemies[i].y = (rnd() & 0b1111100000) | 16;
+                     while((!character_tilemap_check(enemies[i].x, enemies[i].y)) ||
+                            (enemies[i].x.i == player_x.i && enemies[i].y.i == player_y.i)) {
+                            enemies[i].x.i = (rnd() &  0x1F00) | 128;
+                            enemies[i].y.i = (rnd() &  0x1F00) | 128;
                             attempt++;
                             if(attempt == 5) {
                                 enemies[i].mode = 0;
@@ -376,6 +380,7 @@ void place_enemies() {
                             enemy_count++;
                         }
                     }
+                    enemy_index_on_screen(i);
                 }
         } while(enemy_count == 0);
     }
@@ -384,24 +389,23 @@ void place_enemies() {
 #pragma codeseg (push, "CODE2");
 void draw_enemies() {
     unsigned char i = 0;
+    char camRIGHT = camera_x.b.msb + 5;
+    char camBOTTOM = camera_y.b.msb + 5;
     MobState *enemy = enemies;
     queue_flags_param = DMA_GCARRY;
     for(; i < MAX_ENEMIES; ++i) {
         if(enemy->mode != ENEMY_STATE_INACTIVE) {
-            if((enemy->x + 8) > (camera_x)
-                && enemy->y > camera_y
-                && enemy->x < (camera_x + 136)
-                && enemy->y < (camera_y + 128)) {
+            if(enemy->on_screen) {
                     LD_enemy_index(i);
                     if(enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_SKELETON_BOSS || enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_CULTIST_BOSS) {
                         QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
-                        tempEnemy.x - camera_x, tempEnemy.y - camera_y,
+                        (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
                         ((tempEnemy.anim_frame >> 2) & 7) + (tempEnemy.anim_dir << 1) + anim_state_offsets_big[tempEnemy.mode],
                         tempEnemy.anim_flip,
                         GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
                     } else {
                         QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
-                        tempEnemy.x - camera_x, tempEnemy.y - camera_y,
+                        (tempEnemy.x.i - camera_x.i) >> 3, (tempEnemy.y.i - camera_y.i) >> 3,
                         ((tempEnemy.anim_frame >> 2) & 3) + tempEnemy.anim_dir + anim_state_offsets[tempEnemy.mode],
                         tempEnemy.anim_flip,
                         GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
@@ -415,8 +419,8 @@ void draw_enemies() {
 
 
 void face_player() {
-    temp3 = player_x - tempEnemy.x;
-    temp4 = player_y - tempEnemy.y;
+    temp3 = player_x.i - tempEnemy.x.i;
+    temp4 = player_y.i - tempEnemy.y.i;
     temp1 = temp3;
     temp2 = temp4;
     
@@ -447,8 +451,8 @@ void face_player() {
 
 void check_player_attack(char hitsize) {
     if(player_hitbox_damage) {
-        temp1 = player_x + (player_dir_x>>1) - tempEnemy.x;
-        temp2 = player_y + (player_dir_y>>1) - tempEnemy.y;
+        temp1 = player_x.i + (player_dir_x>>1) - tempEnemy.x.i;
+        temp2 = player_y.i + (player_dir_y>>1) - tempEnemy.y.i;
         if(temp1 < 0) {
             temp1 = -temp1;
         }
@@ -468,8 +472,8 @@ void check_player_attack(char hitsize) {
 
 void check_impact_attack(char dist) {
     if(!((player_anim_state == PLAYER_STATE_HITSTUN) || (player_anim_state == PLAYER_STATE_DEAD))) {
-        temp1 = player_x - tempEnemy.x;
-        temp2 = player_y - tempEnemy.y;
+        temp1 = player_x.i - tempEnemy.x.i;
+        temp2 = player_y.i - tempEnemy.y.i;
         if(temp1 < 0) {
             temp1 = -temp1;
         }
@@ -495,8 +499,8 @@ MobState* spawn_projectile(char slot, int x, int y) {
     init_enemy(slot, newProjectile);
     enemies[nextProjectile].anim_dir = tempEnemy.anim_dir;
     enemies[nextProjectile].anim_flip = tempEnemy.anim_flip;
-    enemies[nextProjectile].x = x;
-    enemies[nextProjectile].y = y;
+    enemies[nextProjectile].x.i = x;
+    enemies[nextProjectile].y.i = y;
     ++nextProjectile;
     if(nextProjectile == MAX_ENEMIES) {
         nextProjectile = MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS;
@@ -509,10 +513,10 @@ void circle_position(int* x, int* y, char angle) {
     temp4 = SineTable[temp3];
     temp3 = (temp3 + 64) & 255;
     temp3 = SineTable[temp3];
-    *x = ((temp3 << 1) + (temp3)) >> 3;
-    *y = ((temp4 << 1) + (temp4)) >> 3;
-    *x += player_x - 48;
-    *y += player_y - 48;
+    *x = ((temp3 << 1) + (temp3));
+    *y = ((temp4 << 1) + (temp4));
+    *x += player_x.i - 384;
+    *y += player_y.i - 384;
 }
 
 void big_circle(int* x, int* y, char angle) {
@@ -520,10 +524,10 @@ void big_circle(int* x, int* y, char angle) {
     temp4 = SineTable[temp3];
     temp3 = (temp3 + 192) & 255;
     temp3 = SineTable[temp3];
-    *x = temp3 >> 1;
-    *y = temp4 >> 1;
-    *x += player_x - 64;
-    *y += player_y - 64;
+    *x = temp3 << 2;
+    *y = temp4 << 2;
+    *x += player_x.i - 512;
+    *y += player_y.i - 512;
 }
 
 unsigned char update_enemies() {
@@ -531,8 +535,8 @@ unsigned char update_enemies() {
     static char speed, type, flags, cnt, movemask, moveflags, atkflags;
     static signed char chase_offset_x = 0;
     static signed char chase_offset_y = 0;
-    int camRIGHT = camera_x + 136;
-    int camBOTTOM = camera_y + 128;
+    char camRIGHT = camera_x.b.msb + 5;
+    char camBOTTOM = camera_y.b.msb + 5;
     MobState *proj;
     MobState *enemy = &enemies[i];
     cnt = 0;
@@ -542,10 +546,11 @@ unsigned char update_enemies() {
     }
     for(; (i < MAX_ENEMIES) && (cnt < MAX_ENEMIES_PER_FRAME); ++i) {
         //Check enemy is on screen
-        if(enemy->mode && (ignoreCamera || ((enemy->x + 8) > (camera_x)
-                && enemy->y > camera_y
-                && enemy->x < camRIGHT
-                && enemy->y < camBOTTOM))) {
+        via[ORB] = 0x80;
+        via[ORB] = 0x02;
+        if(enemy->mode && (enemy_index_on_screen(i) || ignoreCamera)) {
+            via[ORB] = 0x80;
+            via[ORB] = 0x42;
             LD_enemy_index(i);
             type = enemy_type_slots[tempEnemy.slot];
             speed = enemy_speeds[type];
@@ -567,14 +572,14 @@ unsigned char update_enemies() {
             atkflags = flags & EFLAGS_ATTACK_MASK;
             switch(tempEnemy.mode) {
             case ENEMY_STATE_NORMAL:
-                temp1 = tempEnemy.x;
-                temp2 = tempEnemy.y;
+                temp1 = tempEnemy.x.i;
+                temp2 = tempEnemy.y.i;
                 ++(tempEnemy.anim_frame);
                 movemask = move_frame_mask[type];
                 if(type == ENEMY_TYPE_ORC) {
                     if(chase_offset_x == 0 && chase_offset_y == 0) {
-                        temp3 = player_x - tempEnemy.x;
-                        temp4 = player_y - tempEnemy.y;
+                        temp3 = player_x.i - tempEnemy.x.i;
+                        temp4 = player_y.i - tempEnemy.y.i;
                         if(temp3 < 0) temp3 = -temp3;
                         if(temp4 < 0) temp4 = -temp4;
                         if((temp3+temp4) < 48) {
@@ -587,64 +592,64 @@ unsigned char update_enemies() {
                     switch(moveflags) {
                     case EFLAGS_MOVETYPE_CHASE:
                         if(atkflags != EFLAGS_ATTACK_IMPACT) {
-                            player_x += chase_offset_x;
-                            player_y += chase_offset_y;
+                            player_x.i += chase_offset_x;
+                            player_y.i += chase_offset_y;
                         }
                         if(type == ENEMY_TYPE_SNIPER) {
-                            temp3 = player_x - tempEnemy.x;
-                            temp4 = player_y - tempEnemy.y;
+                            temp3 = player_x.i - tempEnemy.x.i;
+                            temp4 = player_y.i - tempEnemy.y.i;
                             if(temp3 < 0) temp3 = -temp3;
                             if(temp4 < 0) temp4 = -temp4;
                             if(temp3 < temp4) {
                                 tempEnemy.anim_dir = ANIM_DIR_SIDE;
-                                if(tempEnemy.x > player_x) {
-                                    tempEnemy.x -= speed;
+                                if(tempEnemy.x.i > player_x.i) {
+                                    tempEnemy.x.i -= speed;
                                     tempEnemy.anim_flip = SPRITE_FLIP_X;
-                                } else if(tempEnemy.x < player_x) {
-                                    tempEnemy.x += speed;
+                                } else if(tempEnemy.x.i < player_x.i) {
+                                    tempEnemy.x.i += speed;
                                     tempEnemy.anim_flip = SPRITE_FLIP_NONE;
                                 } else {
                                     face_player();
                                 }
                                 if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
-                                    tempEnemy.x = temp1;
+                                    tempEnemy.x.i = temp1;
                                 }
                             } else {
                                 tempEnemy.anim_flip = SPRITE_FLIP_NONE;
-                                if(tempEnemy.y > player_y) {
-                                    tempEnemy.y -= speed;
+                                if(tempEnemy.y.i > player_y.i) {
+                                    tempEnemy.y.i -= speed;
                                     tempEnemy.anim_dir = ANIM_DIR_UP;
-                                } else if (tempEnemy.y < player_y) {
-                                    tempEnemy.y += speed;
+                                } else if (tempEnemy.y.i < player_y.i) {
+                                    tempEnemy.y.i += speed;
                                     tempEnemy.anim_dir = ANIM_DIR_DOWN;
                                 } else {
                                     face_player();
                                 }
                                 if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
-                                    tempEnemy.y = temp2;
+                                    tempEnemy.y.i = temp2;
                                 }
                             }
                         } else {
-                            if(tempEnemy.x > player_x) {
-                                tempEnemy.x -= speed;
-                            } else if(tempEnemy.x < player_x) {
-                                tempEnemy.x += speed;
+                            if(tempEnemy.x.i > player_x.i) {
+                                tempEnemy.x.i -= speed;
+                            } else if(tempEnemy.x.i < player_x.i) {
+                                tempEnemy.x.i += speed;
                             }
                             if((~flags & EFLAGS_PHASING) && !character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
-                                tempEnemy.x = temp1;
+                                tempEnemy.x.i = temp1;
                             }
-                            if(tempEnemy.y > player_y) {
-                                tempEnemy.y -= speed;
-                            } else if (tempEnemy.y < player_y) {
-                                tempEnemy.y += speed;
+                            if(tempEnemy.y.i > player_y.i) {
+                                tempEnemy.y.i -= speed;
+                            } else if (tempEnemy.y.i < player_y.i) {
+                                tempEnemy.y.i += speed;
                             }
                             if((~flags & EFLAGS_PHASING) && !character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
-                                tempEnemy.y = temp2;
+                                tempEnemy.y.i = temp2;
                             }
                         }
                         if(atkflags != EFLAGS_ATTACK_IMPACT) {
-                            player_x -= chase_offset_x;
-                            player_y -= chase_offset_y;
+                            player_x.i -= chase_offset_x;
+                            player_y.i -= chase_offset_y;
                         }
                         if(type != ENEMY_TYPE_SNIPER) {
                             face_player();
@@ -653,16 +658,16 @@ unsigned char update_enemies() {
                     case EFLAGS_MOVETYPE_DIRECTION:
                         switch(tempEnemy.anim_dir) {
                             case ANIM_DIR_DOWN:
-                                tempEnemy.y += speed;
+                                tempEnemy.y.i += speed;
                                 break;
                             case ANIM_DIR_UP:
-                                tempEnemy.y -= speed;
+                                tempEnemy.y.i -= speed;
                                 break;
                             case ANIM_DIR_SIDE:
                                 if(tempEnemy.anim_flip) {
-                                    tempEnemy.x -= speed;
+                                    tempEnemy.x.i -= speed;
                                 } else {
-                                    tempEnemy.x += speed;
+                                    tempEnemy.x.i += speed;
                                 }
                                 break;
                         }
@@ -673,8 +678,8 @@ unsigned char update_enemies() {
                     case EFLAGS_MOVETYPE_TELEPORT:
                         if((tempEnemy.anim_frame & 63) == 0) {
                             //do {
-                                circle_position(&tempEnemy.x, &tempEnemy.y, rnd() & 255);
-                            //} while(!character_tilemap_check(tempEnemy.x, tempEnemy.y));
+                                circle_position(&tempEnemy.x.i, &tempEnemy.y.i, rnd() & 255);
+                            //} while(!character_tilemap_check(tempEnemy.x.i, tempEnemy.y.i));
                         }
                         face_player();
                         break;
@@ -682,8 +687,8 @@ unsigned char update_enemies() {
                     if(player_health > 0) {
                         switch(atkflags) {
                             case EFLAGS_ATTACK_MELEE:
-                                temp1 = player_x - tempEnemy.x;
-                                temp2 = player_y - tempEnemy.y;
+                                temp1 = player_x.i - tempEnemy.x.i;
+                                temp2 = player_y.i - tempEnemy.y.i;
                                 if(temp1 < 0) {
                                     temp1 = -temp1;
                                 }
@@ -704,7 +709,7 @@ unsigned char update_enemies() {
                                 } else if(moveflags == EFLAGS_MOVETYPE_TELEPORT) {
                                     temp1 = (tempEnemy.anim_frame > 100);
                                 } else {
-                                    temp1 = (tempEnemy.x == player_x+chase_offset_x) || (tempEnemy.y == player_y+chase_offset_y);
+                                    temp1 = (tempEnemy.x.i == player_x.i+chase_offset_x) || (tempEnemy.y.i == player_y.i+chase_offset_y);
                                 }
                                 if(temp1) {
                                     tempEnemy.mode = ENEMY_STATE_ATTACKING;
@@ -716,35 +721,35 @@ unsigned char update_enemies() {
                     }
                 }
                 check_player_attack((flags & EFLAGS_LARGE) ? RANGE_LARGE_HURTBOX : RANGE_HURTBOX);
-                chase_offset_x = tempEnemy.y - player_y;
-                chase_offset_y = player_x - tempEnemy.x;
+                chase_offset_x = tempEnemy.y.i - player_y.i;
+                chase_offset_y = player_x.i - tempEnemy.x.i;
                 break;//out of ENEMY_STATE_NORMAL
             case ENEMY_STATE_KNOCKBACK:
                 ++(tempEnemy.anim_frame);
-                temp1 = tempEnemy.x;
-                temp2 = tempEnemy.y;
+                temp1 = tempEnemy.x.i;
+                temp2 = tempEnemy.y.i;
                 temp3 = 16;
                 if(type == ENEMY_TYPE_CULTIST_BOSS) {
                     temp3 = 32;
                 }
                 switch(tempEnemy.anim_dir) {
                             case ANIM_DIR_DOWN:
-                                tempEnemy.y -= 1;
+                                tempEnemy.y.i -= 8;
                                 break;
                             case ANIM_DIR_UP:
-                                tempEnemy.y += 1;
+                                tempEnemy.y.i += 8;
                                 break;
                             case ANIM_DIR_SIDE:
                                 if(tempEnemy.anim_flip) {
-                                    tempEnemy.x += 1;
+                                    tempEnemy.x.i += 8;
                                 } else {
-                                    tempEnemy.x -= 1;
+                                    tempEnemy.x.i -= 8;
                                 }
                                 break;
                         }
                         if(!character_tilemap_check(tempEnemy.x, tempEnemy.y)) {
-                            tempEnemy.x = temp1;
-                            tempEnemy.y = temp2;
+                            tempEnemy.x.i = temp1;
+                            tempEnemy.y.i = temp2;
                         }
                 if(tempEnemy.anim_frame == temp3) {
                     if(tempEnemy.health) {
@@ -816,8 +821,8 @@ unsigned char update_enemies() {
                                     break;
                             }
                         
-                            temp1 = tempEnemy.x + temp3 - player_x;
-                            temp2 = tempEnemy.y + temp4 - player_y;
+                            temp1 = tempEnemy.x.i + temp3 - player_x.i;
+                            temp2 = tempEnemy.y.i + temp4 - player_y.i;
                             if(temp1 < 0) {
                                 temp1 = -temp1;
                             }
@@ -836,14 +841,14 @@ unsigned char update_enemies() {
                     case EFLAGS_ATTACK_PROJECTILE:
                         attack_sound_for_enemy(type);
                         if(type == ENEMY_TYPE_CULTIST_BOSS) {
-                            proj = spawn_projectile(1, tempEnemy.x, tempEnemy.y);
+                            proj = spawn_projectile(1, tempEnemy.x.i, tempEnemy.y.i);
                             big_circle(&proj->x, &proj->y, rnd()&255);
-                            proj = spawn_projectile(1, tempEnemy.x, tempEnemy.y);
+                            proj = spawn_projectile(1, tempEnemy.x.i, tempEnemy.y.i);
                             big_circle(&proj->x, &proj->y, rnd()&255);
-                            proj = spawn_projectile(1, tempEnemy.x, tempEnemy.y);
+                            proj = spawn_projectile(1, tempEnemy.x.i, tempEnemy.y.i);
                             big_circle(&proj->x, &proj->y, rnd()&255);
                         } else {
-                            spawn_projectile(tempEnemy.slot+1, tempEnemy.x, tempEnemy.y);
+                            spawn_projectile(tempEnemy.slot+1, tempEnemy.x.i, tempEnemy.y.i);
                         }
                         break;
                     }
@@ -857,6 +862,9 @@ unsigned char update_enemies() {
                 break; //out of enemy state attack
             }
             ST_enemy_index(i);
+        } else {
+            via[ORB] = 0x80;
+            via[ORB] = 0x42;
         }
         ++enemy;
     }
@@ -867,8 +875,8 @@ unsigned char update_enemies() {
 }
 
 void player_face_enemy() {
-    temp3 = player_x - tempEnemy.x;
-    temp4 = player_y - tempEnemy.y;
+    temp3 = player_x.i - tempEnemy.x.i;
+    temp4 = player_y.i - tempEnemy.y.i;
     temp1 = temp3;
     temp2 = temp4;
     
@@ -882,12 +890,12 @@ void player_face_enemy() {
         if(temp3 < 0) {
             player_anim_dir = 4;
             player_anim_flip = 0;
-            player_dir_x = 1;
+            player_dir_x = 8;
             player_dir_y = 0;
         } else {
             player_anim_dir = 4;
             player_anim_flip = SPRITE_FLIP_X;
-            player_dir_x = -1;
+            player_dir_x = -8;
             player_dir_y = 0;
         }
     } else {
@@ -895,12 +903,12 @@ void player_face_enemy() {
             player_anim_flip = 0;
             player_anim_dir = 0;
             player_dir_x = 0;
-            player_dir_y = 1;
+            player_dir_y = 8;
         } else {
             player_anim_flip = 0;
             player_anim_dir = 8;
             player_dir_x = 0;
-            player_dir_y = -1;
+            player_dir_y = -8;
         }
     }
 }

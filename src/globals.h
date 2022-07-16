@@ -1,3 +1,5 @@
+#include "coordinate.h"
+
 #define PLAYER_STATE_NEUTRAL 0
 #define PLAYER_STATE_ATTACK 1
 #define PLAYER_STATE_HITSTUN 2
@@ -8,7 +10,7 @@ extern int temp1;
 extern int temp2;
 extern int temp3;
 extern int temp4;
-extern unsigned int player_x, player_y;
+extern coordinate player_x, player_y;
 extern unsigned char player_state_offsets[5];
 extern signed char player_dir_x, player_dir_y;
 extern unsigned char player_hitbox_damage;

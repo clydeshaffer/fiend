@@ -1,6 +1,8 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 
+#include "coordinate.h"
+
 #define MAX_ENEMIES 32
 #define MAX_ENEMIES_PER_FRAME 3
 #define ENEMY_TYPE_NUM_SLOTS 6
@@ -49,8 +51,8 @@
 
 typedef struct MobState {
     unsigned char anim_frame, anim_dir, anim_flip, mode;
-    int x, y;
-    unsigned char health, slot, a, b, c, d, e, f;
+    coordinate x, y;
+    unsigned char health, slot, on_screen, b, c, d, e, f;
 } MobState;
 
 extern MobState enemies[MAX_ENEMIES];
