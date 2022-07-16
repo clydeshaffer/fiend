@@ -168,7 +168,7 @@ void main() {
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
-    
+
 
     ChangeRomBank(BANK_INIT);
     init_dynawave();
@@ -255,7 +255,7 @@ void main() {
                 i = 1;
                 player_x.i -= player_dir_x;
                 player_y.i -= player_dir_y;
-                if(character_tilemap_check(player_x, player_y)) {
+                if(!character_tilemap_check(player_x, player_y)) {
                     player_x.i += player_dir_x;
                     player_y.i += player_dir_y;
                 }

@@ -61,6 +61,7 @@ extern const Frame EnemyFrames_BAT2;
 #define RANGE_ARROW 32
 #define RANGE_HURTBOX 112
 #define RANGE_LARGE_HURTBOX 192
+#define RANGE_ORC_CHARGE 384
 
 //Added to coordinates when moving
 char enemy_speeds[] = {
@@ -582,7 +583,7 @@ unsigned char update_enemies() {
                         temp4 = player_y.i - tempEnemy.y.i;
                         if(temp3 < 0) temp3 = -temp3;
                         if(temp4 < 0) temp4 = -temp4;
-                        if((temp3+temp4) < 48) {
+                        if((temp3+temp4) < RANGE_ORC_CHARGE) {
                             movemask = 1;
                         }
                     }
