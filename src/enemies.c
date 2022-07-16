@@ -390,8 +390,6 @@ void place_enemies() {
 #pragma codeseg (push, "CODE2");
 void draw_enemies() {
     unsigned char i = 0;
-    char camRIGHT = camera_x.b.msb + 5;
-    char camBOTTOM = camera_y.b.msb + 5;
     MobState *enemy = enemies;
     queue_flags_param = DMA_GCARRY;
     for(; i < MAX_ENEMIES; ++i) {
@@ -536,8 +534,6 @@ unsigned char update_enemies() {
     static char speed, type, flags, cnt, movemask, moveflags, atkflags;
     static signed char chase_offset_x = 0;
     static signed char chase_offset_y = 0;
-    char camRIGHT = camera_x.b.msb + 5;
-    char camBOTTOM = camera_y.b.msb + 5;
     MobState *proj;
     MobState *enemy = &enemies[i];
     cnt = 0;
