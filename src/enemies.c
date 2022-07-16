@@ -58,7 +58,7 @@ extern const Frame EnemyFrames_BAT2;
 #define RANGE_MELEE 144
 #define RANGE_MELEE_HITSIZE 96
 #define RANGE_SHOOT 256
-#define RANGE_ARROW 32
+#define RANGE_ARROW 48
 #define RANGE_HURTBOX 112
 #define RANGE_LARGE_HURTBOX 192
 #define RANGE_ORC_CHARGE 384
