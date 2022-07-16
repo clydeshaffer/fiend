@@ -50,7 +50,7 @@
 typedef struct MobState {
     unsigned char anim_frame, anim_dir, anim_flip, mode;
     int x, y;
-    unsigned char health, slot;
+    unsigned char health, slot, a, b, c, d, e, f;
 } MobState;
 
 extern MobState enemies[MAX_ENEMIES];

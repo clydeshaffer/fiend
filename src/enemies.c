@@ -7,6 +7,9 @@
 #include "random.h"
 #include "banking.h"
 
+void LD_enemy_index(char i);
+void ST_enemy_index(char i);
+
 MobState tempEnemy;
 
 MobState enemies[MAX_ENEMIES];
@@ -389,19 +392,21 @@ void draw_enemies() {
                 && enemy->y > camera_y
                 && enemy->x < (camera_x + 136)
                 && enemy->y < (camera_y + 128)) {
-                    if(enemy_type_slots[enemy->slot] == ENEMY_TYPE_SKELETON_BOSS || enemy_type_slots[enemy->slot] == ENEMY_TYPE_CULTIST_BOSS) {
-                        QueuePackedSprite(enemyFrameData[enemy_type_slots[enemy->slot]],
-                        enemy->x - camera_x, enemy->y - camera_y,
-                        ((enemy->anim_frame >> 2) & 7) + (enemy->anim_dir << 1) + anim_state_offsets_big[enemy->mode],
-                        enemy->anim_flip,
-                        GRAM_PAGE(enemy->slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                    LD_enemy_index(i);
+                    if(enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_SKELETON_BOSS || enemy_type_slots[tempEnemy.slot] == ENEMY_TYPE_CULTIST_BOSS) {
+                        QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
+                        tempEnemy.x - camera_x, tempEnemy.y - camera_y,
+                        ((tempEnemy.anim_frame >> 2) & 7) + (tempEnemy.anim_dir << 1) + anim_state_offsets_big[tempEnemy.mode],
+                        tempEnemy.anim_flip,
+                        GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
                     } else {
-                        QueuePackedSprite(enemyFrameData[enemy_type_slots[enemy->slot]],
-                        enemy->x - camera_x, enemy->y - camera_y,
-                        ((enemy->anim_frame >> 2) & 3) + enemy->anim_dir + anim_state_offsets[enemy->mode],
-                        enemy->anim_flip,
-                        GRAM_PAGE(enemy->slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
+                        QueuePackedSprite(enemyFrameData[enemy_type_slots[tempEnemy.slot]],
+                        tempEnemy.x - camera_x, tempEnemy.y - camera_y,
+                        ((tempEnemy.anim_frame >> 2) & 3) + tempEnemy.anim_dir + anim_state_offsets[tempEnemy.mode],
+                        tempEnemy.anim_flip,
+                        GRAM_PAGE(tempEnemy.slot + 2) | bankflip | BANK_CLIP_X | BANK_CLIP_Y, 0);
                     }
+                    ST_enemy_index(i);
                 } 
         }
         ++enemy;
@@ -541,8 +546,7 @@ unsigned char update_enemies() {
                 && enemy->y > camera_y
                 && enemy->x < camRIGHT
                 && enemy->y < camBOTTOM))) {
-            //LD_tempEnemy(enemy);
-            tempEnemy = *enemy;
+            LD_enemy_index(i);
             type = enemy_type_slots[tempEnemy.slot];
             speed = enemy_speeds[type];
             if(type == ENEMY_TYPE_CULTIST_BOSS && !ignoreCamera) {
@@ -675,7 +679,6 @@ unsigned char update_enemies() {
                         face_player();
                         break;
                     } //end switch MOVETYPE
-
                     if(player_health > 0) {
                         switch(atkflags) {
                             case EFLAGS_ATTACK_MELEE:
@@ -711,7 +714,6 @@ unsigned char update_enemies() {
                                 break;
                         }
                     }
-                    
                 }
                 check_player_attack((flags & EFLAGS_LARGE) ? RANGE_LARGE_HURTBOX : RANGE_HURTBOX);
                 chase_offset_x = tempEnemy.y - player_y;
@@ -854,7 +856,7 @@ unsigned char update_enemies() {
                     check_player_attack((flags & EFLAGS_LARGE) ? RANGE_LARGE_HURTBOX : RANGE_HURTBOX);
                 break; //out of enemy state attack
             }
-            *enemy = tempEnemy;
+            ST_enemy_index(i);
         }
         ++enemy;
     }
