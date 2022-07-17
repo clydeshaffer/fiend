@@ -19,7 +19,6 @@ char *mapMessage = "map filled";
 char *maxHpMessage = "hearts increased";
 
 unsigned char enemy_count = 0;
-unsigned char drop_counter = 16;
 
 unsigned char enemy_type_slots[ENEMY_TYPE_NUM_SLOTS];
 unsigned char enemy_type_used_slots = 0;
@@ -377,7 +376,7 @@ void place_enemies() {
                             enemies[i].x.i = (rnd() &  0x1F00) | 128;
                             enemies[i].y.i = (rnd() &  0x1F00) | 128;
                             attempt++;
-                            if(attempt == 5) {
+                            if(attempt == (i < 2 ? 16 : 5)) {
                                 enemies[i].mode = 0;
                             }
                         }
@@ -785,13 +784,11 @@ unsigned char update_enemies() {
                             tempEnemy.mode = ENEMY_STATE_INACTIVE;
                             if(i < (MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS)) {
                                 --enemy_count;
-                                if(drop_counter == 0) {
+                                if((i < 2) && ignoreCamera == 0) {
                                     tempEnemy.mode = ENEMY_STATE_ITEM;
-                                    tempEnemy.anim_frame = (rnd()&1) ? ITEM_TYPE_MAXHP : ITEM_TYPE_MAP;
-                                    drop_counter = rnd_range(4,16);
+                                    tempEnemy.anim_frame = i ? ITEM_TYPE_MAXHP : ITEM_TYPE_MAP;
                                 } else {
-                                    --drop_counter;
-                                    if(!(rnd() & 7)) {
+                                    if((rnd() & 31) < 3) {
                                         tempEnemy.mode = ENEMY_STATE_ITEM;
                                         tempEnemy.anim_frame = ITEM_TYPE_HEART;
                                     }
