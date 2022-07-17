@@ -887,19 +887,16 @@ unsigned char update_enemies() {
                         if(player_health < player_max_health) {
                             ++player_health;
                         }
-                        pause_music();
                         play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
                         break;
                         case ITEM_TYPE_MAXHP:
                         ++player_max_health;
-                        pause_music();
                         temp_msg_counter = 180;
                         message_string = maxHpMessage;
                         play_track(MUSIC_TRACK_FANFARE, REPEAT_RESUME);
                         break;
                         case ITEM_TYPE_MAP:
                         do_fill_map = 1;
-                        pause_music();
                         play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
                         temp_msg_counter = 180;
                         message_string = mapMessage;

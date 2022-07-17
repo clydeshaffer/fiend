@@ -19,11 +19,12 @@ extern const unsigned char* FanfareMusic;
 unsigned char audio_amplitudes[4] = {0, 0, 0, 0};
 unsigned char* music_cursor = 0;
 unsigned char delay_counter = 0;
-unsigned char* repeat_point;
 
-unsigned char* paused_cursor;
+unsigned char* repeat_point;
+unsigned char* paused_cursor = 0;
 unsigned char paused_delay;
-unsigned char* paused_repeat_point;
+unsigned char music_mode = REPEAT_NONE;
+unsigned char repeat_resume_pending = 0;
 
 void init_music() {
     music_cursor = 0;
@@ -31,6 +32,7 @@ void init_music() {
 }
 
 void play_track(char track, char loop) {
+    char *prev_cursor = music_cursor;
     ChangeRomBank(BANK_COMMON);
     switch (track)
     {
@@ -74,17 +76,27 @@ void play_track(char track, char loop) {
         music_cursor = 0;
         break;
     }
+
     switch(loop) {
         case REPEAT_NONE:
             repeat_point = 0;
+            music_mode = REPEAT_NONE;
+            repeat_resume_pending = 0;
             break;
         case REPEAT_LOOP:
             repeat_point = music_cursor;
+            music_mode = REPEAT_LOOP;
+            repeat_resume_pending = 0;
             break;
         case REPEAT_RESUME:
-            repeat_point = paused_cursor;
+            if(!repeat_resume_pending) {
+                paused_cursor = prev_cursor;
+                paused_delay = delay_counter;
+                repeat_resume_pending = 1;
+            }
             break;
     }
+
     if(music_cursor) {
         delay_counter = *(music_cursor++);
     }
@@ -93,14 +105,13 @@ void play_track(char track, char loop) {
 void pause_music() {
     paused_cursor = music_cursor;
     paused_delay = delay_counter;
-    paused_repeat_point = repeat_point;
     music_cursor = 0;
 }
 
 void unpause_music() {
     music_cursor = paused_cursor;
     delay_counter = paused_delay;
-    repeat_point = paused_repeat_point;
+    paused_cursor = 0;
 }
 
 #pragma codeseg (push, "CODE2");
@@ -187,13 +198,16 @@ void tick_music() {
             }
             delay_counter = *(music_cursor++);
             if(delay_counter == 0) {
-                music_cursor = repeat_point;
-                if(paused_repeat_point != 0) {
-                    repeat_point = paused_repeat_point;
-                    paused_repeat_point = 0;
-                }
-                if(music_cursor) {
-                    delay_counter = *(music_cursor++);
+                if(repeat_resume_pending != 0) {
+                    repeat_resume_pending = 0;
+                    music_cursor = paused_cursor;
+                    delay_counter = paused_delay;
+                    paused_cursor = 0;
+                } else {
+                    music_cursor = repeat_point;
+                    if(music_cursor) {
+                        delay_counter = *(music_cursor++);
+                    }   
                 }
             }
         }
