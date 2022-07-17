@@ -47,6 +47,10 @@ void updateInputs(){
 unsigned char game_state = GAME_STATE_TITLE;
 unsigned char game_over_timer = 256;
 
+unsigned char stairs_known = 0;
+unsigned char stairs_x = 0;
+unsigned char stairs_y = 0;
+
 #define PLAYER_START_X 48
 #define PLAYER_START_Y 48
 
@@ -159,11 +163,21 @@ void fill_local_map() {
         for(j = 0; j < 5; ++j) {
             k = *tmpptr_char2;
             if(k & GROUND_TILE) {
-                *tmpptr_char = (k == STAIRS_TILE) ? 28 : 75;
+                if(k == STAIRS_TILE) {
+                    *tmpptr_char = 28;
+                    stairs_known = 1;
+                    stairs_x = cursorX;
+                    stairs_y = cursorY;
+                } else {
+                    *tmpptr_char = 75;
+                }
             }
+            cursorX++;
             ++tmpptr_char;
             ++tmpptr_char2;
         }
+        cursorX -= 5;
+        cursorY++;
         tmpptr_char2 += 27;
         tmpptr_char += 123;
     }
@@ -184,19 +198,29 @@ void fill_whole_map() {
     banksMirror = bankflip;
     *dma_flags = flagsMirror;
     *bank_reg = banksMirror;
-    cursorX = camera_x.b.msb;
-    cursorY = camera_y.b.msb;
+    cursorX = 0;
+    cursorY = 0;
     tmpptr_char = vram;
     tmpptr_char2 = tiles;
     for(i = 0; i < MAP_H; ++i) {
         for(j = 0; j < MAP_W; ++j) {
             k = *tmpptr_char2;
             if(k & GROUND_TILE) {
-                *tmpptr_char = (k == STAIRS_TILE) ? 28 : 75;
+                 if(k == STAIRS_TILE) {
+                    *tmpptr_char = 28;
+                    stairs_known = 1;
+                    stairs_x = cursorX;
+                    stairs_y = cursorY;
+                } else {
+                    *tmpptr_char = 75;
+                }
             }
+            cursorX++;
             ++tmpptr_char;
             ++tmpptr_char2;
         }
+        cursorX = 0;
+        cursorY++;
         tmpptr_char += 96;
     }
 }
@@ -480,8 +504,11 @@ void main() {
             if(inputs & INPUT_MASK_START & ~last_inputs) {
                 game_state = GAME_STATE_PLAY;
             }
-            //QueueFillRect(48+(player_x.i>>8), 48+(player_y.i>>8), 1, 1, 124);
             queue_flags_param = DMA_GCARRY;
+            if(stairs_known) {
+                SET_RECT(46+(stairs_x), 46+(stairs_y), 5, 5, 107, 123, 0, bankflip);
+                QueueSpriteRect();
+            }
             SET_RECT(47+(player_x.b.msb), 47+(player_y.b.msb), 3, 3, 104, 120, 0, bankflip);
             QueueSpriteRect();
         }
