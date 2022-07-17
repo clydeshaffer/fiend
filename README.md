@@ -14,9 +14,6 @@ you can flash fiend.gtr onto a 2MB GameTank cartridge, pop it into the system, a
 You can either use the [web emulator](https://clydeshaffer.com/builds/GameTankEmulator/wasm/?rom=fiend.gtr) or
 use the [desktop version](https://github.com/clydeshaffer/GameTankEmulator).
 
-Mechanically and graphically the game will perform true to hardware on the emulator, though currently the audio
-will have occasional glitches.
-
 Windows builds of the emulator are [generated nightly](https://clydeshaffer.com/builds/GameTankEmulator/latest.php), but OSX and Linux versions can be built from the GameTankEmulator
 repo.
 
