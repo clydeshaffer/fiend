@@ -16,6 +16,7 @@ extern const unsigned char* BossMusic2;
 extern const unsigned char* EndMusic;
 extern const unsigned char* PickupMusic;
 extern const unsigned char* FanfareMusic;
+extern const unsigned char* MapItemMusic;
 unsigned char audio_amplitudes[4] = {0, 0, 0, 0};
 unsigned char* music_cursor = 0;
 unsigned char delay_counter = 0;
@@ -68,9 +69,12 @@ void play_track(char track, char loop) {
         break;
     case MUSIC_TRACK_PICKUP:
         music_cursor = &PickupMusic;
-        break;;
+        break;
     case MUSIC_TRACK_FANFARE:
         music_cursor = &FanfareMusic;
+        break;
+    case MUSIC_TRACK_MAP_ITEM:
+        music_cursor = &MapItemMusic;
         break;
     default:
         music_cursor = 0;

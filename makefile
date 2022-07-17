@@ -38,7 +38,7 @@ _AUDIO_FW = audio_fw.bin.deflate
 AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
 
 _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march_loop.gtm2 spooky_loop.gtm2 \
-boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2 pickup.gtm2 fanfare.gtm2
+boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2 pickup.gtm2 fanfare.gtm2 map.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
 _BANKS = bank00 bank01 bank02 bank03 bank04 bank05 filler bank7F

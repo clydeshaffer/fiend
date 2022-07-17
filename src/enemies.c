@@ -897,7 +897,7 @@ unsigned char update_enemies() {
                         break;
                         case ITEM_TYPE_MAP:
                         do_fill_map = 1;
-                        play_track(MUSIC_TRACK_PICKUP, REPEAT_RESUME);
+                        play_track(MUSIC_TRACK_MAP_ITEM, REPEAT_RESUME);
                         temp_msg_counter = 180;
                         message_string = mapMessage;
                         break;
