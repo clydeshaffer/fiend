@@ -537,7 +537,7 @@ void main() {
                 --temp_msg_counter;
             } else {
                 if(tile_at(player_x.i, player_y.i) == STAIRS_TILE) {
-                    cursorX = 1;
+                    cursorX = 0;
                     cursorY = 108;
                     print("press b to enter");
                 }
