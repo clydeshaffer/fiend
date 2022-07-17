@@ -77,6 +77,7 @@ void init_game_state(unsigned char new_state) {
         camera_y.i = 0;
         player_anim_frame = 0;
         player_health = 0;
+        stairs_known = 0;
         init_level(0);
         ChangeRomBank(BANK_COMMON);
         play_track(MUSIC_TRACK_TITLE, REPEAT_NONE);
@@ -85,6 +86,7 @@ void init_game_state(unsigned char new_state) {
         player_dir_y = 128;
         player_anim_state = PLAYER_STATE_NEUTRAL;
         player_anim_frame = 0;
+        stairs_known = 0;
         if(player_health != 0) {
             next_level();
             ChangeRomBank(BANK_COMMON);
