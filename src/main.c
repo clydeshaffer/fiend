@@ -66,6 +66,7 @@ void init_game_state(unsigned char new_state) {
     game_state = new_state;
     stop_music();
     if(new_state == GAME_STATE_TITLE) {
+        player_max_health = INITIAL_MAX_HEALTH;
         player_dir_x = 8;
         player_dir_y = 8;
         camera_x.i = 64;
@@ -84,8 +85,7 @@ void init_game_state(unsigned char new_state) {
             next_level();
             ChangeRomBank(BANK_COMMON);
         }
-        player_max_health = INITIAL_MAX_HEALTH;
-        player_health = INITIAL_MAX_HEALTH;
+        player_health = player_max_health;
 
         camera_x.i = player_x.i - 512;
         camera_y.i = player_y.i - 512;
@@ -531,7 +531,7 @@ void main() {
             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
             *dma_flags = flagsMirror;
             if(temp_msg_counter > 0) {
-                cursorX = 1;
+                cursorX = 0;
                 cursorY = 108;
                 print(message_string);
                 --temp_msg_counter;
