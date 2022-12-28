@@ -9,6 +9,8 @@ void ChangeRomBank(unsigned char banknum) {
         return;
     romBankMirror = banknum;
     via[ORA] = 0;
+    via[ORA] = !!(banknum & 128) << 1;
+    via[ORA] |= 1;
     via[ORA] = !!(banknum & 64) << 1;
     via[ORA] |= 1;
     via[ORA] = !!(banknum & 32) << 1;

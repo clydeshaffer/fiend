@@ -27,8 +27,6 @@ _rect = $3201 ;borrow unbanked Audio RAM memory
 
 .proc	_pushRect: near
 
-.segment	"CODE"
-
     jsr     pushax
 
     ldy     _queue_end

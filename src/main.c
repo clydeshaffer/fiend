@@ -9,6 +9,7 @@
 #include "enemies.h"
 #include "level.h"
 #include "banking.h"
+#include "savegame.h"
 
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
@@ -78,7 +79,15 @@ void init_game_state(unsigned char new_state) {
         player_anim_frame = 0;
         player_health = 0;
         stairs_known = 0;
-        init_level(0);
+        level_number = 0;
+        updateInputs();
+        if(inputs & INPUT_MASK_C) {
+            clear_save();
+        }
+        if(test_save_magic_number()) {
+            load_game_vars();
+        }
+        init_level(level_number);
         ChangeRomBank(BANK_COMMON);
         play_track(MUSIC_TRACK_TITLE, REPEAT_NONE);
     } else if(new_state == GAME_STATE_PLAY) {
@@ -380,6 +389,9 @@ void main() {
                     i = 1;
                 } else if(inputs & INPUT_MASK_B & ~last_inputs) {
                     if((tile_at(player_x.i, player_y.i) == STAIRS_TILE) || (inputs & INPUT_MASK_START)) {
+                        ++level_number;
+                        save_game_vars();
+                        --level_number;
                         play_track(MUSIC_TRACK_STAIRS, REPEAT_NONE);
                         game_state = GAME_STATE_FADEOUT;
                         go_to_next_level = 1;

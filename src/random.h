@@ -9,4 +9,6 @@ int rnd();
 
 int rnd_range(int low, int high);
 
+extern int rnd_seed;
+
 #endif

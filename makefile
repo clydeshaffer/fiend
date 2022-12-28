@@ -14,7 +14,7 @@ AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
 LFLAGS = -C gametank-2M.cfg -m $(ODIR)/out.map -vm
 LLIBS = lib/gametank.lib
 
-_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o banking.o main.o
+_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o banking.o savegame.o main.o
 COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
 _AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o enemy_util.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
@@ -41,7 +41,7 @@ _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march
 boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2 pickup.gtm2 fanfare.gtm2 map.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
-_BANKS = bank00 bank01 bank02 bank03 bank04 bank05 filler bank7F
+_BANKS = bank80 bank81 bank82 bank83 bank84 bank85 filler bankFF
 BANKS = $(patsubst %,bin/fiend.gtr.%,$(_BANKS))
 
 bin/fiend.gtr: $(BANKS)
