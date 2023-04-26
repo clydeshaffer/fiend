@@ -81,7 +81,7 @@ char enemy_speeds[] = {
     8, //GHOSTBAT
 };
 
-//Values are frames times four
+//Values are frames times sixteen
 //Enemies will wait this long after attacking before returning to normal state.
 unsigned char enemy_attack_cooldown[] = {
     192, //RAT
