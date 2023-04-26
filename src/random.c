@@ -19,6 +19,14 @@ int rnd() {
     rnd_seed = xorshift16(rnd_seed);
     rnd_seed = xorshift16(rnd_seed);
     rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
+    rnd_seed = xorshift16(rnd_seed);
     return rnd_seed;
 }
 

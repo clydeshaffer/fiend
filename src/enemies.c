@@ -81,6 +81,22 @@ char enemy_speeds[] = {
     8, //GHOSTBAT
 };
 
+//Values are frames times four
+//Enemies will wait this long after attacking before returning to normal state.
+unsigned char enemy_attack_cooldown[] = {
+    192, //RAT
+    240, //SPIDER
+    192, //BAT
+    192, //ORC
+    240, //SNIPER
+    0, //ARROW
+    240, //GHOST
+    0, //FIREBALL
+    160, //SKELETON_BOSS
+    240, //CULTIST_BOSS
+    192, //GHOSTBAT
+};
+
 //Update if anim_frame & mask == 0
 unsigned char move_frame_mask[] = {
     3, //RAT
@@ -100,14 +116,16 @@ unsigned char anim_state_offsets[] = {
     0, //INACTIVE
     0, //NORMAL
     24, //KNOCKBACK
-    12 //ATTACKING
+    12, //ATTACKING
+    12, //COOLDOWN
 };
 
 unsigned char anim_state_offsets_big[] = {
     0, //INACTIVE
     0, //NORMAL
     48, //KNOCKBACK
-    24 //ATTACKING
+    24, //ATTACKING
+    24, //COOLDOWN
 };
 
 //Flags mask for mob types
@@ -164,6 +182,15 @@ const char** enemySpriteSheets[] = {
     &Multisheet_Skeleton,
     Multisheet_Cultist,
     &EnemySprites_BAT2,
+};
+
+const char guarunteed_drop_count = 5;
+const char guarunteed_drops[] = {
+    ITEM_TYPE_MAXHP,
+    ITEM_TYPE_MAP,
+    ITEM_TYPE_HEART,
+    ITEM_TYPE_HEART,
+    ITEM_TYPE_HEART,
 };
 
 const char loadSpecial[] = {
@@ -344,6 +371,19 @@ void open_gates() {
     }
 }
 
+unsigned char enemy_player_tile_manhattan_dist(unsigned char i) {
+    char dx, dy;
+    dx = player_x.b.msb - enemies[i].x.b.msb;
+    dy = player_y.b.msb - enemies[i].y.b.msb;
+    if(dx < 0) {
+        dx = -dx;
+    }
+    if(dy < 0) {
+        dy = -dy;
+    }
+    return dx + dy;
+}
+
 void place_enemies() {
     unsigned char i=0, r, c, attempt;
     for(r = 0; r < MAP_H; ++r) {
@@ -372,7 +412,7 @@ void place_enemies() {
                         init_enemy(random_loaded_enemy_slot(), &enemies[i]);
                         attempt = 0;
                      while((!character_tilemap_check(enemies[i].x, enemies[i].y)) ||
-                            (enemies[i].x.i == player_x.i && enemies[i].y.i == player_y.i)) {
+                            (enemy_player_tile_manhattan_dist(i) < 3)) {
                             enemies[i].x.i = (rnd() &  0x1F00) | 128;
                             enemies[i].y.i = (rnd() &  0x1F00) | 128;
                             attempt++;
@@ -777,16 +817,16 @@ unsigned char update_enemies() {
                             init_enemy(3, &enemies[2]);
                             player_face_enemy();
                             player_anim_frame = 0;
-                            player_anim_state == PLAYER_STATE_HITSTUN;
+                            player_anim_state = PLAYER_STATE_HITSTUN;
                             play_track(MUSIC_TRACK_BOSS2, 1);
                             enemy_count += 2;
                         } else {
                             tempEnemy.mode = ENEMY_STATE_INACTIVE;
                             if(i < (MAX_ENEMIES - RESERVED_PROJECTILE_SLOTS)) {
                                 --enemy_count;
-                                if((i < 2) && ignoreCamera == 0) {
+                                if((!ignoreCamera) && (i < guarunteed_drop_count)) {
                                     tempEnemy.mode = ENEMY_STATE_ITEM;
-                                    tempEnemy.anim_frame = i ? ITEM_TYPE_MAXHP : ITEM_TYPE_MAP;
+                                    tempEnemy.anim_frame = guarunteed_drops[i];
                                 } else {
                                     if((rnd() & 31) < 3) {
                                         tempEnemy.mode = ENEMY_STATE_ITEM;
@@ -874,12 +914,22 @@ unsigned char update_enemies() {
                     }
                 }
                 else if(tempEnemy.anim_frame == temp4) {
-                    tempEnemy.anim_frame = 0;
-                    tempEnemy.mode = ENEMY_STATE_NORMAL;                    
+                    tempEnemy.anim_frame = enemy_attack_cooldown[type] | 12;
+                    tempEnemy.mode = ENEMY_STATE_COOLDOWN;
                 }
                 if(type != ENEMY_TYPE_CULTIST_BOSS)
                     check_player_attack((flags & EFLAGS_LARGE) ? RANGE_LARGE_HURTBOX : RANGE_HURTBOX);
                 break; //out of enemy state attack
+            case ENEMY_STATE_COOLDOWN:
+                tempEnemy.anim_frame -= tempEnemy.anim_frame & 15;
+                if(tempEnemy.anim_frame == 0) {
+                    tempEnemy.mode = ENEMY_STATE_NORMAL;
+                } else {
+                    tempEnemy.anim_frame -= 16;
+                }
+                tempEnemy.anim_frame += 12;
+                check_player_attack((flags & EFLAGS_LARGE) ? RANGE_LARGE_HURTBOX : RANGE_HURTBOX);
+                break;
             case ENEMY_STATE_ITEM:
                 if(player_dist_check(RANGE_IMPACT)) {
                     switch(tempEnemy.anim_frame) {

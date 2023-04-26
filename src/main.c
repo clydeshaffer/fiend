@@ -13,6 +13,9 @@
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
 
+#define CONTROLLER_CYCLES 8
+char inputReads[CONTROLLER_CYCLES];
+
 extern void wait();
 extern void nop5();
 
@@ -22,6 +25,19 @@ void updateInputs(){
     inputsA = *gamepad_2;
     inputsA = *gamepad_1;
     inputsB = *gamepad_1;
+
+#ifdef INPUT_EXTRA
+    inputReads[2] = *gamepad_1;
+    inputReads[3] = *gamepad_1;
+    inputReads[4] = *gamepad_1;
+    inputReads[5] = *gamepad_1;
+    inputReads[6] = *gamepad_1;
+    inputReads[7] = *gamepad_1;
+    inputReads[8] = *gamepad_1;
+#endif
+
+    inputReads[0] = inputsA;
+    inputReads[1] = inputsB;
 
     last_inputs = inputs;
     inputs = ~((((int) inputsB) << 8) | inputsA);
@@ -523,10 +539,19 @@ void main() {
         }
 
         if(game_state == GAME_STATE_TITLE) {
+             flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | frameflip;
+            *dma_flags = flagsMirror;
             if(game_over_timer >= 4) {
                 draw_fade(game_over_timer);
                 game_over_timer -= 4;
             }
+#ifdef INPUT_DEBUG
+            cursorX = 0;
+            for(i = 0; i < CONTROLLER_CYCLES; ++i) {
+                cursorY = 16 + ((i & 1) << 3);
+                printHEXnum(inputReads[i]);
+            }
+#endif
         } else if(game_state == GAME_STATE_FADEOUT) {
             if(game_over_timer < 116) {
                 game_over_timer+=4;

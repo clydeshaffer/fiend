@@ -56,6 +56,8 @@ void draw_fade(unsigned char opacity);
 
 void printnum(int num);
 
+void printHEXnum(char num);
+
 void print(char* str);
 
 extern char cursorX, cursorY;

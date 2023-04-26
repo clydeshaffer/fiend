@@ -297,6 +297,24 @@ void printnum(int num) {
     }
 }
 
+void printHEXnum(char num) {
+    vram[VX] = cursorX;
+    vram[VY] = cursorY;
+    vram[GY] = SPRITE_ROW_0_F;
+    vram[WIDTH] = SPRITE_CHAR_W;
+    vram[HEIGHT] = SPRITE_CHAR_H;
+
+    vram[GX] = (num & 0xF0) >> 1;
+    vram[START] = 1;
+    wait();
+    cursorX += 8;
+    vram[VX] = cursorX;
+    vram[GX] = (num & 0x0F) << 3;
+    vram[START] = 1;
+    wait();
+    cursorX += 8;
+}
+
 void print(char* str) {
     flagsMirror &= ~DMA_COLORFILL_ENABLE;
     *dma_flags = flagsMirror;
