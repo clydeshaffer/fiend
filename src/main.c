@@ -10,6 +10,9 @@
 #include "level.h"
 #include "banking.h"
 
+extern char EpilogueText_0[];
+extern char EpilogueText_1[];
+
 int inputs = 0, last_inputs = 0;
 int inputs2 = 0, last_inputs2 = 0;
 
@@ -117,10 +120,16 @@ void init_game_state(unsigned char new_state) {
                 game_state = GAME_STATE_ENDSCREEN;
             }
         }
-        if(game_state == GAME_STATE_ENDSCREEN)
-            play_track(MUSIC_TRACK_END, REPEAT_NONE);
-        else 
+        if(game_state != GAME_STATE_ENDSCREEN)
             play_track(music_for_level(), REPEAT_LOOP);
+    }
+    if(game_state == GAME_STATE_ENDSCREEN) {
+        camera_x.i = 0;
+        camera_y.i = 0;
+        ChangeRomBank(BANK_EPILOGUE);
+        load_spritesheet(EpilogueText_0, 2);
+        load_spritesheet(EpilogueText_1, 18);
+        play_track(MUSIC_TRACK_END, REPEAT_NONE);
     }
 }
 
@@ -306,7 +315,7 @@ void main() {
         Sleep(1);
     }
 
-    init_game_state(GAME_STATE_TITLE);
+    init_game_state(GAME_STATE_ENDSCREEN);
     while(1){
         via[ORB] = 0x80;
         via[ORB] = 0x00;
@@ -607,15 +616,30 @@ void main() {
             *dma_flags = flagsMirror;
             print_floor_number();
         } else if(game_state == GAME_STATE_ENDSCREEN) {
-            cursorX = 8;
-            cursorY = 60;
-            print("fiend is slain");
-            cursorX = 64;
-            cursorY = 90;
-            print("for now");
-            if(inputs & ~last_inputs & INPUT_MASK_START) {
+            if(camera_x.b.msb < 255) {
+                camera_x.i += 48;
+            } else if(camera_y.b.msb < 128) {
+                camera_y.i += 48;
+            } else {
                 init_game_state(GAME_STATE_TITLE);
             }
+            if(camera_x.b.msb < 128) {
+                queue_flags_param = DMA_COLORFILL_ENABLE;
+                SET_RECT(1, 0, 126, 128 - camera_x.b.msb, 0, 0, ~32, bankflip | 2)
+                QueueSpriteRect();
+                queue_flags_param = DMA_GCARRY;
+                SET_RECT(1, 128 - camera_x.b.msb, 126, camera_x.b.msb, 1, 0, 0, bankflip | 2)
+            } else if(camera_x.b.msb < 255) {
+                queue_flags_param = DMA_GCARRY;
+                SET_RECT(1, 0, 126, 127, 1, camera_x.b.msb - 128, 0, bankflip | 2)
+            } else {
+                queue_flags_param = DMA_GCARRY;
+                SET_RECT(1, 0, 126, 128 - camera_y.b.msb, 1, camera_y.b.msb + 128, 0, bankflip | 2);
+            }
+            QueueSpriteRect();
+            /*if(inputs & ~last_inputs & INPUT_MASK_START) {
+                init_game_state(GAME_STATE_TITLE);
+            }*/
         }
 
         Sleep(1);

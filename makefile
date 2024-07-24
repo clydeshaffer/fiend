@@ -25,7 +25,7 @@ chara_hero.gtg.deflate chara_spider.gtg.deflate chara_bat.gtg.deflate chara_rat.
 chara_goblin_sniper.gtg.deflate projectile_arrow.gtg.deflate chara_ghost.gtg.deflate projectile_fireball.gtg.deflate \
 SkeletonMage_Red.gtg.deflate SkeletonMage_Red.gtg.1.deflate SkeletonMage_Red.gtg.2.deflate SkeletonMage_Red.gtg.3.deflate \
 Cultist_Red.gtg.deflate Cultist_Red.gtg.1.deflate Cultist_Red.gtg.2.deflate Cultist_Red.gtg.3.deflate \
-chara_bat2.gtg.deflate bossmap.gtg.deflate 
+chara_bat2.gtg.deflate bossmap.gtg.deflate end_text.gtg.deflate end_text.gtg.1.deflate
 
 BMPOBJS = $(patsubst %,$(ODIR)/assets/%,$(_BMPOBJS))
 
@@ -41,7 +41,7 @@ _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march
 boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2 pickup.gtm2 fanfare.gtm2 map.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
-_BANKS = bank00 bank01 bank02 bank03 bank04 bank05 filler bank7F
+_BANKS = bank00 bank01 bank02 bank03 bank04 bank05 bank06 filler bank7F
 BANKS = $(patsubst %,bin/fiend.gtr.%,$(_BANKS))
 
 bin/fiend.gtr: $(BANKS)

@@ -11,6 +11,7 @@
     .export _EnemyFrames_SKELETON
     .export _EnemySprites_CULTIST_0, _EnemySprites_CULTIST_1, _EnemySprites_CULTIST_2, _EnemySprites_CULTIST_3, _EnemyFrames_CULTIST
     .export _EnemyFrames_BAT2, _EnemySprites_BAT2
+    .export _EpilogueText_0, _EpilogueText_1
 
     .segment "COMMON"
 
@@ -194,3 +195,9 @@ _EnemySprites_CULTIST_3:
 
 _EnemySprites_BAT2:
     .incbin "chara_bat2.gtg.deflate"
+
+    .segment "EPILOGUE"
+_EpilogueText_0:
+    .incbin "end_text.gtg.deflate"
+_EpilogueText_1:
+    .incbin "end_text.gtg.1.deflate"
