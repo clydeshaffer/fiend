@@ -315,7 +315,7 @@ void main() {
         Sleep(1);
     }
 
-    init_game_state(GAME_STATE_ENDSCREEN);
+    init_game_state(GAME_STATE_TITLE);
     while(1){
         via[ORB] = 0x80;
         via[ORB] = 0x00;
