@@ -259,16 +259,16 @@ void main() {
 
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_COLORFILL_ENABLE;
     *dma_flags = flagsMirror;
-    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 16);
+    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 32);
     wait();
-    FillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-1, 16);
+    FillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-1, 32);
     wait();
     flagsMirror = DMA_NMI | DMA_ENABLE | DMA_IRQ | DMA_OPAQUE | DMA_PAGE_OUT | DMA_COLORFILL_ENABLE;
     *dma_flags = flagsMirror;
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
-    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 16);
+    FillRect(0, SCREEN_HEIGHT-1, SCREEN_WIDTH - 1, 1, 32);
     wait();
-    FillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-1, 16);
+    FillRect(SCREEN_WIDTH-1, 0, 1, SCREEN_HEIGHT-1, 32);
     wait();
     *dma_flags = DMA_NMI | DMA_CPU_TO_VRAM;
     *bank_reg = 0;
@@ -315,7 +315,7 @@ void main() {
         Sleep(1);
     }
 
-    init_game_state(GAME_STATE_ENDSCREEN);
+    init_game_state(GAME_STATE_TITLE);
     while(1){
         via[ORB] = 0x80;
         via[ORB] = 0x00;
@@ -540,7 +540,7 @@ void main() {
             QueueSpriteRect();
         }
         
-        CLB(16);
+        CLB(32);
 
         while(queue_pending != 0) {
             asm("CLI");
@@ -637,9 +637,6 @@ void main() {
                 SET_RECT(1, 0, 126, 127 - camera_y.b.msb, 1, camera_y.b.msb + 128, 0, bankflip | 2);
             }
             QueueSpriteRect();
-            /*if(inputs & ~last_inputs & INPUT_MASK_START) {
-                init_game_state(GAME_STATE_TITLE);
-            }*/
         }
 
         Sleep(1);
