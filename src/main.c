@@ -315,7 +315,7 @@ void main() {
         Sleep(1);
     }
 
-    init_game_state(GAME_STATE_TITLE);
+    init_game_state(GAME_STATE_ENDSCREEN);
     while(1){
         via[ORB] = 0x80;
         via[ORB] = 0x00;
@@ -634,7 +634,7 @@ void main() {
                 SET_RECT(1, 0, 126, 127, 1, camera_x.b.msb - 128, 0, bankflip | 2)
             } else {
                 queue_flags_param = DMA_GCARRY;
-                SET_RECT(1, 0, 126, 128 - camera_y.b.msb, 1, camera_y.b.msb + 128, 0, bankflip | 2);
+                SET_RECT(1, 0, 126, 127 - camera_y.b.msb, 1, camera_y.b.msb + 128, 0, bankflip | 2);
             }
             QueueSpriteRect();
             /*if(inputs & ~last_inputs & INPUT_MASK_START) {
