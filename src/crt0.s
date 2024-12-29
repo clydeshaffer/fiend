@@ -5,7 +5,7 @@
 ; Startup code for cc65 (GameTank version)
 
 .export   _init, _exit
-.import   _main
+.import   _main, _sdk_init
 
 .export   __STARTUP__ : absolute = 1        ; Mark as startup
 .import   __RAM_START__, __RAM_SIZE__       ; Linker generated
@@ -42,12 +42,10 @@ IER = $E
 _init:    LDX     #$FF                 ; Initialize stack pointer to $01FF
           TXS
           CLD                          ; Clear decimal mode
-
     ldx #0
 viaWakeup:
 	inx
 	bne viaWakeup
-	
 	LDA #40
 	STA BankReg
 	STA $1FFF
@@ -79,7 +77,10 @@ viaWakeup:
 
 ; ---------------------------------------------------------------------------
 ; Call main()
-
+		  lda #$00
+		  sta _romBankMirror
+		  jsr ShiftHighBits
+          JSR     _sdk_init
           JSR     _main
 
 ; ---------------------------------------------------------------------------

@@ -9,14 +9,14 @@ ODIR = build
 
 PORT = COM3
 
-CFLAGS = -t none -Osr --cpu 65c02 --codesize 500 --static-locals
-AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets
-LFLAGS = -C gametank-2M.cfg -m $(ODIR)/out.map -vm
+CFLAGS = -t none -Osr --cpu 65c02 --codesize 500 --static-locals -I src/gt -g
+AFLAGS = --cpu 65C02 --bin-include-dir lib --bin-include-dir $(ODIR)/assets -g
+LFLAGS = -C gametank-2M.cfg -m $(ODIR)/out.map -vm --dbgfile $(ODIR)/sourcemap.dbg
 LLIBS = lib/gametank.lib
 
-_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o banking.o main.o
+_COBJS = globals.o gametank.o dynawave.o drawing_funcs.o tilemap.o random.o music.o enemies.o level.o banking.o init.o main.o
 COBJS = $(patsubst %,$(ODIR)/%,$(_COBJS))
-_AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o enemy_util.o
+_AOBJS = assets.o wait.o vectors.o interrupt.o draw_util.o enemy_util.o draw_logo.o crt0.o
 AOBJS = $(patsubst %,$(ODIR)/%,$(_AOBJS))
 
 _BMPOBJS = hud_graphics.gtg.deflate \
@@ -38,7 +38,7 @@ _AUDIO_FW = audio_fw.bin.deflate
 AUDIO_FW = $(patsubst %,$(ODIR)/assets/%,$(_AUDIO_FW))
 
 _MUSIC = title.gtm2 died.gtm2 fiend_loop.gtm2 stairs.gtm2 darker_loop.gtm2 march_loop.gtm2 spooky_loop.gtm2 \
-boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2 pickup.gtm2 fanfare.gtm2 map.gtm2
+boss_loop.gtm2 boss_loop_p2.gtm2 end.gtm2 pickup.gtm2 fanfare.gtm2 map.gtm2 jingle.gtm2
 MUSIC = $(patsubst %,$(ODIR)/assets/%,$(_MUSIC))
 
 _BANKS = bank00 bank01 bank02 bank03 bank04 bank05 bank06 filler bank7F
@@ -71,9 +71,9 @@ $(ODIR)/%.o: src/%.s
 	mkdir -p $(@D)
 	$(AS) $(AFLAGS) -o $@ $<
 
-lib/gametank.lib: src/crt0.s
-	$(AS) src/crt0.s -o build/crt0.o
-	ar65 a lib/gametank.lib build/crt0.o
+#lib/gametank.lib: src/crt0.s
+#	$(AS) src/crt0.s -o build/crt0.o
+#	ar65 a lib/gametank.lib build/crt0.o
 
 $(ODIR)/assets/%.gtg: assets/%.bmp
 	mkdir -p $(@D)
@@ -105,6 +105,7 @@ $(ODIR)/assets/audio_fw.bin: src/audio_fw.asm gametank-acp.cfg
 
 clean:
 	rm -rf $(ODIR)/*
+	rm -rf bin/*
 
 flash: $(BANKS)
 	$(FLASHTOOL) bin/fiend.gtr.bank*

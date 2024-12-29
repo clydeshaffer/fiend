@@ -17,6 +17,7 @@ extern const unsigned char* EndMusic;
 extern const unsigned char* PickupMusic;
 extern const unsigned char* FanfareMusic;
 extern const unsigned char* MapItemMusic;
+extern const unsigned char* ConsoleJingle;
 unsigned char audio_amplitudes[4] = {0, 0, 0, 0};
 unsigned char* music_cursor = 0;
 unsigned char delay_counter = 0;
@@ -75,6 +76,9 @@ void play_track(char track, char loop) {
         break;
     case MUSIC_TRACK_MAP_ITEM:
         music_cursor = &MapItemMusic;
+        break;
+    case MUSIC_TRACK_CONSOLE_JINGLE:
+        music_cursor = &ConsoleJingle;
         break;
     default:
         music_cursor = 0;

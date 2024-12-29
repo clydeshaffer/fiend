@@ -277,16 +277,12 @@ void main() {
     *bank_reg = BANK_SECOND_FRAMEBUFFER;
     vram[SCREEN_HEIGHT*SCREEN_WIDTH-1] = 0;
 
-
-    ChangeRomBank(BANK_INIT);
-    init_dynawave();
-    init_music();
-
     frameflip = 0;
     flagsMirror = DMA_NMI | DMA_IRQ | frameflip;
     bankflip = BANK_SECOND_FRAMEBUFFER;
     banksMirror = bankflip;
 
+    ChangeRomBank(BANK_INIT);
     load_spritesheet(&HudSprites, 0);
     load_spritesheet(&HeroSprites, 1);
     load_spritesheet(&PauseScreen, 8);

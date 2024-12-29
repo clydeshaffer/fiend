@@ -1,6 +1,7 @@
 #include <zlib.h>
 #include "dynawave.h"
 #include "gametank.h"
+#include "banking.h"
 
 char pitch_table[216] = {
     0x00, 0x4D, 0x00, 0x51, 0x00, 0x56, 0x00, 0x5B, 0x00, 0x61, 0x00, 0x66, 0x00, 0x6C, 0x00, 0x73, 0x00, 0x7A, 0x00, 0x81, 0x00, 0x89, 0x00, 0x91,
@@ -22,6 +23,7 @@ void wait();
 
 void init_dynawave()
 {
+    ChangeRomBank(BANK_INIT);
     *audio_rate = 0x7F;
 
     inflatemem(aram, &DynaWave);
@@ -35,6 +37,7 @@ void init_dynawave()
     }
     wavetable_page = 0x3000;
     wavetable_page += *WAVE_TABLE_LOCATION;
+    ChangeRomBank(BANK_COMMON);
 }
 
 void push_audio_param(char param, char value) {

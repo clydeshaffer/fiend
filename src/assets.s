@@ -2,6 +2,7 @@
     .export _HudSprites, _Tileset_00, _Tileset_01, _Tileset_02, _Tileset_03
     .export _HeroSprites, _HeroFrames, _DynaWave, _TitleMusic, _BossMusic, _BossMusic2, _EndMusic
     .export _DiedMusic, _StairsMusic, _PickupMusic, _FanfareMusic, _MapItemMusic
+    .export _ConsoleJingle
     .export _MainMusic, _SecondMusic, _ThirdMusic, _FourthMusic
     .export _EnemyFrames_RAT, _EnemyFrames_BAT, _EnemyFrames_SPIDER, _EnemyFrames_ORC, _EnemyFrames_SNIPER, _EnemyFrames_ARROW
     .export _EnemySprites_RAT, _EnemySprites_BAT, _EnemySprites_SPIDER, _EnemySprites_ORC, _EnemySprites_SNIPER, _EnemySprites_ARROW
@@ -32,6 +33,9 @@ _SineTable:
 	.byte 10,11,12,14,15,17,18,20,21,23,25,27,29,31,33,35
 	.byte 37,40,42,44,47,49,52,54,57,59,62,65,67,70,73,76
 	.byte 79,82,85,88,90,93,97,100,103,106,109,112,115,118,121,124
+
+_ConsoleJingle:
+    .incbin "jingle.gtm2"
 
 _MainMusic:
     .incbin "fiend_loop.gtm2"
