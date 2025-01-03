@@ -650,23 +650,23 @@
  ],
  "meta": {
   "app": "https://www.aseprite.org/",
-  "version": "1.2.35-x64",
+  "version": "1.3.11-beta2-x64",
   "image": "SkeletonMage_Red.bmp",
   "format": "I8",
   "size": { "w": 256, "h": 167 },
   "scale": "1",
   "frameTags": [
-   { "name": "export", "from": 0, "to": 71, "direction": "forward" },
-   { "name": "walk_down", "from": 0, "to": 7, "direction": "forward" },
-   { "name": "walk_right", "from": 8, "to": 15, "direction": "forward" },
-   { "name": "walk_up", "from": 16, "to": 23, "direction": "forward" },
-   { "name": "attack_down", "from": 24, "to": 31, "direction": "forward" },
-   { "name": "attack_right", "from": 32, "to": 39, "direction": "forward" },
-   { "name": "attack_up", "from": 40, "to": 47, "direction": "forward" },
-   { "name": "flinch", "from": 48, "to": 71, "direction": "forward" },
-   { "name": "down", "from": 48, "to": 55, "direction": "forward" },
-   { "name": "right", "from": 56, "to": 63, "direction": "forward" },
-   { "name": "up", "from": 64, "to": 71, "direction": "forward" }
+   { "name": "export", "from": 0, "to": 71, "direction": "forward", "color": "#000000ff" },
+   { "name": "walk_down", "from": 0, "to": 7, "direction": "forward", "color": "#000000ff" },
+   { "name": "walk_right", "from": 8, "to": 15, "direction": "forward", "color": "#000000ff" },
+   { "name": "walk_up", "from": 16, "to": 23, "direction": "forward", "color": "#000000ff" },
+   { "name": "attack_down", "from": 24, "to": 31, "direction": "forward", "color": "#000000ff" },
+   { "name": "attack_right", "from": 32, "to": 39, "direction": "forward", "color": "#000000ff" },
+   { "name": "attack_up", "from": 40, "to": 47, "direction": "forward", "color": "#000000ff" },
+   { "name": "flinch", "from": 48, "to": 71, "direction": "forward", "color": "#000000ff" },
+   { "name": "down", "from": 48, "to": 55, "direction": "forward", "color": "#000000ff" },
+   { "name": "right", "from": 56, "to": 63, "direction": "forward", "color": "#000000ff" },
+   { "name": "up", "from": 64, "to": 71, "direction": "forward", "color": "#000000ff" }
   ],
   "layers": [
    { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
