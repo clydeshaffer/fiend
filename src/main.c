@@ -74,6 +74,7 @@ unsigned char stairs_y = 0;
 #define PLAYER_START_Y 48
 
 unsigned char go_to_next_level = 0;
+unsigned char global_tick = 0;
 
 void Sleep(int frames) {
     int i;
@@ -196,7 +197,7 @@ void fill_local_map() {
                     stairs_x = cursorX;
                     stairs_y = cursorY;
                 } else {
-                    *tmpptr_char = 75;
+                    *tmpptr_char = 43;
                 }
             }
             cursorX++;
@@ -239,7 +240,7 @@ void fill_whole_map() {
                     stairs_x = cursorX;
                     stairs_y = cursorY;
                 } else {
-                    *tmpptr_char = 75;
+                    *tmpptr_char = 43;
                 }
             }
             cursorX++;
@@ -532,8 +533,10 @@ void main() {
                 SET_RECT(46+(stairs_x), 46+(stairs_y), 5, 5, 107, 123, 0, bankflip);
                 QueueSpriteRect();
             }
-            SET_RECT(47+(player_x.b.msb), 47+(player_y.b.msb), 3, 3, 104, 120, 0, bankflip);
-            QueueSpriteRect();
+            if(global_tick & 8) {
+                SET_RECT(47+(player_x.b.msb), 47+(player_y.b.msb), 3, 3, 104, 120, 0, bankflip);
+                QueueSpriteRect();
+            }
         }
         
         CLB(32);
@@ -643,6 +646,7 @@ void main() {
         *dma_flags = flagsMirror;
         *bank_reg = banksMirror;
         ChangeRomBank(BANK_COMMON);
+        ++global_tick;
         tick_music();
         via[ORB] = 0x80;
         via[ORB] = 0x40;
